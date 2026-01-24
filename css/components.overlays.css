@@ -1,0 +1,158 @@
+/* =========================================
+   Overlays & Buttons
+   ========================================= */
+.speed-overlay {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    display: flex;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 6px 10px;
+    border-radius: 25px;
+    z-index: 20;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.speed-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.speed-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.speed-btn.active {
+    background: var(--accent-primary);
+    color: var(--accent-ink);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 10px rgba(244, 238, 226, 0.3);
+}
+
+/* .timer-overlay is now commented out in index.html */
+
+
+.score-overlay {
+    background: rgba(0, 0, 0, 0.6);
+    color: #f4eee0 !important; /* Ivory text */
+    padding: 8px 15px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 700;
+    z-index: 2000;
+    border: 1px solid rgba(244, 238, 224, 0.4); /* Ivory border */
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-medal {
+    font-size: 14px;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.score-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.score-ctrl-btn {
+    background: rgba(0, 0, 0, 0.5);
+    color: #f4eee0;
+    border: 1px solid rgba(244, 238, 224, 0.3);
+    border-radius: 50%;
+    width: 28px; /* Slightly smaller as requested */
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.score-ctrl-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(244, 238, 224, 0.6);
+    transform: scale(1.1);
+}
+
+.score-ctrl-btn .material-symbols-outlined {
+    font-size: 16px;
+}
+
+.score-ctrl-btn.paused {
+    color: #ff5555;
+    border-color: rgba(255, 85, 85, 0.5);
+}
+
+.score-overlay:hover {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: rgba(244, 238, 224, 0.6);
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(244, 238, 224, 0.2);
+}
+
+.refresh-overlay {
+    position: fixed;
+    top: 170px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.refresh-overlay:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(180deg);
+}
+
+.top-left-controls {
+    position: fixed;
+    top: 60px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 2000;
+}
+
+.top-left-controls .refresh-overlay,
+.top-left-controls .score-overlay {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+}

@@ -1,0 +1,18 @@
+# StudyWithMe (Video Study Trainer)
+
+## About
+StudyWithMe is a browser-based AI study companion that helps users maintain good study posture and focus by comparing their posture with study-with-me videos in real-time.
+
+- **AI Focus Analysis**: Uses MediaPipe Pose Detection to track movement and stability via camera.
+- **Stillness-based Scoring**: Calculates focus scores based on the user's lack of movement (staying focused).
+- **Privacy First**: All processing happens locally in the browser; video data is never uploaded to a server.
+
+- **Responsive Design**: Works on Desktop (Split mode) and Mobile (Overlay mode).
+- **YouTube Integration**: Users can import any YouTube study-with-me video.
+- YouTube IFrame API
+
+## Usage
+1. Open the app.
+2. Select or import a YouTube study-with-me video.
+3. Allow camera access.
+4. Study along with the video while checking your focus score on the screen.

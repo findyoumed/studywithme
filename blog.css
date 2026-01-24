@@ -1,0 +1,209 @@
+.glass-effect {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.blog-post-content {
+  display: none;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.blog-post-content.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+/* Ensure empty wrappers never render space */
+.blog-post-content:empty {
+  display: none !important;
+}
+
+/* Action row spacing control */
+.post-actions {
+  margin-top: 0.25rem !important;
+  /* ~mt-1 */
+  gap: 0.5rem !important;
+  /* ~gap-2 */
+}
+
+.hidden {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#langKoBtn.active,
+#langEnBtn.active {
+  background: #f4eee2;
+  color: #2f2a24 !important;
+}
+
+/* Mobile Optimizations - iPhone SE (375px) optimized */
+@media (max-width: 640px) {
+  section.px-6.lg\:px-20.pt-10 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Header adjustments */
+  header {
+    padding: 0.75rem 0.5rem;
+  }
+
+  /* Reduce gap between header elements */
+  header > div {
+    gap: 0.5rem !important;
+  }
+
+  /* Reduce gap between left side elements (logo + title) */
+  header .flex.items-center.gap-3 {
+    gap: 0.5rem !important;
+  }
+
+  /* Reduce gap between right side elements (lang + button) */
+  header .flex.items-center.gap-6 {
+    gap: 0.35rem !important;
+  }
+
+  header h1 {
+    font-size: 0.7rem;
+  }
+
+  header .w-10 {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* Language toggle - make smaller */
+  header .flex.bg-white\/5 {
+    padding: 0.15rem !important;
+  }
+
+  header .flex.bg-white\/5 button {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.5rem !important;
+  }
+
+  /* Back to main button */
+  header button[data-i18n="back_to_app"] {
+    padding: 0.35rem 0.6rem !important;
+    font-size: 0.6rem !important;
+    white-space: nowrap;
+  }
+
+  /* Hero section adjustments */
+  section:first-of-type {
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Hero container */
+  section:first-of-type .min-h-\[480px\] {
+    min-height: 270px !important;
+    padding: 0.75rem 0.5rem !important;
+  }
+
+  /* Hero content area - reduce vertical padding */
+  section:first-of-type .p-8 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Hero title - prevent overflow on iPhone SE */
+  h1[data-i18n="hero_title"] {
+    font-size: 1.75rem !important;
+    line-height: 1.15 !important;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    padding: 0 0.25rem;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Hero subtitle */
+  p[data-i18n="hero_subtitle"] {
+    font-size: 0.8125rem !important;
+    line-height: 1.4 !important;
+    padding: 0 0.25rem;
+    margin-bottom: 2rem !important;
+  }
+
+  /* Premium badge */
+  .inline-flex.items-center.gap-2 {
+    font-size: 0.625rem !important;
+    padding: 0.3rem 0.6rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Premium badge icon */
+  .inline-flex.items-center.gap-2 .material-symbols-outlined {
+    font-size: 0.75rem !important;
+  }
+
+  /* Search bar container */
+  .max-w-xl {
+    max-width: 100% !important;
+    padding: 0 0.25rem;
+  }
+
+  /* Search bar input */
+  input[type="text"] {
+    font-size: 0.8125rem;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Search button */
+  .max-w-xl button {
+    padding: 0.6rem 1.25rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Main content sections */
+  section {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  /* Section titles */
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  /* Grid adjustments */
+  #blog-posts-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Footer */
+  footer {
+    padding: 2rem 0.75rem !important;
+  }
+}
+
+/* Extra small devices (iPhone SE - 375px) */
+@media (max-width: 375px) {
+  h1[data-i18n="hero_title"] {
+    font-size: 1.5rem !important;
+  }
+
+  header h1 {
+    font-size: 0.7rem;
+  }
+}

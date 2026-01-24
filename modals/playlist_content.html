@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h2 data-i18n="playlist_title">재생 목록 (<span id="count">0</span>)</h2>
+    <button class="close-btn" onclick="togglePlaylist()">✕</button>
+</div>
+<!-- Search Section -->
+<div class="search-section-modal">
+    <div class="search-box-modal">
+        <input type="text" id="searchInput" class="input-field" placeholder="YouTube 검색 (예: 10분 유산소)"
+            data-i18n-placeholder="search_placeholder" onkeypress="handleSearchKeyPress(event)" />
+        <button class="ctrl-btn search-btn" onclick="searchVideos()">
+            <span class="material-symbols-outlined">search</span>
+        </button>
+    </div>
+    <div id="searchResults" class="search-results-grid"></div>
+</div>
+
+<div id="playlistItems"></div>
+<div class="add-form">
+    <div class="divider-text" data-i18n="url_divider">또는 URL로 직접 추가</div>
+    <input type="text" id="urlInput" class="input-field" placeholder="YouTube 영상/재생목록 URL"
+        data-i18n-placeholder="url_placeholder" />
+    <input type="text" id="titleInput" class="input-field" placeholder="제목" data-i18n-placeholder="title_placeholder" />
+    <div class="add-close-container">
+        <button class="ctrl-btn add-btn" onclick="addVideo()">
+            <span class="material-symbols-outlined">add</span> <span data-i18n="add">추가</span>
+        </button>
+        <button class="ctrl-btn close-btn-action" onclick="togglePlaylist()">
+            <span class="material-symbols-outlined">close</span> <span data-i18n="close">닫기</span>
+        </button>
+    </div>
+</div>

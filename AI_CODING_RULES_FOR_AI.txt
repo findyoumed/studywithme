@@ -1,0 +1,2174 @@
+===============================================================================
+AI CODING RULES & CRITICAL MISTAKES (CONSOLIDATED FOR AI)
+===============================================================================
+Version: 2.0 | Merged: 2025-12-27
+This file combines common mistakes prevention and general coding rules.
+
+PART 1: CRITICAL MISTAKES TO AVOID
+(Read this section FIRST before generating any code)
+
+===============================================================================
+AI COMMON MISTAKES & HOW TO PREVENT THEM
+===============================================================================
+Version: 1.0 | For: AI Code Generators | Updated: 2025-12-27
+
+This document lists the TOP 10 mistakes AI makes when coding and how to prevent them.
+Read this BEFORE generating any code.
+
+===============================================================================
+MISTAKE_001: CODE TRUNCATION (코드 잘림) - VERY COMMON
+===============================================================================
+
+SYMPTOMS:
+  - 파일을 수정했는데 일부 코드가 사라짐
+  - "... rest of code ..." 같은 주석이 나타남
+  - 파일 끝부분이 잘려나감
+  - 사용자가 "코드가 잘렸어"라고 불평
+
+CAUSE:
+  - write_to_file로 큰 파일(50줄 이상)을 전체 재작성
+  - 응답 길이 제한에 걸려서 중간에 끊김
+  - 전체 파일을 다시 쓰려다가 실패
+
+HOW TO PREVENT:
+  1. NEVER use write_to_file for files > 50 lines
+  2. ALWAYS use replace_file_content or multi_replace_file_content
+  3. NEVER write placeholders like "... rest of code ..."
+  4. 변경 필요한 부분만 정확히 수정
+  5. 전체 파일 재작성 절대 금지
+
+CORRECT APPROACH:
+  - Use replace_file_content
+  - Specify exact TargetContent (앞뒤 5줄 포함)
+  - Only replace what needs to change
+  - Keep everything else intact
+
+RECOVERY IF HAPPENED:
+  - User command: git restore [file]
+  - Apologize and redo with replace_file_content
+
+
+===============================================================================
+MISTAKE_002: API HALLUCINATION (존재하지 않는 API 사용) - CRITICAL
+===============================================================================
+
+SYMPTOMS:
+  - 함수 호출 시 "undefined is not a function" 에러
+  - import 시 "Module not found" 에러
+  - 존재하지 않는 메서드 사용
+  - 파라미터 순서/타입이 틀림
+
+CAUSE:
+  - 공식 문서 확인 없이 API 가정
+  - 비슷한 이름의 다른 함수와 혼동
+  - 버전 차이 무시 (예: ES2020 기능을 ES5에서 사용)
+  - 다른 라이브러리와 혼동
+
+HOW TO PREVENT (MANDATORY):
+  1. BEFORE using any API/function:
+     - search_official_docs: 공식 문서에서 확인
+     - check_version: 사용자 환경에서 지원하는지 확인
+     - verify_signature: 파라미터와 반환값 확인
+  
+  2. IF UNCERTAIN:
+     - ASK user: "Does your version support [API]?"
+     - NEVER assume it exists
+  
+  3. ADD COMMENT:
+     - // Verified: Array.flatMap() available in ES2019+
+     - // User version check: required
+
+EXAMPLE CORRECT:
+  // Verified: fetch() available in Node.js 18+
+  // User confirmed Node 20.x
+  const response = await fetch(url);
+
+EXAMPLE WRONG:
+  const response = await fetch(url); // No verification - DANGEROUS
+
+
+===============================================================================
+MISTAKE_003: OVERWRITING EXISTING CODE (기존 코드 덮어쓰기)
+===============================================================================
+
+SYMPTOMS:
+  - 파일 수정 후 다른 기능이 사라짐
+  - 주석이 모두 삭제됨
+  - 기존 로직이 의도치 않게 변경됨
+  - 사용자가 "왜 다른 부분도 바뀌었어?"
+
+CAUSE:
+  - write_to_file로 파일 전체를 다시 작성
+  - 기존 코드를 제대로 읽지 않음
+  - 필요 이상의 변경
+  - 주석을 무시하고 삭제
+
+HOW TO PREVENT:
+  1. RULE: replace_file_content for surgical edits
+  2. READ entire file FIRST
+  3. Identify EXACT location to change
+  4. Use TargetContent with exact match (including whitespace)
+  5. PRESERVE comments unless explicitly wrong
+  6. MINIMAL changes only
+
+WORKFLOW:
+  1. view_file to read current content
+  2. Identify exact lines to change
+  3. Copy TargetContent EXACTLY (with spaces/tabs)
+  4. Create ReplacementContent with only needed changes
+  5. KEEP everything else unchanged
+
+NEVER:
+  - Rewrite entire file when only 1 function needs change
+  - Remove comments without reason
+  - Change code style unless asked
+
+
+===============================================================================
+MISTAKE_004: SYNTAX ERRORS (문법 오류)
+===============================================================================
+
+SYMPTOMS:
+  - Uncaught SyntaxError
+  - IndentationError (Python)
+  - Missing parentheses, brackets, semicolons
+  - Type errors
+
+CAUSE:
+  - No verification before submitting code
+  - Copy-paste mistakes
+  - Language syntax confusion (mixing JS and Python)
+  - Incomplete code blocks
+
+HOW TO PREVENT:
+  1. ALWAYS run verification BEFORE submitting:
+     JavaScript:
+       - node --check [file]
+       - eslint [file]
+     
+     Python:
+       - python -m py_compile [file]
+       - pylint [file]
+  
+  2. Complete all code blocks - no "..." placeholders
+  
+  3. Match brace/bracket/parenthesis pairs
+  
+  4. Follow language-specific syntax rules
+
+CHECKLIST BEFORE SUBMIT:
+  [ ] Syntax check passed
+  [ ] No linter errors
+  [ ] All brackets/braces matched
+  [ ] Proper indentation
+  [ ] No trailing commas in wrong places
+
+
+===============================================================================
+MISTAKE_005: IMPROPER GIT USAGE (부적절한 Git 사용)
+===============================================================================
+
+SYMPTOMS:
+  - 빈번한 커밋으로 히스토리가 지저분해짐
+  - AI가 코드를 망쳤을 때 맹목적으로 revert하여 다른 작업까지 유실됨
+  - "이전 코드가 어땠지?" 참고만 하고 싶은데 파일 전체가 되돌아감
+
+CAUSE:
+  - 작업 단위가 아닌 중간 단계마다 커밋 남발
+  - git restore/reset의 무분별한 사용
+  - 복구(Recovery)와 참조(Reference)의 구분 부재
+
+HOW TO PREVENT (USER RULE APPLIED):
+  1. Commit only ONCE at the FINAL stage:
+     - Do NOT commit frequently during intermediate steps.
+     - Wait until the entire task/feature is successfully implemented.
+     - COMMAND: git add . && git commit -m "Done: [Task Description]"
+  
+  2. If Code is Broken (Recovery Strategy):
+     - ERROR: Do NOT use 'git restore' to blindly revert files.
+     - CORRECT: Use Git to REFERENCE previous code.
+     - COMMAND: git show HEAD:path/to/file
+     - Compare previous code with current code, and manually fix only the broken parts.
+
+REMINDER FOR AI:
+  "Git is a safety net, but don't abuse it. Commit once at the end. Use Git history for REFERENCE, not just for rollback."
+
+RECOVERY GUIDE:
+  - If you need to see old code: git show HEAD:[filename]
+  - Do NOT overwrite current work unless explicitly requested.
+
+
+===============================================================================
+MISTAKE_006: HARDCODED SECRETS (비밀정보 하드코딩) - SECURITY RISK
+===============================================================================
+
+SYMPTOMS:
+  - API keys in source code
+  - Passwords in plain text
+  - Tokens exposed
+  - Database credentials in code
+
+CAUSE:
+  - Convenience over security
+  - Not using environment variables
+  - .env file committed to git
+
+HOW TO PREVENT:
+  1. NEVER accept secrets from user in chat
+  
+  2. ALWAYS use environment variables:
+     CORRECT:
+       import os
+       api_key = os.getenv("API_KEY")
+       
+     WRONG:
+       api_key = "sk-1234567890"  // NEVER DO THIS
+  
+  3. CHECK: .env file in .gitignore
+  
+  4. IF user shares secret:
+     - WARN immediately: "Never share secrets with AI"
+     - DELETE from conversation
+     - Suggest environment variables
+
+SECURITY CHECKLIST:
+  [ ] No hardcoded passwords
+  [ ] No API keys in code
+  [ ] Environment variables used
+  [ ] .env in .gitignore
+  [ ] No secrets in git commits
+
+
+===============================================================================
+MISTAKE_007: EMPTY/INCOMPLETE ERROR HANDLING (불완전한 에러 처리)
+===============================================================================
+
+SYMPTOMS:
+  - Empty catch blocks
+  - Errors silently ignored
+  - Application crashes without logs
+  - No fallback behavior
+
+CAUSE:
+  - Adding try-catch without content
+  - Generic exception catching
+  - No logging
+  - No error recovery
+
+HOW TO PREVENT:
+  1. NEVER write empty catch blocks:
+     WRONG:
+       try {
+         riskyOperation();
+       } catch (e) {
+         // Empty - FORBIDDEN
+       }
+  
+  2. ALWAYS log with context:
+     CORRECT:
+       try {
+         await riskyOperation();
+       } catch (error) {
+         logger.error('Operation failed', { 
+           userId, 
+           operation: 'riskyOperation',
+           error: error.message 
+         });
+         return fallbackValue;
+       }
+  
+  3. Catch specific errors, not generic
+  
+  4. Provide fallback/recovery
+
+REQUIRED:
+  - Logging with context (user_id, action, timestamp)
+  - Specific error types
+  - Fallback behavior
+  - Finally blocks for cleanup
+
+
+===============================================================================
+MISTAKE_008: IGNORING EDGE CASES (엣지 케이스 무시)
+===============================================================================
+
+SYMPTOMS:
+  - TypeError: Cannot read property of null
+  - Empty array causes crash
+  - Boundary value bugs (0, -1, MAX_INT)
+  - Network timeout not handled
+
+CAUSE:
+  - Only testing happy path
+  - Assuming input is always valid
+  - Not testing edge cases
+
+HOW TO PREVENT:
+  1. ALWAYS handle edge cases:
+     - null/undefined inputs
+     - empty arrays/objects
+     - boundary values (0, MAX_INT, MIN_INT)
+     - network failures
+     - concurrent requests
+  
+  2. Write tests for edge cases FIRST:
+     TEST normal_case: valid input
+     TEST null_input: null handling
+     TEST empty_array: empty collection
+     TEST boundary_max: MAX_INT
+     TEST boundary_min: 0 or MIN_INT
+     TEST network_fail: timeout/error
+
+EXAMPLE:
+  function processArray(items) {
+    // Edge case: null check
+    if (!items) return [];
+    
+    // Edge case: empty array
+    if (items.length === 0) return [];
+    
+    // Edge case: boundary
+    if (items.length > MAX_ITEMS) {
+      throw new Error(`Too many items: ${items.length}`);
+    }
+    
+    // Normal processing
+    return items.map(process);
+  }
+
+
+===============================================================================
+MISTAKE_009: BREAKING CHANGES WITHOUT WARNING (경고 없는 파괴적 변경)
+===============================================================================
+
+SYMPTOMS:
+  - 기존 코드가 작동 안 함
+  - 함수 시그니처 변경
+  - API 인터페이스 변경
+  - 다른 파일에서 에러 발생
+
+CAUSE:
+  - Refactoring without considering impact
+  - Changing public interfaces
+  - Not tracking dependencies
+
+HOW TO PREVENT:
+  1. BEFORE making breaking changes:
+     - WARN user explicitly
+     - LIST affected files/functions
+     - EXPLAIN impact
+  
+  2. When refactoring:
+     - preserve_behavior: no logic changes
+     - preserve_api: public interfaces unchanged
+     - preserve_tests: existing tests must pass
+  
+  3. TAG response with "Breaking Change"
+  
+  4. Provide migration guide
+
+EXAMPLE RESPONSE:
+  "WARNING: Breaking Change
+  
+  This change modifies the function signature:
+  - OLD: processData(data)
+  - NEW: processData(data, options)
+  
+  Affected files:
+  - src/service.js (line 45)
+  - tests/service.test.js (line 12)
+  
+  Do you want to proceed?"
+
+
+===============================================================================
+MISTAKE_010: NO TESTS (테스트 없음)
+===============================================================================
+
+SYMPTOMS:
+  - Code works in demo, breaks in production
+  - Regression bugs
+  - Fear of changing code
+  - Unknown coverage
+
+CAUSE:
+  - Generating code without tests
+  - "Will test later" mentality
+  - Not following TDD
+
+HOW TO PREVENT:
+  1. FOLLOW TDD:
+     a. Write tests FIRST
+     b. Run tests (they should FAIL)
+     c. Write minimal code to pass
+     d. Verify tests PASS
+     e. Refactor
+  
+  2. MINIMUM coverage: 80%
+  
+  3. Test categories:
+     - Unit tests: individual functions
+     - Integration tests: components together
+     - Edge case tests: boundary conditions
+  
+  4. ALWAYS include tests in response
+
+TEMPLATE:
+  // Implementation
+  function add(a, b) {
+    return a + b;
+  }
+  
+  // Tests
+  describe('add', () => {
+    it('should add two numbers', () => {
+      expect(add(2, 3)).toBe(5);
+    });
+    
+    it('should handle negative numbers', () => {
+      expect(add(-1, -1)).toBe(-2);
+    });
+    
+    it('should handle zero', () => {
+      expect(add(0, 5)).toBe(5);
+    });
+  });
+
+
+===============================================================================
+QUICK MISTAKE RECOVERY GUIDE
+===============================================================================
+
+IF AI BREAKS CODE:
+  1. STAY CALM - git can save you
+  2. git restore [file]          (파일 즉시 복원)
+  3. git reset --soft HEAD~1     (커밋 취소, 변경 유지)
+  4. Review what went wrong
+  5. Be MORE SPECIFIC in next request
+
+IF AI USES NON-EXISTENT API:
+  1. STOP - don't use the code
+  2. ASK AI: "Verify [function] exists in official docs for [version]"
+  3. CHECK user's version compatibility
+  4. USE verified alternative
+  5. DEMAND AI to always verify before using APIs
+
+IF CODE GETS TRUNCATED:
+  1. git restore [file]
+  2. TELL AI: "Use replace_file_content, NOT write_to_file"
+  3. SPECIFY: "Change only lines X-Y, keep everything else"
+  4. VERIFY AI understands RULE_002
+
+IF SECURITY ISSUE FOUND:
+  1. git restore [file]          (즉시 제거)
+  2. git reset --soft HEAD~1     (트랙킹 제거)
+  3. CHECK: .gitignore includes .env
+  4. RE-IMPLEMENT with security in mind
+  5. RUN security scan: npm audit / safety check
+
+IF TESTS FAIL:
+  1. DON'T commit
+  2. READ error messages carefully
+  3. FIX code OR fix tests
+  4. VERIFY all tests pass
+  5. Then commit
+
+IF LINTER FAILS:
+  1. RUN: eslint --fix [file] OR black [file]
+  2. CHECK remaining errors
+  3. FIX manually if auto-fix doesn't work
+  4. VERIFY: linter warnings = 0
+
+
+===============================================================================
+AI SELF-CHECK BEFORE SUBMITTING CODE
+===============================================================================
+
+BEFORE submitting ANY code, verify ALL these are YES:
+
+[ ] Did I use replace_file_content for files > 50 lines?
+[ ] Did I verify all APIs exist in official documentation?
+[ ] Did I preserve existing code/comments I shouldn't change?
+[ ] Did I run syntax check (node --check / python -m py_compile)?
+[ ] Did I handle edge cases (null, empty, boundary)?
+[ ] Did I add proper error handling (no empty catch)?
+[ ] Did I avoid hardcoding secrets?
+[ ] Did I write/update tests?
+[ ] Did I check for breaking changes?
+[ ] Would this work in production?
+
+If ANY answer is NO:
+  - FIX it before submitting
+  - OR ASK user for clarification
+  - NEVER submit broken/incomplete code
+
+
+===============================================================================
+REMINDER FOR AI
+===============================================================================
+
+Top 3 Rules to NEVER break:
+  1. Git Safety: ALWAYS create safety commit first
+  2. No Code Truncation: Use replace_file_content for large files
+  3. No Hallucination: Verify APIs exist before using
+
+When in doubt:
+  - ASK the user
+  - Check official documentation
+  - Be conservative and safe
+
+Security > Speed > Perfection
+
+
+===============================================================================
+PART 2: GENERAL CODING PROTOCOLS
+===============================================================================
+
+===============================================================================
+===============================================================================
+
+📚 이 문서는: 개발자가 읽고 학습하기 위한 상세한 가이드입니다.
+🤖 AI용 버전: AI_CODING_RULES_FOR_AI.txt (간결하고 구조화된 순수 텍스트 버전)
+
+사용 방법:
+- 개발자: 이 파일(AI_CODING_RULES.txt)을 읽고 AI 코딩 원칙을 학습하세요
+- 두 파일 모두 동일한 규칙을 담고 있지만, 표현 방식이 다릅니다
+
+이 문서의 특징:
+
+===============================================================================
+
+# AI CODING MASTER PROTOCOL
+
+## HUMAN_GUIDE_KR - 사람을 위한 사용 설명
+- 이 문서는 AI에게 "코드를 어떻게 짜야 하는지"를 알려주는 상세 규칙 모음이다.
+- 사람(개발자)은 AI에게 요청을 줄 때, 아래에 정의된 SECTION 이름과 RULE_ID를 같이 언급하면 좋다.
+- AI는 코드를 생성하기 전/후에 이 문서를 체크리스트처럼 사용해야 한다.
+- 중요한 보안 원칙: 비밀번호, API 키, 토큰, 개인정보 등 **비밀 정보는 AI에게 그대로 붙여넣지 않는다.**
+- 외부에서 가져온 코드를 사용할 때는 라이선스와 출처를 반드시 확인하고, 필요한 경우 주석에 명시한다.
+
+[CORE_MISSION]
+
+---
+
+## SECTION 0: [GENERAL_AI_CODING_RULES] - 기본 행동 수칙
+[RULE_ID: GENERAL_001]
+- AI는 **필요 이상으로 구조를 갈아엎지 않고**, 기존 코드 베이스와 스타일을 최대한 존중한다.
+- 새 기능 구현 요청이라도, 가능한 한 **작은 단위 변경**으로 나누어 제안하고, 각 단위마다 변경 이유와 영향을 설명한다.
+- 버그 수정 요청에서는, (1) 재현 조건, (2) 원인 추론, (3) 수정 코드, (4) 영향 범위 순서로 설명한다.
+- 리팩토링 요청이 아닌 이상, 기존 함수/클래스의 **외부 동작(입력/출력, 예외 타입, 공개 인터페이스)**을 함부로 바꾸지 않는다.
+- 기존 파일/프로젝트에 이미 존재하는 **네이밍 규칙, 들여쓰기, 언어/프레임워크 버전**을 우선 기준으로 삼는다.
+- 사용하는 라이브러리/프레임워크의 API가 확실하지 않으면, 공식 문서를 확인하거나 사용자에게 버전/환경을 질문한 뒤에 사용한다.
+- 코드 조각만 수정하는 경우, 전체 파일을 다시 쓰기보다 **변경된 부분 위주로 설명**하고, 가능한 한 diff/부분 코드 형태로 제안한다.
+
+## SECTION 1: [MODULARITY_CONSTRAINT] - 250줄 규칙 (모듈화 제약조건)
+[RULE_ID: MOD_001]
+- **CONSTRAINT (제약)**: 모든 소스 파일의 최대 길이는 250줄(Lines)로 제한한다.
+- **TRIGGER (발동 조건)**: 파일이 240줄에 도달하면 즉시 리팩토링 모드로 전환한다.
+- **ACTION (행동)**: 250줄을 초과하는 파일에 대한 기능 추가 요청을 받으면, 반드시 "파일 분리 설계안"을 먼저 제시하고 승인 후 작업을 시작한다.
+- **LOGIC (논리)**: SRP(Single Responsibility Principle, 단일 책임 원칙)에 따라 UI, Logic, Assets, Input, Main 등으로 기능을 분리한다.
+
+---
+
+## SECTION 2: [ADVANCED_PROMPTING] - 고급 프롬프팅 기법 (추론 프레임워크)
+
+### 2.1 Chain-of-Thought (CoT) Prompting - 사고의 연쇄 기법
+
+**Zero-Shot CoT**:
+```
+"Let's solve this step by step:
+1. [First step analysis]
+2. [Second step reasoning]
+3. [Final implementation]"
+```
+
+**Few-Shot CoT**:
+```
+Example 1: [Input] → [Step 1] → [Step 2] → [Output]
+Example 2: [Input] → [Step 1] → [Step 2] → [Output]
+
+Now solve: [Your problem]
+```
+
+**자동 CoT (Auto-CoT)**: 비슷한 문제들을 클러스터링하고 각 클러스터에서 대표 예시를 자동 생성
+
+### 2.2 Tree-of-Thought (ToT) Prompting - 사고의 나무 기법
+
+```
+Problem: [복잡한 설계 문제]
+
+Approach 1: [방법 A]
+  Pros: [장점]
+  Cons: [단점]
+  Feasibility: [실현 가능성]
+
+Approach 2: [방법 B]
+  Pros: [장점]
+  Cons: [단점]
+  Feasibility: [실현 가능성]
+
+Approach 3: [방법 C]
+  Pros: [장점]
+  Cons: [단점]
+  Feasibility: [실현 가능성]
+
+Best choice: [선택된 방법] because [이유]
+```
+
+**ToT 4단계 프로세스**:
+1. **Decompose**: 문제를 중간 단계로 분해
+2. **Generate**: 각 단계마다 여러 사고 경로 생성
+3. **Evaluate**: 각 경로의 가능성 평가
+4. **Backtrack**: 필요시 이전 노드로 되돌아가 다른 경로 탐색
+
+### 2.3 ReAct (Reasoning + Acting) Prompting - 추론과 행동 기법
+
+```
+Task: [복잡한 작업]
+
+Thought 1: I need to [분석]
+Action 1: Search[키워드] or Execute[코드]
+Observation 1: [결과]
+
+Thought 2: Based on the observation, I should [다음 단계]
+Action 2: [액션]
+Observation 2: [결과]
+
+Thought 3: Now I can [최종 결정]
+Action 3: Finish[솔루션]
+```
+
+**ReAct vs CoT**:
+- ReAct: 실시간 피드백, 도구 사용, 자가 수정
+- CoT: 순수 추론, 선형 흐름, 내부 지식 활용
+
+### 2.4 Structured CoT (SCoT) for Code Generation - 구조화된 사고의 연쇄 기법
+
+```
+Requirements: [요구사항]
+
+Structured Reasoning:
+1. Sequential Logic:
+   - Step A: [순차 단계]
+   - Step B: [순차 단계]
+
+2. Branch Logic:
+   - If [조건]: [처리]
+   - Else: [대체 처리]
+
+3. Loop Logic:
+   - For each [항목]: [반복 작업]
+   - While [조건]: [계속 작업]
+
+Final Code: [구조화된 코드]
+```
+
+### 2.5 Prompt Chaining - 프롬프트 연결 기법
+
+```
+Prompt 1: "Analyze the requirements and create a high-level design"
+→ Output 1: [설계안]
+
+Prompt 2: "Based on the design: [설계안], implement the data models"
+→ Output 2: [데이터 모델]
+
+Prompt 3: "Using these models: [데이터 모델], create the API endpoints"
+→ Output 3: [API 코드]
+```
+
+---
+
+## SECTION 3: [PCTF_FRAMEWORK] - 구조화된 프롬프팅
+
+```
+[PERSONA - 역할]: 
+
+[CONTEXT - 맥락]:
+- Project Type (프로젝트 종류): [웹앱/CLI/라이브러리]
+- Tech Stack (기술 스택): [기술 스택]
+- Current State (현재 상태): [현재 상태]
+- Constraints (제약사항): [성능, 보안, 호환성]
+- Environment (환경): [개발/스테이징/프로덕션]
+
+[TASK - 작업]:
+- Primary Goal (주요 목표): [주요 목표]
+- Requirements (요구사항): [구체적 요구사항 나열]
+- Edge Cases (엣지 케이스): [null, 빈 값, 경계값, 타입 불일치, 네트워크 실패 등]
+- Success Criteria (성공 기준): [성공 기준]
+
+[FORMAT - 출력 형식]:
+- Output Style (출력 스타일): [함수/클래스/모듈]
+- Naming Convention (이름 규칙): [camelCase/snake_case/PascalCase]
+- Error Handling (에러 처리 방식): [try-catch/Result 타입/에러 코드]
+- Documentation (문서화): [JSDoc/Docstring/인라인 주석]
+- Test Coverage (테스트 커버리지): [유닛 테스트 포함 여부]
+```
+
+### PCTF 예시
+```
+[PERSONA]: Act as a senior backend engineer with expertise in Python and RESTful APIs
+
+[CONTEXT]:
+- Project: E-commerce API
+- Stack: FastAPI, PostgreSQL, Redis
+- Current: Basic CRUD operations exist
+- Constraints: Must handle 1000 req/sec, PCI-DSS compliant
+- Environment: Production
+
+[TASK]:
+- Goal: Implement secure payment processing endpoint
+- Requirements:
+  1. Validate payment data (card number, CVV, expiry)
+  2. Tokenize sensitive data before storage
+  3. Integrate with Stripe API
+  4. Handle idempotency for duplicate requests
+  5. Log all transactions for audit
+- Edge Cases: Invalid cards, network timeouts, duplicate submissions, partial failures
+- Success: 99.9% uptime, <200ms response time, zero data leaks
+
+[FORMAT]:
+- Output: FastAPI route with Pydantic models
+- Naming: snake_case
+- Error Handling: HTTPException with detailed error codes
+- Documentation: Docstrings + OpenAPI schema
+- Tests: pytest with 90%+ coverage
+```
+
+---
+
+## SECTION 4: [Q&A_STRATEGY] - 선-질문 접근법
+[RULE_ID: QA_001]
+
+
+### Q&A 프롬프트 템플릿
+```
+1. Specific requirements and constraints
+2. Expected behavior and edge cases
+3. Performance and scalability needs
+4. Security and compliance requirements
+5. Integration with existing systems
+
+```
+
+### Q&A 실행 예시
+```
+User: "사용자 인증 시스템을 만들어줘"
+
+AI: "구현하기 전에 몇 가지 질문드립니다:
+
+1. 인증 방식:
+   - JWT 토큰 기반? Session 기반? OAuth2?
+   - 소셜 로그인(Google, GitHub) 필요한가요?
+
+2. 보안 요구사항:
+   - 비밀번호 정책은? (최소 길이, 복잡도)
+   - 2FA(이중 인증) 필요한가요?
+   - Rate limiting 필요한가요?
+
+3. 확장성:
+   - 예상 사용자 수는?
+   - Redis 같은 캐시 사용 가능한가요?
+
+4. 기존 시스템:
+   - 사용 중인 프레임워크는? (Express, FastAPI, Spring)
+   - DB는? (PostgreSQL, MongoDB, MySQL)
+
+```
+
+---
+
+## SECTION 5: [STEP_BY_STEP_VERIFICATION] - 단계별 검증 (점진적 승인)
+[RULE_ID: STEP_001]
+
+
+### Step-by-Step 프롬프트
+```
+
+After each step:
+1. Explain what you changed and why
+2. Show the impact (affected files, functions)
+3. Wait for my approval before continuing"
+```
+
+### 실행 예시
+```
+AI: "Step 1: Analyze current code structure
+
+I've identified these issues in service.js:
+- 5 unrelated functions (user, product, order, payment, email)
+- Duplicated error handling in 8 places
+- 3 functions over 100 lines each
+
+Recommendation: Split into 5 separate modules
+- user-service.js
+- product-service.js
+- order-service.js
+- payment-service.js
+- email-service.js
+
+Type 'next' to proceed with Step 2: Create module interfaces"
+
+[User types 'next']
+
+AI: "Step 2: Create module interfaces
+
+Creating TypeScript interfaces for each module:
+[코드 표시]
+
+Type 'next' for Step 3: Extract user service module"
+```
+
+---
+
+## SECTION 6: [RUBBER_DUCK_DEBUGGING] - 러버덕 디버깅 (설명을 통한 해결)
+[RULE_ID: DUCK_001]
+
+
+### Rubber Duck Prompting
+```
+
+Rules:
+1. Let me explain first - don't interrupt immediately
+2. Ask clarifying questions when something doesn't make sense
+3. Point out logical flaws or assumptions
+4. Suggest edge cases I might have missed
+5. Help me realize the bug through Socratic questioning
+
+
+Here's my code:
+[코드 붙여넣기]
+
+```
+
+### AI Rubber Duck 실행 예시
+```
+User: "이 함수가 큰 입력에서 너무 느려. 한 줄씩 설명할게."
+
+def fibonacci(n):
+    if n <= 1:
+    else:
+
+
+AI: "잠깐요. n=100이면 어떻게 되나요? 이 함수는 몇 번 호출될까요?"
+
+User: "음... fibonacci(99)와 fibonacci(98)을 각각 호출하고... 
+
+AI: "정확합니다! 이걸 exponential time complexity라고 하죠. 
+
+User: "메모이제이션! 한 번 계산한 값을 캐시에 저장하면..."
+
+AI: "바로 그겁니다! Dynamic Programming 접근이네요. 구현해볼까요?"
+```
+
+### 고급 Rubber Duck Personas
+```
+"Act as a [선택]:
+- Debugging Assistant: 체계적으로 문제를 진단
+- Security Auditor: 보안 취약점 관점에서 질문
+- Performance Engineer: 성능 병목 찾기
+- Naive Listener: 비전문가 관점에서 이해 확인
+- Socratic Teacher: 질문을 통해 스스로 깨닫게 유도"
+```
+
+---
+
+## SECTION 7: [ROLE_BASED_PROMPTING] - 역할 기반 프롬프팅 (전문가 역할 부여)
+[RULE_ID: ROLE_001]
+
+
+### Persona 카탈로그
+
+**1. Senior Software Architect (시니어 소프트웨어 아키텍트)**
+```
+Review this system design considering:
+- Scalability (10x growth)
+- Maintainability (5+ years)
+- Technology choices (trade-offs)
+- Team size and skills
+- Budget constraints"
+```
+
+**2. Security Specialist (보안 전문가)**
+```
+Audit this code for:
+- OWASP Top 10 vulnerabilities
+- Authentication/Authorization flaws
+- Data encryption gaps
+- SQL/XSS/CSRF risks
+- Secrets management
+```
+
+**3. Performance Engineer (성능 엔지니어)**
+```
+Analyze this code for:
+- Time complexity (Big O)
+- Space complexity
+- Database query optimization
+- Caching opportunities
+- Parallelization potential
+```
+
+**4. Code Reviewer (Google 스타일 코드 리뷰어)**
+```
+Check for:
+- Readability and clarity
+- Naming conventions
+- Function length (<50 lines)
+- Cyclomatic complexity (<10)
+- Test coverage (>80%)
+- Documentation completeness"
+```
+
+**5. DevOps Engineer (데브옵스 엔지니어)**
+```
+Review for:
+- Containerization readiness
+- 12-factor app compliance
+- Monitoring and observability
+- Deployment strategies (blue-green, canary)
+- Infrastructure as Code"
+```
+
+**6. Accessibility Expert (접근성 전문가)**
+```
+Check for:
+- Semantic HTML
+- ARIA labels
+- Keyboard navigation
+- Screen reader compatibility
+- Color contrast ratios"
+```
+
+---
+
+## SECTION 8: [EDITING_PROTOCOL] - 편집 프로토콜 (외과적 패치 전용)
+[RULE_ID: EDIT_001]
+- **PROHIBITION**: 50줄 이상의 파일에 대해 `write_to_file`을 통한 전체 덮어쓰기를 엄격히 금지한다.
+- **MANDATE**: 반드시 `replace_file_content` 또는 `multi_replace_file_content`를 사용한다.
+- **ANCHOR_VALIDATION**: 수정할 블록의 앞뒤 5줄(Context)을 앵커로 지정하여 위치 오차를 방지한다.
+- **NO_PLACEHOLDER**: "// ... (기존 코드 동일)"과 같은 생략 주석을 절대 사용하지 않는다. 모든 출력은 완전한 실행 가능 코드여야 한다.
+- **PRESERVE_COMMENTS_KR**: 기존 코드의 주석이나 문서(docstring)는 AI가 임의로 삭제하지 않는다. 주석 내용이 명백히 틀렸거나 오래된 경우에만 수정 또는 삭제를 제안하고, 그 외에는 최대한 원본을 유지한다. (한국어: 기존 주석 보존 원칙)
+- **HUMAN_FRIENDLY_COMMENT_KR**: 새로 추가하거나 복잡하게 수정하는 코드 블록에는, 다른 개발자(사람)가 쉽게 이해할 수 있도록 **핵심 의도와 작동 방식, 주의사항을 한국어 주석으로** 남긴다. (한국어: 사람을 위한 주석 작성)
+
+---
+
+## SECTION 9: [TEST_DRIVEN_DEVELOPMENT] - 테스트 주도 개발 (테스트 우선)
+[RULE_ID: TDD_001]
+
+### 9.1 Test-First Workflow
+```
+1. Write Test Cases First (테스트 케이스 먼저 작성):
+   "[함수]에 대한 테스트 케이스를 만들어라:
+   - Normal case (정상 케이스): [예상 동작]
+   - Edge cases (엣지 케이스): null, 빈 값, 경계값
+   - Error cases (에러 케이스): 잘못된 입력, 예외"
+
+2. Run Tests (should FAIL) (테스트 실행 - 실패해야 함):
+
+3. Implement Minimum Code (최소 기능 구현):
+
+4. Refactor (리팩토링):
+
+5. Repeat (반복):
+```
+
+### 9.2 Test Case Template
+```javascript
+  // Normal Cases (정상 케이스)
+  
+  // Edge Cases (엣지 케이스)
+  
+  
+  
+  // Error Cases (에러 케이스)
+  
+```
+
+---
+
+## SECTION 10: [VERIFICATION_ALGORITHM] - 검증 알고리즘 (자가 검증)
+[RULE_ID: VER_001]
+
+### 10.1 자동 검증 파이프라인
+모든 코드 수정 직후 다음 명령을 실행한다:
+
+```bash
+# JavaScript/TypeScript
+
+# Python
+
+# Go
+```
+
+### 10.2 체크리스트 자동화
+```python
+def verify_code(file_path): # 코드 검증 함수
+        'syntax': run_syntax_check(file_path),      # 문법 검사
+        'linting': run_linter(file_path),           # 린팅 검사
+        'tests': run_tests(file_path),              # 테스트 실행
+        'coverage': check_coverage(file_path),      # 테스트 커버리지 확인
+        'security': run_security_scan(file_path)   # 보안 스캔
+    
+    # 모든 검사를 순회하며 실패 시 에러 발생
+    for check, result in checks.items():
+        if not result.passed:
+            raise VerificationError(f"{check} 검사 실패: {result.error}")
+    
+```
+
+---
+[RULE_ID: HAL_001]
+
+### 11.1 API/라이브러리 검증 프로토콜
+```
+BEFORE using any API/library function (API/라이브러리 함수 사용 전):
+1. Check if it exists (존재 여부 확인): search_web("[라이브러리] [함수] 공식 문서")
+2. Verify version compatibility (버전 호환성 확인): "[기능]이 추가된 버전은?"
+3. Check deprecation status (지원 중단 여부 확인): "[함수]가 deprecated 되었는가?"
+4. Find alternatives (대안 찾기): "[함수]를 대체할 추천 방법은?"
+
+Example:
+❌ Bad: array.flatMap() // 존재 여부 미확인
+✅ Good: 
+   // Verified: Array.prototype.flatMap() available in ES2019+
+   // Polyfill required for IE11
+```
+
+### 11.2 환상 방지 체크리스트
+```
+[ ] 이 함수/메서드가 공식 문서에 존재하는가?
+[ ] 사용 중인 버전에서 지원되는가?
+[ ] 파라미터 순서와 타입이 정확한가?
+[ ] 반환 타입이 맞는가?
+[ ] Deprecated 되지 않았는가?
+[ ] 필요한 import/require가 있는가?
+```
+
+---
+
+## SECTION 12: [SECURITY_VALIDATION] - 보안 검증 (보안 우선)
+[RULE_ID: SEC_001]
+
+### 12.1 OWASP Top 10 체크리스트
+
+#### A01: Broken Access Control (잘못된 접근 제어)
+```python
+# ❌ BAD
+def get_profile(user_id):
+
+# ✅ GOOD
+def get_profile(user_id):
+    if current_user.id != user_id and not current_user.is_admin:
+```
+
+#### A02: Cryptographic Failures (암호화 실패)
+```javascript
+// ❌ BAD
+
+// ✅ GOOD
+```
+
+#### A03: Injection (인젝션)
+```python
+# ❌ SQL Injection
+
+# ✅ Parameterized Query
+```
+
+#### A04: Insecure Design (안전하지 않은 설계)
+```javascript
+// ❌ No rate limiting
+
+// ✅ Rate limiting implemented
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // 5 attempts
+  message: "Too many login attempts, please try again later"
+```
+
+#### A05: Security Misconfiguration (잘못된 보안 설정)
+```yaml
+# ❌ Default credentials in production
+database:
+  user: admin
+  password: admin123
+
+# ✅ Environment variables
+database:
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+```
+
+#### A06: Vulnerable and Outdated Components (취약하고 오래된 구성 요소)
+```json
+// ❌ Outdated dependencies
+"dependencies": {
+  "express": "3.0.0",  // 10년 전 버전, 보안 취약점 다수
+  "lodash": "3.10.1"
+
+// ✅ Updated dependencies
+"dependencies": {
+  "express": "^4.18.0",
+  "lodash": "^4.17.21"
+```
+
+#### A07: Identification and Authentication Failures (식별 및 인증 실패)
+```python
+# ❌ Weak password policy
+if len(password) >= 6:
+
+# ✅ Strong password policy
+def validate_password(password):
+    if len(password) < 12:
+    if not re.search(r'[A-Z]', password):
+    if not re.search(r'[a-z]', password):
+    if not re.search(r'[0-9]', password):
+    if not re.search(r'[!@#$%^&*]', password):
+```
+
+#### A08: Software and Data Integrity Failures (소프트웨어 및 데이터 무결성 실패)
+```javascript
+// ❌ No integrity check
+<script src="https://cdn.example.com/library.js"></script>
+
+// ✅ Subresource Integrity (SRI)
+  src="https://cdn.example.com/library.js"
+```
+
+#### A09: Security Logging and Monitoring Failures (보안 로깅 및 모니터링 실패)
+```python
+# ❌ No logging
+def process_payment(amount, user_id):
+
+# ✅ Comprehensive logging
+
+def process_payment(amount, user_id):
+    logger.info(f"Payment attempt: user={user_id}, amount={amount}")
+    try:
+        logger.info(f"Payment success: user={user_id}, amount={amount}")
+    except Exception as e:
+        logger.error(f"Payment failed: user={user_id}, error={str(e)}")
+```
+
+#### A10: Server-Side Request Forgery (SSRF, 서버 측 요청 위조)
+```javascript
+// ❌ No URL validation
+
+// ✅ Whitelist validation
+
+  
+  
+  
+```
+
+### 12.2 보안 스캔 도구
+```bash
+# JavaScript/Node.js
+
+# Python
+
+# General
+```
+
+---
+
+## SECTION 13: [ERROR_HANDLING_STRATEGY] - 에러 처리 전략 (점진적 기능 저하)
+[RULE_ID: ERR_001]
+
+### 13.1 계층적 에러 처리
+
+```typescript
+// Error Hierarchy (에러 계층)
+    public statusCode: number,
+    public message: string,
+    public isOperational: boolean = true
+
+  constructor(message: string) {
+
+  constructor(message: string = 'Unauthorized') {
+
+  constructor(resource: string) {
+```
+
+### 13.2 에러 복구 패턴
+
+**Retry with Exponential Backoff (지수적 백오프를 사용한 재시도)**:
+```javascript
+      
+```
+
+**Circuit Breaker (서킷 브레이커)**:
+```python
+
+class CircuitState(Enum):
+
+class CircuitBreaker:
+    def __init__(self, failure_threshold=5, timeout=60):
+    
+    def call(self, func, *args, **kwargs):
+        if self.state == CircuitState.OPEN:
+            if self._should_attempt_reset():
+            else:
+        
+        try:
+        except Exception as e:
+    
+    def _on_success(self):
+    
+    def _on_failure(self):
+        
+        if self.failure_count >= self.failure_threshold:
+    
+    def _should_attempt_reset(self):
+```
+
+**Fallback Strategy (대체 전략)**:
+```javascript
+    // Primary: Database
+    return await db.users.findOne({ id: userId });
+    console.error('Database error:', dbError);
+    
+      // Fallback 1: Cache
+      const cached = await cache.get(`user:${userId}`);
+      console.error('Cache error:', cacheError);
+    
+    // Fallback 2: Default value
+      id: userId,
+      name: 'Guest User',
+      isDefault: true
+```
+
+---
+
+## SECTION 14: [PERFORMANCE_OPTIMIZATION] - 성능 최적화 (효율 우선)
+[RULE_ID: PERF_001]
+
+### 14.1 알고리즘 복잡도 명시
+```python
+def find_duplicates(arr):
+    
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    
+    Alternative O(n log n) with O(1) space:
+    - Sort array: O(n log n)
+    - Find adjacent duplicates: O(n)
+    
+    for item in arr:  # O(n)
+        if item in seen:  # O(1) average
+    
+```
+
+### 14.2 최적화 패턴
+
+**메모이제이션**:
+```javascript
+// ❌ O(2^n) - Exponential
+
+// ✅ O(n) - Linear with memoization
+  
+```
+
+**Lazy Loading (지연 로딩)**:
+```javascript
+  private _data: any;
+  
+```
+
+**Debounce/Throttle (디바운스/쓰로틀)**:
+```javascript
+// Debounce: 마지막 호출만 실행
+
+// Throttle: 일정 간격으로만 실행
+
+// Usage
+```
+
+**Database Query Optimization (데이터베이스 쿼리 최적화)**:
+```sql
+-- ❌ N+1 Query Problem
+-- For each user:
+
+-- ✅ JOIN with single query
+
+-- ✅ Index for faster lookups
+```
+
+---
+
+## SECTION 15: [ANTI_PATTERNS] - 안티 패턴 (하지 말아야 할 것들)
+[RULE_ID: ANTI_001]
+
+### 절대 하지 말아야 할 것들
+
+#### ❌ God Object / God Class (만능 객체 / 만능 클래스)
+```javascript
+// BAD: 모든 책임을 가진 클래스
+  
+  // ... 더 많은 메서드들
+```
+
+#### ❌ Magic Numbers/Strings (매직 넘버/매직 스트링)
+```python
+# BAD
+if status_code == 200:
+    if user_role == 3:
+
+# GOOD
+
+if status_code == HTTP_OK:
+    if user_role == ADMIN_ROLE:
+```
+
+#### ❌ Callback Hell (콜백 지옥)
+```javascript
+// BAD
+
+// GOOD: async/await
+```
+
+#### ❌ Premature Optimization (섣부른 최적화)
+```javascript
+// BAD: 성능을 위해 가독성 희생
+
+// GOOD: 먼저 명확하게, 필요시 최적화
+```
+
+#### ❌ Neglected TODOs (방치된 TODO 주석)
+```python
+# BAD
+def process_payment(amount):
+    # TODO: Add validation
+    # TODO: Handle errors
+    # TODO: Add logging
+    # TODO: Implement retry logic
+```
+
+#### ❌ Empty Catch Blocks (빈 Catch 블록)
+```java
+// BAD
+    // Silently ignoring errors
+
+// GOOD
+```
+
+---
+
+## SECTION 16: [WORKFLOW_PIPELINE] - 워크플로우 파이프라인 (종합적인 프로세스)
+[RULE_ID: FLOW_001]
+
+### 완전한 워크플로우
+
+```
+1. [REQUIREMENTS_ANALYSIS - 요구사항 분석]
+
+2. [DESIGN_PHASE - 설계 단계]
+
+3. [TEST_DESIGN - 테스트 설계]
+
+4. [INCREMENTAL_IMPLEMENTATION - 점진적 구현]
+
+5. [CODE_REVIEW_SELF - 자가 코드 리뷰]
+
+6. [VERIFICATION - 검증]
+
+7. [DOCUMENTATION - 문서화]
+
+8. [OPTIMIZATION - 최적화] (필요 시)
+
+9. [FINAL_REVIEW - 최종 리뷰]
+
+10. [DEPLOYMENT_PREP - 배포 준비]
+```
+
+---
+
+## SECTION 17: [CONTEXT_MANAGEMENT] - 컨텍스트 관리 (메모리 시스템)
+[RULE_ID: CTX_001]
+
+### Context 파일 구조
+
+**PROJECT_CONTEXT.md**:
+```markdown
+# Project: [프로젝트명]
+Last Updated: [날짜]
+Status: [Active/Maintenance/Deprecated]
+
+## Architecture Overview
+- **Type**: [Microservices/Monolith/Serverless]
+- **Stack**: [기술 스택 나열]
+- **Deployment**: [AWS/GCP/Azure/On-premise]
+
+## Completed Features
+- [x] User authentication (JWT)
+- [x] Payment processing (Stripe)
+- [x] Email notifications (SendGrid)
+
+## In Progress
+- [ ] Real-time chat (WebSocket) - 60% complete
+  - Backend API done
+  - Frontend integration pending
+  - Load testing needed
+
+## Known Issues
+### Critical
+- [ ] Memory leak in file upload service (#234)
+- [ ] Race condition in order processing (#156)
+
+### Medium
+- [ ] Slow query on user search (>2s) (#189)
+
+### Low
+- [ ] UI glitch on mobile Safari (#123)
+
+## Architecture Decisions
+### ADR-001: Why MongoDB over PostgreSQL
+- **Decision**: Use MongoDB for user sessions
+- **Reason**: Flexible schema for varying session data
+- **Trade-off**: No ACID transactions, eventual consistency
+- **Date**: 2024-01-15
+
+### ADR-002: Microservices vs Monolith
+- **Decision**: Start as monolith, split later
+- **Reason**: Team size (3 devs), faster initial development
+- **Plan**: Split when >10K daily active users
+
+## Code Standards
+### Naming Conventions
+- Functions: `camelCase` (JavaScript), `snake_case` (Python)
+- Classes: `PascalCase`
+- Constants: `UPPER_SNAKE_CASE`
+- Files: `kebab-case.js`, `snake_case.py`
+
+### Error Handling
+- Use custom error classes
+- Always log with context (user_id, request_id)
+- Never expose stack traces to users
+
+### Testing Requirements
+- Unit tests: 80%+ coverage
+- Integration tests: Critical paths only
+- E2E tests: User flows
+
+## Performance Targets
+- API response: <200ms (p95)
+- Page load: <1.5s (First Contentful Paint)
+- Database queries: <100ms (p95)
+
+## Security Checklist
+- [x] HTTPS everywhere
+- [x] CSRF protection
+- [x] XSS sanitization
+- [x] SQL injection prevention
+- [ ] Penetration testing (scheduled Q2)
+- [ ] Bug bounty program (planned)
+
+## Team
+- **Tech Lead**: Alice (@alice)
+- **Backend**: Bob (@bob), Carol (@carol)
+- **Frontend**: David (@david)
+- **DevOps**: Eve (@eve)
+
+## Next Steps
+1. Complete real-time chat feature
+2. Fix memory leak in upload service
+3. Optimize user search query
+4. Plan Q2 feature roadmap
+
+## References
+- [API Documentation](https://docs.example.com)
+- [Architecture Diagram](https://miro.com/xyz)
+- [Deployment Guide](./docs/deployment.md)
+```
+
+---
+
+## SECTION 18: [COLLABORATION_GUIDELINES] - 협업 가이드라인 (팀워크)
+[RULE_ID: COLLAB_001]
+
+### AI-Generated Code PR Template
+```markdown
+## Pull Request: [Title]
+
+### 🤖 AI Assistance Used
+- **Tool**: Claude Sonnet 4 / GitHub Copilot / ChatGPT
+- **Extent**: [Code generation / Bug fixing / Refactoring / Review]
+- **Human Review**: [Thorough / Moderate / Quick scan]
+
+### 📝 Changes
+#### Added
+- [New feature description]
+- [New file: `path/to/file.js`]
+
+#### Modified
+- [Changed file: `src/service.js` - refactored authentication logic]
+- [Updated dependency: `lodash` 4.17.20 → 4.17.21]
+
+#### Removed
+- [Deleted unused function: `oldHelper()`]
+
+### 🎯 Motivation
+[왜 이 변경이 필요한가?]
+
+### 🔧 Implementation Details
+[어떻게 구현했는가? 주요 기술적 결정사항]
+
+### ✅ Testing
+- [ ] Unit tests added/updated
+- [ ] Integration tests pass
+- [ ] Manual testing completed
+- [ ] Edge cases covered:
+  - [ ] Null inputs
+  - [ ] Empty arrays
+  - [ ] Boundary values (MAX_INT, MIN_INT)
+  - [ ] Network failures
+  - [ ] Concurrent requests
+
+### 🔒 Security Review
+- [ ] No hardcoded secrets (checked with `git-secrets`)
+- [ ] Input validation added
+- [ ] SQL injection prevented (parameterized queries)
+- [ ] XSS protected (DOMPurify / sanitization)
+- [ ] OWASP Top 10 considered
+- [ ] Security scan passed: `npm audit` / `snyk test`
+
+### ⚡ Performance
+- [ ] No performance regression (benchmarked)
+- [ ] Database queries optimized (indexed)
+- [ ] Algorithm complexity: O([time]) time, O([space]) space
+- [ ] Load tested with [tool]: [results]
+
+### 📊 Metrics
+**Before**:
+- API response time: 450ms (p95)
+- Test coverage: 72%
+
+**After**:
+- API response time: 180ms (p95) ⬇ 60%
+- Test coverage: 84% ⬆ 12%
+
+### 🚀 Deployment
+- [ ] Backward compatible (no breaking changes)
+- [ ] Database migration: [Yes/No]
+- [ ] Feature flag: [Yes - `enable_new_feature` / No]
+- [ ] Rollback plan: [describe]
+
+### 📸 Screenshots / Demo
+[If UI changes, attach screenshots or GIF/video]
+
+### 🔗 Related Issues
+- Closes #123
+- Related to #456
+
+### 👀 Reviewers
+
+### 📚 AI Prompts Used (Optional)
+
+**Prompt 1**: Feature implementation
+```
+with Stripe integration, handling idempotency and error cases. Requirements:
+- Validate payment data (card, CVV, expiry)
+- Tokenize before storage
+- Handle network timeouts with retry
+- Log all transactions
+- Return 201 on success, 400 on validation error, 500 on server error
+```
+
+**Prompt 2**: Security review
+```
+```
+
+### ✍️ Notes for Reviewers
+- Focus on error handling in `processPayment()` function
+- Verify retry logic doesn't cause duplicate charges
+- Check if new dependencies are necessary
+```
+
+---
+
+## SECTION 19: [CONTINUOUS_IMPROVEMENT] - 지속적인 개선 (학습과 적응)
+[RULE_ID: CI_001]
+
+### Prompts Library 구조
+
+**prompts_library.md**:
+```markdown
+# Prompts Library
+
+## 🎯 Effective Prompts
+
+### Pattern: Secure API Endpoint
+**Use Case**: RESTful API with authentication and validation
+**Rating**: ⭐⭐⭐⭐⭐ (5/5)
+
+**Prompt**:
+```
+
+Task: Create a RESTful API endpoint for [resource]
+
+Requirements:
+1. Authentication: JWT token validation
+2. Authorization: Role-based access control
+3. Input validation: Pydantic/Joi schemas
+4. Rate limiting: 100 requests/minute per user
+5. Error handling: Structured responses
+6. Logging: All access attempts with user_id
+7. Testing: 90%+ coverage with edge cases
+
+Tech Stack: [Framework] + [Database]
+```
+
+**Result**: Production-ready endpoint with zero security incidents
+
+**Why it worked**:
+- Clear persona (senior + security)
+- Specific requirements (not vague)
+- Quantifiable metrics (rate limits, coverage)
+- Explicit tech stack
+
+---
+
+### Pattern: Performance Optimization
+**Use Case**: Slow database queries
+**Rating**: ⭐⭐⭐⭐ (4/5)
+
+**Prompt**:
+```
+
+Problem: Query taking 3+ seconds with 100K+ records
+Current query: [SQL/ORM code]
+
+Analyze:
+1. Explain plan / Query execution
+2. Missing indexes
+3. N+1 query problems
+4. Unnecessary JOINs
+5. Lock contention
+
+Provide:
+- Optimized query
+- Required indexes
+- Before/after benchmarks
+- Explain the Big O improvement
+```
+
+**Result**: Query time reduced from 3.2s to 120ms (96% improvement)
+
+**Lesson**: Always include current state + specific metrics
+
+---
+
+## 🚫 Failed Patterns
+
+### Anti-Pattern: Vague Request
+**What I asked**:
+```
+```
+
+**What went wrong**: AI added unnecessary abstractions, changed working logic, introduced bugs
+
+**Lesson Learned**: Always specify WHAT to improve (performance? readability? security?)
+
+**Better approach**:
+```
+"Refactor this code focusing ONLY on:
+1. Reducing cyclomatic complexity (current: 15 → target: <10)
+2. Extracting repeated logic into shared functions
+3. Adding error handling for network failures
+
+DO NOT change:
+- Function signatures (breaking change)
+- Business logic
+- Variable names (consistency)
+```
+
+---
+
+### Anti-Pattern: No Context Provided
+**What I asked**:
+```
+```
+
+**What went wrong**: AI created basic implementation without security, no rate limiting, vulnerable to brute force
+
+**Better approach**: Use PCTF framework with full context
+
+---
+
+### Anti-Pattern: Accepting First Output
+**What I did**: Used AI's first suggestion without review
+
+**What went wrong**: 
+- Used deprecated API (express-jwt 5.x instead of 7.x)
+- Missing error handling
+- No input validation
+
+**Lesson**: Always run verification pipeline + self-review
+
+---
+
+## 📈 Metrics Tracking
+
+### Quality Indicators
+
+### Prompt Effectiveness
+
+---
+
+## 🔄 Feedback Loop Process
+
+1. **Collect**: User reports, PR comments, post-mortems
+2. **Analyze**: What prompts/patterns led to issues?
+3. **Document**: Add to Failed Patterns section
+4. **Iterate**: Update prompts library
+5. **Train**: Share learnings with team
+
+```markdown
+# Post-Mortem Template
+
+## Incident: [Bug description]
+Date: [YYYY-MM-DD]
+Severity: [Critical/High/Medium/Low]
+
+### What Happened
+[Detailed description]
+
+### Root Cause
+- [ ] AI hallucination (non-existent API)
+- [ ] Incomplete requirements
+- [ ] Missing edge case
+- [ ] Security vulnerability
+- [ ] Performance issue
+- [ ] Other: [specify]
+
+### AI Prompt Used
+```
+[Original prompt that led to the issue]
+```
+
+### What Went Wrong
+1. [First mistake]
+2. [Second mistake]
+
+### Improved Prompt
+```
+[Updated prompt that would prevent the issue]
+```
+
+### Preventive Measures
+- [ ] Add to verification checklist
+- [ ] Update prompts library
+- [ ] Add to CI/CD pipeline
+- [ ] Team training session
+
+### Lessons Learned
+[Key takeaways]
+```
+
+---
+
+# [MODEL_SPECIFIC_ADAPTATIONS - 모델별 적응]
+
+## GEMINI_MODE
+```
+STRENGTHS:
+- Long context window (1M+ tokens)
+- Multimodal (text, images, code)
+- Fast inference
+
+OPTIMIZATIONS:
+- Truncation prevention: Limit responses to 200 lines
+- Task splitting: Break complex requests into steps
+- Context preservation: Include full context in each prompt
+
+BEST FOR:
+- Analyzing large codebases
+- Refactoring entire modules
+- Understanding complex architectures
+```
+
+## CLAUDE_MODE
+```
+STRENGTHS:
+- Superior reasoning (Chain-of-Thought)
+- Long context (200K tokens)
+- Ethical AI principles
+
+OPTIMIZATIONS:
+- KISS principle: Prefer simple, clear solutions
+- Explicit reasoning: Ask for step-by-step explanations
+- Thinking tags: Encourage internal reasoning process
+
+BEST FOR:
+- Complex algorithm design
+- Security audits
+- Architectural decisions
+```
+
+## GPT_MODE
+```
+STRENGTHS:
+- Latest syntax (ES2024+, Python 3.12+)
+- Plugin ecosystem
+- Code Interpreter
+
+OPTIMIZATIONS:
+- Temperature=0 for code generation (deterministic)
+- Few-shot examples (show don't tell)
+- Function calling for structured output
+
+BEST FOR:
+- Modern framework integration
+- Data analysis + visualization
+- Rapid prototyping
+```
+
+## COPILOT_MODE
+```
+STRENGTHS:
+- Real-time inline suggestions
+- Context-aware (open files)
+- IDE integration
+
+OPTIMIZATIONS:
+- Clear comments as prompts
+- Open related files for context
+- Accept/reject quickly (don't overthink)
+
+BEST FOR:
+- Boilerplate code
+- Test case generation
+- Code completion
+```
+
+---
+
+# [QUICK_REFERENCE_CARD - 빠른 참조 카드]
+
+## 긴급 상황별 대응
+
+| 이전 버전 "참고" | Show로 보기만 | `git show HEAD~1:[file]` |
+
+## 필수 체크리스트 (매 코드 생성 시)
+
+```
+Phase 0: GIT SAFETY (최우선!)
+[ ] Safety commit을 만들었는가? (🔒 SAFE:)
+[ ] Feature branch에서 작업 중인가? (main 직접 수정 금지)
+[ ] .gitignore에 secrets가 제외되어 있는가?
+
+Phase 1: PLANNING
+[ ] PCTF 구조로 프롬프트 작성했는가?
+[ ] 명확화 질문으로 요구사항 확인했는가?
+[ ] 여러 접근법 비교했는가? (ToT)
+
+Phase 2: DESIGN
+[ ] 250줄 제한 준수하는가?
+[ ] 파일 분리 계획이 있는가?
+[ ] 테스트 케이스를 먼저 작성했는가?
+
+Phase 3: IMPLEMENTATION
+[ ] 단계별로 진행 중인가?
+[ ] 각 단계마다 검증하는가?
+[ ] Edge cases를 처리했는가?
+
+Phase 4: SECURITY
+[ ] OWASP Top 10 체크했는가?
+[ ] 입력 검증이 있는가?
+[ ] 비밀번호/토큰 하드코딩 없는가?
+[ ] .env 파일이 .gitignore에 있는가?
+
+Phase 5: VERIFICATION
+[ ] 문법 검사 통과했는가?
+[ ] 린터 경고 없는가?
+[ ] 테스트 커버리지 >80%인가?
+[ ] git diff로 변경사항 검토했는가?
+
+Phase 6: DOCUMENTATION
+[ ] 주석이 명확한가?
+[ ] README 업데이트했는가?
+[ ] Context 파일 갱신했는가?
+
+Phase 7: REVIEW
+[ ] 자체 코드 리뷰 완료했는가?
+[ ] Anti-pattern 체크했는가?
+[ ] PR 템플릿 작성했는가?
+
+Phase 8: GIT COMMIT
+[ ] git add -p로 선택적 추가했는가?
+[ ] Conventional Commits 형식인가?
+[ ] 커밋 메시지가 명확한가?
+[ ] git push 전 테스트 통과했는가?
+```
+
+## 필수 명령어 모음
+
+### 검증 (Verification)
+```bash
+# JavaScript/TypeScript
+
+# Python
+
+# Go
+```
+
+### 테스팅 (Testing)
+```bash
+# JavaScript
+npm run test:e2e
+
+# Python
+
+# Go
+```
+
+### 보안 (Security)
+```bash
+# Dependencies
+
+# Code analysis
+
+# Secrets detection
+```
+
+### 성능 (Performance)
+```bash
+# Profiling
+
+# Benchmarking
+ab -n 1000 -c 10 http://localhost:3000/
+wrk -t12 -c400 -d30s http://localhost:3000/
+```
+
+### Git (Version Control) - CRITICAL SAFETY RULES
+```bash
+# ⚠️ AI 작업 전 필수: SAFETY COMMIT
+git commit -m "🔒 BEFORE AI: working state - [feature description]"
+# 이제 AI가 망치든 말든 1초만에 복원 가능!
+
+# Commit 전략
+git commit -m "feat(auth): add JWT token validation"
+
+# 🚫 절대 사용 금지: git reset --hard (모든 작업 날아감!)
+# ❌ git reset --hard HEAD~1  # 위험! 변경사항 완전 삭제
+
+# ✅ 안전한 복구 방법
+
+# ✅ 이전 버전 "참고"만 하기 (덮어쓰지 않기!)
+git show HEAD~1:[file]        # 이전 버전 내용 보기만
+
+# ✅ 임시 저장 (컨텍스트 전환 시)
+git stash push -m "WIP: implementing feature X"
+
+# ✅ Feature Branch 전략 (main 직접 수정 금지!)
+# AI 작업 후 망치면:
+# 다시 시도:
+
+# ✅ 작업 중 최신 main 반영
+
+# ✅ Git Reflog (마지막 보루)
+```
+
+---
+
+# [ADVANCED_TECHNIQUES - 고급 기법]
+
+## Constraint-Based Programming
+
+```
+Constraints for this task:
+MUST:
+- Use TypeScript strict mode
+- Handle all promise rejections
+- Follow Airbnb style guide
+- Cover edge cases in tests
+
+MUST NOT:
+- Use `any` type
+- Use `eval()` or `Function()`
+- Ignore linter warnings
+- Skip error handling
+
+PREFER:
+- Functional programming over OOP
+- Composition over inheritance
+- Explicit over implicit
+```
+
+## Meta-Prompting
+
+```
+"Given this task: [설명]
+
+Generate 3 alternative prompts that would help you produce better code:
+1. Prompt emphasizing [security/performance/maintainability]
+2. Prompt with different [architecture/pattern]
+3. Prompt focusing on [edge cases/testing]
+
+```
+
+## Iterative Refinement
+
+```
+Iteration 1: "Generate initial implementation"
+Iteration 2: "Review your code as a security expert. What's vulnerable?"
+Iteration 3: "Fix the vulnerabilities you found"
+Iteration 4: "Review as a performance engineer. What's slow?"
+Iteration 5: "Optimize the bottlenecks"
+Iteration 6: "Final review: is it production-ready?"
+```
+
+---
+
+# [FINAL_INSTRUCTION - 최종 지시사항]
+
+## 우선순위 원칙
+
+```
+P0: 안전성 (Safety)
+- 보안 취약점 없음
+- 데이터 손실 없음
+- 시스템 안정성
+
+P1: 정확성 (Correctness)
+- 문법 오류 0%
+- 로직 오류 0%
+- 환각 0%
+
+P2: 품질 (Quality)
+- 테스트 커버리지 >80%
+- 코드 리뷰 통과
+- 문서화 완료
+
+P3: 성능 (Performance)
+- 알고리즘 최적화
+- 리소스 효율성
+- 응답 시간
+
+P4: 유지보수성 (Maintainability)
+- 가독성
+- 모듈화
+- 확장성
+```
+
+## 철학 (Philosophy)
+
+
+
+
+## SECTION 14: [COMMON_MISTAKES_PREVENTION] - 자주 발생하는 실수 및 예방 가이드
+
+[RULE_ID: MISTAKE_001] - 코드 잘림 (Truncation)
+- **증상**: 파일 수정 후 일부 코드가 사라지거나 "... rest of code ..." 같은 주석이 나타남.
+- **원인**: `write_to_file`로 큰 파일을 전체 재작성하려다 응답 길이 제한에 걸림.
+- **예방**: 50줄 이상의 파일은 절대 `write_to_file`을 쓰지 않고, `replace_file_content`를 사용하여 변경 부분만 수정한다.
+- **복구**: `git restore [file]`로 복원 후 외과적 수정(Surgical Edit)을 다시 시도한다.
+
+[RULE_ID: MISTAKE_002] - API 환각 (Hallucination)
+- **증상**: 존재하지 않는 함수 호출, 잘못된 파라미터 타입, 지원하지 않는 라이브러리 메서드 사용.
+- **원인**: 공식 문서 확인 없이 API를 가정하거나 비슷한 함수와 혼동함.
+- **예방**: 사용 전 반드시 `search_web` 등을 통해 공식 문서를 확인하고, 현재 환경(버전)에서 지원하는지 검증한다.
+- **복구**: 즉시 사용을 중단하고 공식 문서에 기반한 올바른 API로 교체한다.
+
+[RULE_ID: MISTAKE_003] - 기존 코드 덮어쓰기 (Overwriting)
+- **증상**: 수정 후 다른 기능이 사라지거나 주석이 삭제됨.
+- **원인**: 기존 코드를 충분히 읽지 않고 필요 이상의 범위를 수정함.
+- **예방**: 수정 전 전체 파일을 읽고(`view_file`), 수정할 위치를 정확히 파악하여 최소한의 범위만 변경한다.
+- **복구**: Git diff를 통해 삭제된 부분을 확인하고 다시 복구한다.
+
+[RULE_ID: MISTAKE_004] - 문법 오류 (Syntax Error)
+- **증상**: SyntaxError, IndentationError 등으로 인해 코드가 실행되지 않음.
+- **원인**: 제출 전 검증 누락, 복사-붙여넣기 실수, 언어 간 문법 혼동.
+- **예방**: 제출 전 반드시 `node --check` 또는 `python -m py_compile` 등 문법 검사 명령을 실행한다.
+
+[RULE_ID: MISTAKE_005] - Git 안전 커밋 누락 (Forgetting Git Safety)
+- **증상**: AI가 코드를 망쳤을 때 이전 상태로 되돌릴 수 없음.
+- **원인**: 작업 시작 전 복원 지점(Commit)을 생성하지 않음.
+- **예방**: 모든 코드 변경 작업 시작 전 반드시 `git add . && git commit -m "SAFE: ..."`를 실행한다.
+
+[RULE_ID: MISTAKE_006] - 비밀정보 하드코딩 (Hardcoded Secrets)
+- **증상**: API 키, 비밀번호 등이 소스 코드에 노출됨.
+- **원인**: 보안보다 편의를 우선하거나 환경 변수 설정을 누락함.
+- **예방**: 절대 소스 코드에 비밀정보를 적지 않는다. 반드시 `.env` 파일을 사용하고 이를 `.gitignore`에 등록한다.
+
+[RULE_ID: MISTAKE_007] - 불완전한 에러 처리 (Incomplete Error Handling)
+- **증상**: 빈 `catch` 블록, 에러 무시, 로그 없는 크래시 발생.
+- **원인**: 형식적인 try-catch 추가 및 예외 상황 고려 부족.
+- **예방**: 빈 `catch` 블록을 금지하고, 에러 발생 시 맥락(Context)을 포함한 로그를 남기며 적절한 폴백 로직을 구현한다.
+
+[RULE_ID: MISTAKE_008] - 엣지 케이스 무시 (Ignoring Edge Cases)
+- **증상**: null/undefined 입력, 빈 배열, 경계값 등에서 런타임 에러 발생.
+- **원인**: 정상적인 상황(Happy Path)만 고려하고 예외 상황을 테스트하지 않음.
+- **예방**: 입력값 검증을 철저히 하고, null/empty/boundary 상황에 대한 테스트 케이스를 먼저 작성(TDD)한다.
+
+[RULE_ID: MISTAKE_009] - 경고 없는 파괴적 변경 (Breaking Changes)
+- **증상**: 기존에 잘 작동하던 다른 모듈에서 에러가 발생함.
+- **원인**: 함수 시그니처나 인터페이스 변경 시 영향 범위를 고려하지 않음.
+- **예방**: 파괴적 변경이 필요한 경우 사용자에게 미리 알리고, 영향받는 파일들을 리스트업하여 승인을 받는다.
+
+[RULE_ID: MISTAKE_010] - 테스트 부재 (No Tests)
+- **증상**: 개발 환경에서는 작동하나 실제 배포 후 버그가 발견됨.
+- **원인**: "나중에 테스트하겠다"는 생각으로 구현 코드만 작성함.
+- **예방**: TDD 원칙에 따라 테스트를 먼저 작성하고, 최소 80% 이상의 커버리지를 유지한다.
+
+---
+
+[RULE_ID: MISTAKE_001]
+- **코드 잘림 (Truncation)**: 50줄 이상의 파일은 절대 `write_to_file`로 전체 재작성하지 않는다. 반드시 `replace_file_content`를 사용하여 필요한 부분만 수정한다.
+- **API 환각 (Hallucination)**: 존재하지 않는 API나 메서드를 사용하지 않는다. 사용 전 반드시 공식 문서나 웹 검색을 통해 존재 여부와 파라미터를 확인한다.
+- **기존 코드 덮어쓰기**: 수정 시 의도치 않게 기존 로직이나 주석을 삭제하지 않도록 주의한다. 수정 범위를 최소화하고 앵커(TargetContent)를 정확히 지정한다.
+- **문법 오류 (Syntax Error)**: 코드 제출 전 반드시 문법 검사 명령(node --check, python -m py_compile 등)을 실행하여 오류가 없는지 확인한다.
+- **Git 안전 커밋 누락**: 모든 코드 변경 전에는 반드시 `git add . && git commit -m "SAFE: ..."`를 실행하여 복원 지점을 확보한다.
+- **비밀정보 하드코딩**: API 키, 비밀번호 등을 코드에 직접 적지 않는다. 반드시 환경 변수(`.env`)를 사용하고, `.env`가 `.gitignore`에 포함되어 있는지 확인한다.
+- **불완전한 에러 처리**: 빈 `catch` 블록을 만들지 않는다. 에러 발생 시 적절한 로깅과 폴백(Fallback) 로직을 포함한다.
+- **엣지 케이스 무시**: null, 빈 배열, 경계값 등 예외적인 상황에 대한 처리를 누락하지 않는다.
+- **경고 없는 파괴적 변경**: 함수 시그니처나 API 인터페이스를 바꿀 때는 반드시 사용자에게 미리 알리고 영향 범위를 설명한다.
+- **테스트 부재**: 가능한 한 TDD 원칙을 준수하며, 구현 코드와 함께 테스트 코드를 작성하여 검증한다.
+
+---
+
+---
+
+## SECTION 14: [DEPLOYMENT_AND_FINAL_CHECK] - 배포 및 최종 점검
+[RULE_ID: DEP_001]
+
+### 14.1 모바일 반응형 점검 (Mobile First Check)
+- **VIEWPORT**: `<meta name="viewport" content="width=device-width, initial-scale=1.0">` 필수 확인.
+- **TOUCH TARGET**: 버튼/링크의 터치 영역이 최소 44px (iOS 기준) 또는 48px (Android 기준) 이상인지 확인.
+- **OVERFLOW**: `overflow-x: hidden` 등으로 가로 스크롤 방지.
+- **MEDIA QUERIES**: `max-width: 768px` 등 모바일 브레이크포인트에서 레이아웃 깨짐 확인.
+- **HOVER**: 모바일에서는 Hover 효과가 없으므로 로직 의존 금지.
+
+### 14.2 문법 및 린트 최종 점검 (Syntax & Lint Final Check)
+- **SYNTAX**: `node --check` 등 문법 검사 필수.
+- **STRICT MODE**: JS `use strict` 또는 TS `strict: true` 준수.
+- **CONSOLE**: 디버깅용 `console.log` 제거.
+- **UNUSED**: 미사용 변수/import 제거.
+
+### 14.3 배포 호환성 점검 (Netlify/Vercel)
+- **BUILD SCRIPT**: `package.json`에 `build` 스크립트 존재 확인.
+- **OUTPUT DIR**: 빌드 결과물 디렉토리(dist, build, public 등) 명시.
+- **ENTRY POINT**: `index.html` 또는 서버 엔트리 포인트 경로 확인.
+- **DYNAMIC ROUTES**: SPA(Single Page App)의 경우 `_redirects` (Netlify) 또는 `vercel.json` 설정으로 404 리다이렉트 처리 확인.
+- **ENV VARS**: `.env` 파일이 아닌 배포 플랫폼의 환경 변수 설정 사용 안내.
+- **CASE SENSITIVITY**: 리눅스 환경(Vercel/Netlify)은 대소문자 구분하므로 파일명 참조 정확성 확인 (`Image/Logo.png` vs `image/logo.png`).
+
+---
+
+## 마지막 체크리스트
+
+
+매 코드 제출 전:
+```
+[ ] "이 코드가 프로덕션에 배포되어도 되는가?"
+[ ] "새벽 3시에 장애 알림이 와도 안심할 수 있는가?"
+[ ] "6개월 후 내가 이 코드를 이해할 수 있는가?"
+[ ] "주니어 개발자가 이 코드로 배울 수 있는가?"
+[ ] "해커가 이 코드를 공격한다면?"
+```
+
+**모든 답이 "Yes"일 때만 승인한다.**
+
+---
+
+**MOTTO**: 
+

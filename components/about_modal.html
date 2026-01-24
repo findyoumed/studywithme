@@ -1,0 +1,25 @@
+<!-- About/Guide Modal (SEO Content) -->
+<div class="playlist-modal" id="aboutModal">
+    <div class="modal-header">
+        <h2 data-i18n="about_title">StudyWithMe Info</h2>
+        <button class="close-btn" onclick="toggleAbout()">✕</button>
+    </div>
+    <!-- Tab Navigation -->
+    <div class="modal-tabs">
+        <button class="tab-btn active" data-tab="usage" data-i18n="tab_usage">Usage</button>
+        <button class="tab-btn" data-tab="faq" data-i18n="tab_faq">FAQ</button>
+        <button class="tab-btn" data-tab="guide" data-i18n="tab_guide">Study Guide</button>
+        <button class="tab-btn" data-tab="policy" data-i18n="tab_policy">Privacy Policy</button>
+        <a href="/blog" target="_blank" class="tab-btn"
+            style="text-decoration: none; display: flex; align-items: center; justify-content: center; "
+            data-i18n="tab_blog">Blog↗</a>
+    </div>
+    <!-- Tab Content Container -->
+    <div class="modal-body" id="aboutModalBody">
+        <div style="text-align: center; padding: 40px; color: #888;">
+            <span class="material-symbols-outlined"
+                style="font-size: 48px; margin-bottom: 10px; animation: spin 2s linear infinite;">sync</span>
+            <p data-i18n="loading">Loading...</p>
+        </div>
+    </div>
+</div>

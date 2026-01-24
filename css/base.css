@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+/* =========================================
+   Base Styles
+   ========================================= */
+:root {
+  --bg-primary: #0f172a; /* Slate 900 */
+  --bg-secondary: #1e293b; /* Slate 800 */
+  --accent-primary: #f4eee2; /* Ivory */
+  --accent-hover: #e7dcc8; /* Warm Ivory */
+  --accent-ink: #2f2a24; /* Soft charcoal */
+  --text-primary: #ffffff;
+  --text-secondary: #cbd5e1; /* Slate 300 */
+  --glass-bg: rgba(15, 23, 42, 0.8);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+}

@@ -1,0 +1,30 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/blog/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/posts/:path*",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
+    {
+      "source": "/((?!.*\\.).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

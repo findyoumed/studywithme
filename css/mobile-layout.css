@@ -1,0 +1,78 @@
+/* =========================================
+   Mobile Layout & Positioning
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* Layout */
+    .container:not(.overlay-mode) {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .container:not(.overlay-mode) .panel {
+        width: 100%;
+        height: 50% !important;
+        position: relative;
+        flex: 0 0 50%;
+    }
+
+    /* Split Mode Adjustments */
+    .container:not(.overlay-mode) .video-panel {
+        padding-top: 60px;
+        background: #000;
+    }
+
+    .container:not(.overlay-mode) .player-wrapper {
+        height: calc(100% - 60px);
+    }
+
+    .container.overlay-mode {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #000;
+    }
+
+    .container.overlay-mode .video-panel {
+        position: relative;
+        width: 100%;
+        height: auto;
+        z-index: 1;
+    }
+
+    .container.overlay-mode .player-wrapper {
+        width: 100%;
+        aspect-ratio: 16/9;
+        position: relative;
+    }
+
+    .container.overlay-mode .camera-panel {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        aspect-ratio: 16/9;
+        transform: translateY(-50%);
+        z-index: 5;
+        height: auto;
+        pointer-events: none;
+        margin-top: -25px;
+        /* Offset for next-video-bar height (50px) */
+    }
+
+    /* Overlays */
+    .speed-overlay {
+        display: none !important;
+    }
+
+    .search-results-grid {
+        max-height: 200px;
+    }
+
+    /* Adjust Top Left Controls position for mobile */
+    .top-left-controls {
+        top: 10px !important;
+    }
+}

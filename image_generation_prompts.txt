@@ -1,0 +1,88 @@
+# Image Generation Prompts (Manual)
+
+Here are the details for the 12 images that need to be generated.
+Please generate them and save them with the exact filenames provided in the `d:\work\studywithme\assets\images\` folder.
+
+---
+
+## ID 1: 시작하기 (Starting)
+**Filename:** `post_01_start_goals.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a beautiful Korean woman standing in front of a white wall, confidently sticking a blue post-it note that says 'GOAL'. She looks motivated. Bright, clean lighting. Smart casual outfit (white shirt, jeans). High quality, detailed.
+
+---
+
+## ID 2: 주간 계획 (Weekly Planning) - REGENERATION
+**Filename:** `post_02_weekly_planning_v2.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a beautiful Korean woman with soft features (not resembling specific celebrities) writing in a plain planner at a wooden desk. Focus on the hand and pen, but her face is visible and calm. Warm, cozy lighting. No visible text on the page. 4k cinematic.
+
+---
+
+## ID 3: 집중 스프린트 (Focus Sprint) - REGENERATION
+**Filename:** `post_03_focus_sprint_v2.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a focused Korean woman working on a laptop in a home office. A digital timer on the desk shows blurred digits or a simple countdown like '24:30'. Professional atmosphere. Evening light with a desk lamp. No text overlay. 4k resolution.
+
+---
+
+## ID 8: 번아웃 예방 (Burnout Prevention) - REGENERATION
+**Filename:** `post_08_burnout_prevention_v2.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a gentle Korean woman holding a warm mug, sitting by a window and looking out. She has a relaxed, peaceful expression. Wearing cozy knitwear. Soft natural sunlight hitting her face. Healing vibe. Not resembling a specific celebrity.
+
+---
+
+## ID 12: 복습 vs 문제풀이 (Review vs Practice) - REGENERATION
+**Filename:** `post_12_review_practice_v2.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a studious Korean woman in a library, looking thoughtful. She is deciding between a stack of thick textbooks (left) and loose test papers (right). Wearing glasses. Intellectual academic vibe. No large legible text on covers. 4k.
+
+---
+
+## ID 13: 순서 결정 (Sequencing) - REGENERATION
+**Filename:** `post_13_sequencing_v2.png`
+**Prompt:**
+> A stunning 4k photorealistic close-up image of a Korean woman's hand writing a checklist in a small notebook with a nice pen. Her face is soft-focused in the background. Sunlight hitting the desk. Vibe of morning organization. No legible words. High detail texture.
+
+---
+
+## ID 16: 포모도로 (Pomodoro) - REGENERATION
+**Filename:** `post_16_pomodoro_v2.png`
+**Prompt:**
+> A stunning 4k photorealistic close-up of a hand pressing a start button on a cute, simple pastel-colored digital timer. The timer display is slightly out of focus or just shows numbers. Warm desk lamp light. Background shows a cozy study setup. Focus on the action.
+
+---
+
+## ID 19: 집중력 지구력 (Focus Endurance)
+**Filename:** `post_19_focus_endurance.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a beautiful Korean woman sitting with perfect posture at a desk, looking at a computer screen. Side profile. She looks fresh and focused despite a long session. Modern ergonomic chair. Clean white desk setup. Vibe of endurance. 4k.
+
+---
+
+## ID 20: 집중력 변형 (Focus Variation)
+**Filename:** `post_20_focus_variation.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a beautiful Korean woman reading a book while standing at a standing desk or high table. Active studying pose. She looks engaged. Bright, modern room with plants. 4k resolution.
+
+---
+
+## ID 21: 매일 복습 (Daily Review)
+**Filename:** `post_21_daily_review.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a beautiful Korean woman quickly reviewing index cards or small notes while holding a coffee cup. Morning light. She looks smart and ready for the day. Casual comfortable home setting. 4k highly detailed.
+
+---
+
+## ID 22: 글쓰기 루틴 (Writing Routine)
+**Filename:** `post_22_writing_routine.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a beautiful Korean woman typing on a laptop with a focused expression. A notebook with an outline is open next to the laptop. Clean, minimalist workspace. Vibe of logical thinking and writing. 4k cinematic.
+
+---
+
+## ID 23: 아침 루틴 (Morning Routine)
+**Filename:** `post_23_morning_routine.png`
+**Prompt:**
+> A stunning 4k photorealistic image of a beautiful Korean woman stretching her arms gently at her desk in the morning sunlight. A planner is open on the desk. Fresh start energy. Cozy room. 4k photorealistic.

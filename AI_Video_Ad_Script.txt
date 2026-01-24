@@ -1,0 +1,83 @@
+﻿이 프로젝트인 **StudyWithMe (Video Study Trainer)** 에 대한 AI 영상 광고 제작용 스크립트 및 상세 프롬프트 가이드입니다.
+
+이 문서는 AI 영상 생성 도구(Sora, Runway Gen-2, Pika 등)에 바로 입력하여 고퀄리티 영상을 만들기 위한 **"실전형 가이드"**입니다. 각 장면마다 영상 생성 AI를 위한 **[영어 프롬프트]**가 포함되어 있습니다.
+
+---
+
+### [AI 영상 제작 가이드: StudyWithMe]
+
+**프로젝트 명:** StudyWithMe (스터디위드미 - AI 학습 파트너)
+**영상 스타일(Tone & Manner):** Cinematic, Cozy Study, High-Tech, Focused, Photorealistic 8k
+**핵심 키워드:** Split screen, Posture tracking, Minimal UI, Real-time Feedback
+
+---
+
+#### 1. 도입부: 지루하고 불안한 혼자 공부
+
+**[내레이션 / 자막]**
+"혼자 공부할 때, 집중이 흐트러지지 않나요? 내 자세가 괜찮은지, 지금 페이스가 맞는지... 아무도 알려주지 않는 고요한 밤." 
+
+**[장면 설명]**
+어두운 방에서 혼자 책상에 앉아 공부하는 사람. 책상 위는 어지럽고, 모니터에는 흐릿한 스터디 영상이 재생됩니다. 사용자는 피곤하고 확신이 없는 표정입니다.
+
+**[🎬 AI Video Prompt (Copy & Paste this)]**
+> **Cinematic shot, dim study room lighting. A lonely student at a desk, messy notes, tired eyes. A laptop plays a blurred study-with-me video. Close-up on the student's face showing doubt and fatigue. Muted colors, melancholic atmosphere, photorealistic 4k.**
+
+---
+
+#### 2. 솔루션 등장: StudyWithMe의 혁신적인 화면
+
+**[내레이션 / 자막]**
+"이제 StudyWithMe를 켜세요. 당신의 방이 집중을 위한 스마트 스터디룸으로 변합니다." 
+
+**[장면 설명]**
+사용자가 노트북(또는 태블릿)을 켜자 화면이 밝아지며 'StudyWithMe' 로고가 뜹니다. 화면 속에서 사용자의 상체 위로 **형광색 AI 스켈레톤 라인**이 실시간으로 그려집니다.
+
+**[🎬 AI Video Prompt (Copy & Paste this)]**
+> **Close-up of a laptop screen turning on in a dark room. The screen displays the 'StudyWithMe' logo glowing softly. A futuristic UI appears. A student sits in front of the camera, and glowing neon lines (posture tracking) overlay the shoulders and spine. Calm cyberpunk lighting, high-tech interface, holographic effect, 8k resolution.**
+
+---
+
+#### 3. 핵심 기능: 실시간 집중 코칭과 스코어링
+
+**[내레이션 / 자막]**
+"유튜브 스터디 메이트와 함께 공부하세요. AI가 당신의 자세와 집중 흐름을 실시간으로 분석하고 점수를 매깁니다. 몰입이 점점 쉬워집니다!" 
+
+**[장면 설명]**
+**화면 분할(Split Screen)** 연출. 왼쪽은 스터디 영상, 오른쪽은 사용자가 따라 공부하는 모습. 집중이 유지될 때마다 `Focus!`, `Streak!`, `+10` 같은 미니멀한 UI 효과가 나타납니다.
+
+**[🎬 AI Video Prompt (Copy & Paste this)]**
+> **Cinematic split-screen view. Left side shows a calm study-with-me creator working at a desk. Right side shows a user mirroring the posture. Subtle neon posture lines track the user's shoulders. Floating minimalist UI text '+10' and 'FOCUS' appears like a productivity game. Soft particles, steady camera, focused atmosphere.**
+
+---
+
+#### 4. 기술적 차별점: 무설치 & 프라이버시
+
+**[내레이션 / 자막]**
+"설치? 필요 없습니다. 로그인? 복잡하지 않아요. 스마트폰, 노트북 어디서든 스터디 영상만 있으면 OK. 내 모습은 절대 서버에 저장되지 않는, 완벽히 안전한 나만의 스터디 파트너." 
+
+**[장면 설명]**
+다양한 기기(아이폰, 아이패드, 맥북)에서 웹사이트가 매끄럽게 돌아가는 모습. 'Privacy Shield' 아이콘이 뜨며 보안이 강조되는 컷.
+
+**[🎬 AI Video Prompt (Copy & Paste this)]**
+> **Montage of various devices (iPhone, iPad, Laptop) displaying the StudyWithMe interface on a desk. A glowing blue digital shield icon appears in the center with text 'Local Processing Only'. Clean white and blue color palette, tech advertisement style, slick motion graphics, highly detailed product shot.**
+
+---
+
+#### 5. 마무리: 행동 촉구 (Start Now)
+
+**[내레이션 / 자막]**
+"보는 스터디는 그만, 이제는 함께 공부. StudyWithMe로 시작하세요." 
+
+**[장면 설명]**
+공부를 마친 사용자가 가볍게 미소 지으며 스트레칭합니다. 화면이 줌아웃 되며 웹사이트 주소(StudyWithMe.com)와 "Start Now" 버튼이 빛납니다.
+
+**[🎬 AI Video Prompt (Copy & Paste this)]**
+> **Medium shot of the student stretching, smiling confidently, looking at the camera. The background fades to a sleek dark blue gradient. The text 'StudyWithMe.com' and a glowing 'Start Now' button appear in the center. Calm, hopeful lighting, commercial quality finale.**
+
+---
+
+### 💡 팁: 더 좋은 결과를 얻으려면?
+*   **카메라 워킹:** 안정적인 느낌을 원하면 프롬프트 끝에 `Steady camera`를 추가하세요.
+*   **스타일 변경:** 더 따뜻한 분위기를 원하면 `Cozy warm lighting`을 강조하세요.
+*   **비율:** 쇼츠(Shorts/Reels)용이라면 영상 생성 시 비율을 **9:16**으로 설정하는 것을 잊지 마세요.

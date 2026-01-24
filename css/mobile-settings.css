@@ -1,0 +1,124 @@
+/* Settings Menu - Fully Opaque & Independent */
+.speed-menu {
+    position: fixed;
+    bottom: 70px;
+    right: 15px;
+    width: auto;
+    min-width: 220px;
+    max-width: 260px;
+    max-width: 260px;
+    z-index: 9999;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    border: 1px solid rgba(244, 238, 226, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 15px rgba(244, 238, 226, 0.2);
+    opacity: 1 !important;
+    display: none !important;
+}
+
+.speed-menu.active {
+    display: block !important;
+}
+
+/* Close Button */
+.speed-menu-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.speed-menu-close:active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.9);
+}
+
+.speed-menu-close .material-symbols-outlined {
+    font-size: 18px;
+}
+
+/* Menu Title */
+.speed-menu-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Grid Layouts */
+.speed-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.speed-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.speed-options {
+    margin-bottom: 5px;
+}
+
+/* Menu Buttons */
+.speed-menu .speed-btn {
+    width: 100%;
+    padding: 8px 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.speed-menu .speed-btn:active {
+    transform: scale(0.95);
+    background: rgba(244, 238, 226, 0.15);
+}
+
+.speed-menu .speed-btn.active {
+    background: linear-gradient(135deg, rgba(244, 238, 226, 0.25) 0%, rgba(231, 220, 200, 0.25) 100%);
+    border-color: rgba(244, 238, 226, 0.5);
+    color: var(--accent-ink);
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(244, 238, 226, 0.3);
+}
+
+.speed-menu .speed-btn .material-symbols-outlined {
+    opacity: 0.7;
+    font-size: 16px;
+}
+
+.speed-menu .speed-btn.active .material-symbols-outlined {
+    opacity: 1;
+    color: var(--accent-ink);
+}

@@ -1,0 +1,253 @@
+﻿<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyWithMe - Live Study Together</title>
+
+    <!-- Meta Tags -->
+    <meta
+      name="description"
+      content="AI 기반 학습 코치. 유튜브 스터디 영상을 보며 카메라로 실시간 집중도 피드백과 SCORE를 기록해보세요."
+    />
+    <meta
+      name="keywords"
+      content="스터디, 공부, 학습, AI 학습, 집중 코칭, 비디오 스터디, Study With Me, AI study"
+    />
+    <meta name="author" content="StudyWithMe" />
+    <meta name="theme-color" content="#0f172a" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://studywithme.com/" />
+
+    <!-- Analytics & SEO (Head Scripts) -->
+    <script src="js/analytics.js"></script>
+
+    <!-- AI & GEO -->
+    <link rel="help" href="/llms.txt" title="AI Context" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://studywithme.com/" />
+    <meta
+      property="og:title"
+      content="StudyWithMe - 실시간 스터디룸"
+    />
+    <meta
+      property="og:description"
+      content="실시간 AI 집중 코칭과 함께 유튜브 스터디 영상을 따라 공부해보세요."
+    />
+    <meta
+      property="og:image"
+      content="https://studywithme.com/og_image.png"
+    />
+
+    <!-- JSON-LD Structured Data (GEO) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "StudyWithMe",
+        "description": "실시간 영상 공유와 AI 집중 코칭으로 함께 공부하는 온라인 스터디룸 서비스입니다.",
+        "url": "https://studywithme.com",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": "AI Focus Analysis, Real-time Scoring, YouTube Study Videos, Privacy Focused (Local Processing)"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use StudyWithMe",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Select Video",
+            "text": "Choose a YouTube study-with-me video from the playlist or search for one."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Enable Camera",
+            "text": "Allow camera access to enable AI focus and posture tracking."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Study",
+            "text": "Study along with the video. The AI compares your posture and focus and gives you a real-time score."
+          }
+        ]
+      }
+    </script>
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+
+    <!-- Fonts & Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/intro-modal.css" />
+    <link rel="stylesheet" href="css/live-stream.css" />
+
+    <!-- Agora SDK -->
+    <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+    <script src="https://download.agora.io/sdk/release/agora-rtm-2.2.0.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Top Left Controls (Score & Settings) -->
+      <div class="top-left-controls">
+<!-- <div
+          class="refresh-overlay"
+          onclick="location.reload(true)"
+          data-i18n-title="refresh_title"
+        >
+          <span class="material-symbols-outlined">refresh</span>
+        </div> -->
+        <!-- <div
+          id="exerciseTimer"
+          class="timer-overlay"
+          style="cursor: pointer"
+          data-i18n-title="timer_reset_title"
+        >
+          00:00:00
+        </div> -->
+        <div class="score-group">
+          <div id="score" class="score-overlay" data-i18n-title="score_share_title" style="cursor: pointer">
+            <span id="scoreMedal" class="score-medal">🥉</span>
+            <span id="scoreValue">SCORE: 00:00:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Participant List Sidebar -->
+      <div id="participantSidebar" class="participant-sidebar">
+        <div class="sidebar-header">
+          <h3>참여자 목록</h3>
+          <button id="btnCloseSidebar" class="close-sidebar-btn">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <ul id="participantList" class="participant-list">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+
+      <!-- Video Panel -->
+      <div class="panel video-panel">
+        <div class="player-wrapper">
+          <div id="player"></div>
+
+          <!-- Desktop Speed Controls (0.5x removed) -->
+          <!-- <div class="speed-overlay">
+            <button class="speed-btn" data-speed="0.75">0.75x</button>
+            <button class="speed-btn active" data-speed="1">1x</button>
+            <button class="speed-btn" data-speed="1.25">1.25x</button>
+            <button class="speed-btn" data-speed="1.5">1.5x</button>
+            <button class="speed-btn" data-speed="2">2x</button>
+          </div> -->
+        </div>
+
+        <!-- Next Video Bar -->
+        <div class="next-video-bar">
+          <button
+            class="ctrl-btn btn-icon-only"
+            onclick="playNext()"
+            data-i18n-title="next"
+          >
+            <span class="material-symbols-outlined">skip_next</span>
+          </button>
+          <button class="next-info" onclick="playNext()" data-i18n-title="next">
+            <span class="next-label" data-i18n="next_label">Next : </span>
+            <span class="next-title" id="nextTitle">-</span>
+          </button>
+
+          <div class="settings-container">
+            <button class="ctrl-btn btn-icon-only" onclick="toggleSpeedMenu()">
+              <span class="material-symbols-outlined">settings</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Camera Panel -->
+      <div class="panel camera-panel">
+        <div class="camera-controls-overlay">
+          <div id="liveStatus" class="live-status-overlay" style="display: none">
+            <span class="live-indicator"></span> LIVE
+          </div>
+          <div class="live-controls">
+            <div id="emojiBar" class="emoji-bar" style="display: none;">
+              <button class="emoji-btn" data-emoji="🔥">🔥</button>
+              <button class="emoji-btn" data-emoji="👏">👏</button>
+              <button class="emoji-btn" data-emoji="💪">💪</button>
+              <button class="emoji-btn" data-emoji="💯">💯</button>
+              <button class="emoji-btn" data-emoji="✨">✨</button>
+            </div>
+            <div class="room-info" id="roomUI">
+              <span id="roomNameDisplay" class="room-name">study-room-default</span>
+              <div class="participant-count-wrapper" id="btnShowParticipants" style="cursor: pointer;">
+                <span class="material-symbols-outlined">group</span>
+                <span id="participantCount">0</span>
+              </div>
+              <button id="btnCopyRoom" class="copy-btn" title="Copy Room Link">
+                <span class="material-symbols-outlined">link</span>
+              </button>
+            </div>
+            <button id="btnGoLive" class="live-btn-icon" title="Go Live">
+              <span class="material-symbols-outlined">podcasts</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="localVideoPreview" style="width: 100%; height: 100%;"></div>
+        <video id="camera" style="display: none" autoplay playsinline></video>
+        <canvas id="output_canvas" style="display: none"></canvas>
+        <div class="placeholder" id="placeholder" data-i18n="camera_connecting">Connecting Camera...</div>
+
+        <!-- Remote Videos Container -->
+        <div id="remoteVideoContainer" class="remote-videos-grid"></div>
+      </div>
+      
+      <!-- Floating Emoji Container -->
+      <div id="reactionContainer" class="reaction-container"></div>
+    </div>
+
+    <!-- Dynamic Containers -->
+    <div id="mobileMenuContainer"></div>
+    <div id="aboutModalContainer"></div>
+    <div class="controls" id="controlsContainer"></div>
+    <div class="playlist-modal" id="playlistModal"></div>
+    <div id="pmfModalContainer"></div>
+
+    <!-- YouTube API & App Scripts -->
+    <script type="module" src="script.js"></script>
+    <script type="module" src="js/live-manager.js"></script>
+
+    <!-- Global Key Handlers -->
+    <script>
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" || e.key === "Esc") {
+          if (window.ui && typeof window.ui.toggleSpeedMenu === 'function') {
+             // Basic ESC handler for speed menu if needed
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
