@@ -45,13 +45,13 @@ Format: Time | Emoji | Korean Title | English Title
 05h 50m | ⚡ | 전광석화 의지 | lightning will
 
 06h 00m | 💎 | 불변의 의지 | constant will
-06h 10m | 🪙 | 행운을 타고남 | lucky pouch
+06h 10m | 🪙 | 행운을 타고난 사람 | lucky pouch
 06h 20m | 💵 | 풍요로운 지혜 | rich wisdom
 06h 30m | 💰 | 배움의 자산가 | knowledge asset
 06h 40m | 👝 | 보물 주머니 | treasure pouch
 06h 50m | 💍 | 성실의 약속 | promise of sincerity
 
-07h 00m | 🌟 | 찬란한 성취 | brilliant achievement
+07h 00m | 🌟 | 찬란한 성취가 | brilliant achievement
 07h 10m | 🎐 | 청량한 바람 | cool breeze
 07h 20m | 🏺 | 담백한 그릇 | steady mind
 07h 30m | 📿 | 축복받은 시간 | blessed time
@@ -65,9 +65,9 @@ Format: Time | Emoji | Korean Title | English Title
 08h 40m | 🌌 | 은하수의 꿈 | milky way dream
 08h 50m | 🪐 | 우주의 신비 | space mystery
 
-09h 00m | 🌠 | 별 헤는 밤 | starry night
+09h 00m | 🌠 | 공부가 빛나는 밤 | starry night
 09h 10m | ⚜️ | 고결한 정신 | noble soul
-09h 20m | 🔱 | 의지의 삼지창 | trident of will
+09h 20m | 🔱 | 의지력이라는 무기 | trident of will
 09h 30m | 💠 | 정교한 몰입 | exquisite flow
 09h 40m | 🏵️ | 영예로운 훈장 | honor badge
 09h 50m | 👑 | 전설의 왕관 | legendary crown
