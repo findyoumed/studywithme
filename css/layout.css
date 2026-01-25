@@ -14,7 +14,7 @@
 
 .camera-controls-overlay {
     position: absolute;
-    top: 15px;
+    top: 60px; /* Aligned with .top-left-controls */
     left: 15px;
     right: 15px;
     display: flex;
@@ -23,6 +23,13 @@
     gap: 10px;
     z-index: 10;
     pointer-events: auto;
+}
+
+/* Mobile Adjustment: Move controls back up */
+@media (max-width: 768px) {
+    .camera-controls-overlay {
+        top: 15px;
+    }
 }
 
 

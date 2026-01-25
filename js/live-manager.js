@@ -69,6 +69,8 @@ async function init() {
     }
 
     if (urlParams.get('room')) channelName = urlParams.get('room');
+    console.log(`[LiveManager] Current Room: ${channelName}, Mode: ${urlParams.get('mode') || 'Host'}`);
+    
     if (roomNameDisplay) roomNameDisplay.innerText = channelName;
 
     // 1.5 View Mode Check
@@ -127,6 +129,13 @@ async function initRTM() {
         rtmClient = new RTM_CLASS(APP_ID, myUID.toString());
         await rtmClient.login({ token: rtmToken });
         await rtmClient.setLocalUserAttributes({ nickname: userNickname });
+        
+        // Update Status Indicator
+        const statusEl = document.querySelector('.status-indicator');
+        if (statusEl) {
+            statusEl.innerText = 'Connected';
+            statusEl.classList.add('connected');
+        }
 
         // Use standard subscribe
         try {
@@ -157,9 +166,39 @@ async function initRTM() {
         });
 
         rtmClient.on("message", (event) => {
+            console.log("[RTM] Raw Event:", event); 
             // Check for Channel Message
             if (event.channelType === "MESSAGE" && event.channelName === channelName) {
-                showFloatingEmoji(event.message);
+                let msgString;
+                // Handle Uint8Array or String
+                if (typeof event.message === 'string') {
+                    msgString = event.message;
+                } else if (event.message instanceof Uint8Array) {
+                    msgString = new TextDecoder().decode(event.message);
+                } else {
+                    console.log("Unknown message type:", event.message);
+                    return;
+                }
+
+                console.log("[RTM] Decoded Message:", msgString);
+
+                try {
+                    // Check if it's a simple string first (legacy emoji)
+                    if (!msgString.startsWith('{')) {
+                        showFloatingEmoji(msgString);
+                        return;
+                    }
+
+                    const data = JSON.parse(msgString);
+                    if (data.type === 'EMOJI') {
+                        showFloatingEmoji(data.value);
+                    } else if (data.type === 'SCORE') {
+                        updateHostScoreUI(data.value);
+                    }
+                } catch (e) {
+                    // Fallback for raw string emojis just in case
+                    showFloatingEmoji(msgString);
+                }
             }
         });
 
@@ -220,13 +259,51 @@ function updateParticipantsList(members) {
 
 function showFloatingEmoji(emoji) {
     if (!reactionContainer) return;
+
+    // Zoom-like effect:
+    // 1. Start from random X position near the bottom right (or center depending on layout)
+    // 2. Float UP with some random wiggle
+    // 3. Fade out near the top
+
     const el = document.createElement('div');
     el.className = 'floating-emoji';
     el.innerText = emoji;
-    el.style.setProperty('--random-x', `${(Math.random() - 0.5) * 100}px`);
-    el.style.left = `${Math.random() * 20}px`;
+
+    // Randomize starting X (spread across the container width)
+    // Container is likely fixed at bottom right, let's use its width
+    const startX = Math.random() * 80 + 10; // 10% to 90%
+    
+    // Randomize size for variety
+    const scale = 0.8 + Math.random() * 0.8; // 0.8x to 1.6x
+
+    // Randomize duration
+    const duration = 2 + Math.random() * 2; // 2s to 4s
+
+    // Randomize wiggle intensity
+    const wiggle = (Math.random() - 0.5) * 50; 
+
+    el.style.left = `${startX}%`;
+    el.style.fontSize = `${32 * scale}px`;
+    el.style.animationDuration = `${duration}s`;
+    el.style.setProperty('--wiggle-x', `${wiggle}px`);
+
     reactionContainer.appendChild(el);
-    setTimeout(() => el.remove(), 3000);
+
+    // Remove after animation completes
+    setTimeout(() => el.remove(), duration * 1000);
+}
+
+function updateHostScoreUI(seconds) {
+    const el = document.getElementById('hostScoreDisplay');
+    const valEl = document.getElementById('hostScoreValue');
+    if (el && valEl) {
+        el.style.display = 'flex';
+        // Format seconds to HH:MM:SS
+        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+        valEl.innerText = `${h}:${m}:${s}`;
+    }
 }
 
 async function fetchTokens(role) {
@@ -276,6 +353,28 @@ async function startBroadcasting() {
         isLive = true;
         updateButtonsUI();
         console.log("Broadcasting started!");
+        
+        // Start Score Broadcasting Loop (every 1s)
+        if (!window.scoreBroadcastInterval) {
+            window.scoreBroadcastInterval = setInterval(async () => {
+                // Check if MotionManager is available (only on Host)
+                if (window.motionManager) {
+                    const currentScore = window.motionManager.getScore();
+                    // Basic logging to confirm it sends
+                    console.log(`[Host] Broadcasting Score: ${currentScore}`);
+                    
+                    const payload = JSON.stringify({ type: 'SCORE', value: currentScore });
+                    try {
+                        if (rtmClient) {
+                            await rtmClient.publish(channelName, payload, { channelType: "MESSAGE" });
+                        }
+                    } catch (e) { console.error("Score Publish Failed", e); }
+                } else {
+                    // This is expected on Viewer, but if this logs on Host, we have an issue.
+                    // console.log("MotionManager not found (Normal for Viewer)");
+                }
+            }, 1000);
+        }
     } catch (error) {
         console.error("Start broadcasting failed:", error);
         alert("카메라를 켤 수 없습니다. 권한을 확인해주세요.");
@@ -295,6 +394,11 @@ async function stopBroadcasting() {
 
         const placeholder = document.getElementById('placeholder');
         if (placeholder) placeholder.style.display = 'flex';
+        
+        if (window.scoreBroadcastInterval) {
+            clearInterval(window.scoreBroadcastInterval);
+            window.scoreBroadcastInterval = null;
+        }
         
         isLive = false;
         
@@ -328,7 +432,8 @@ rtcClient.on("user-published", async (user, mediaType) => {
         const nickname = participantsMap.get(user.uid.toString()) || "알 수 없는 친구";
         remotePlayerContainer.innerHTML = `<div class="remote-video-label">${nickname}</div>`;
         remoteVideoContainer.append(remotePlayerContainer);
-        user.videoTrack.play(remotePlayerContainer);
+        // Explicitly format video: cover, NO mirror
+        user.videoTrack.play(remotePlayerContainer, { fit: "cover", mirror: false });
     }
 });
 
