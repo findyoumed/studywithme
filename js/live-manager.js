@@ -15,6 +15,7 @@ let RTM_CLASS = null;
 
 let localTracks = { videoTrack: null };
 let isLive = false;
+window.isLive = false; // Initialize global state early
 let channelName = "study-room-default";
 let myUID = Math.floor(100000 + Math.random() * 900000); // Numeric UID for Agora
 
@@ -333,8 +334,13 @@ async function toggleLive() {
     else await startBroadcasting();
 }
 
+// Expose state for automation
+window.isLive = isLive;
+window.startBroadcasting = startBroadcasting;
+
 async function startBroadcasting() {
     try {
+        window.isLive = true; // Sync global state
         btnGoLive.disabled = true;
         
         // Start Camera
@@ -401,6 +407,7 @@ async function stopBroadcasting() {
         }
         
         isLive = false;
+        window.isLive = false; // Sync global state
         
         updateButtonsUI();
         console.log("Broadcasting stopped.");
@@ -421,6 +428,17 @@ function updateButtonsUI() {
         liveStatus.style.display = 'none';
         emojiBar.style.display = 'none';
     }
+    // Initial Grid Sync for viewers joining existing sessions
+    updateGridCount();
+}
+
+function updateGridCount() {
+    const container = document.getElementById('remoteVideoContainer');
+    if (container) {
+        const count = container.children.length;
+        container.setAttribute('data-count', count);
+        console.log(`[Grid] Updated participant count to: ${count}`);
+    }
 }
 
 rtcClient.on("user-published", async (user, mediaType) => {
@@ -434,6 +452,7 @@ rtcClient.on("user-published", async (user, mediaType) => {
         remoteVideoContainer.append(remotePlayerContainer);
         // Explicitly format video: cover, NO mirror
         user.videoTrack.play(remotePlayerContainer, { fit: "cover", mirror: false });
+        updateGridCount();
     }
 });
 
@@ -443,7 +462,10 @@ rtcClient.on("user-published", async (user, mediaType) => {
 
 rtcClient.on("user-unpublished", (user) => {
     const remotePlayerContainer = document.getElementById(`user-${user.uid}`);
-    if (remotePlayerContainer) remotePlayerContainer.remove();
+    if (remotePlayerContainer) {
+        remotePlayerContainer.remove();
+        updateGridCount();
+    }
 });
 
 // UI Event Listeners

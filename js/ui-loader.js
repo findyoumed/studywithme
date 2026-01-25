@@ -7,6 +7,13 @@ export class UILoader {
     constructor() {}
 
     async loadControlsContent(uiControls) {
+        // Skip entirely for viewer mode - "Comment out" for viewers
+        const isViewer = new URLSearchParams(window.location.search).get('mode') === 'viewer';
+        if (isViewer) {
+            console.log("UILoader: Viewer mode detected, skipping control content loading.");
+            return;
+        }
+
         const timestamp = Date.now(); // Cache buster
         const containers = [
             { id: "controlsContainer", url: `components/controls_content.html?v=${timestamp}` },

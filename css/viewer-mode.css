@@ -69,24 +69,39 @@ body.viewer-mode .remote-videos-grid {
     left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+    width: 100vw !important;
+    height: 100vh !important;
     max-height: none !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #000;
+    overflow: hidden !important;
     
-    display: flex;
-    flex-wrap: wrap; 
-    align-items: stretch; /* Stretch items to fill height */
-    justify-content: center;
+    display: grid !important;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     gap: 0;
+}
+
+/* Grid specific logic based on data-count */
+body.viewer-mode .remote-videos-grid[data-count="2"] {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: 1fr !important;
+}
+body.viewer-mode .remote-videos-grid[data-count="3"],
+body.viewer-mode .remote-videos-grid[data-count="4"] {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: 1fr 1fr !important;
+}
+body.viewer-mode .remote-videos-grid[data-count="5"],
+body.viewer-mode .remote-videos-grid[data-count="6"] {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-template-rows: 1fr 1fr !important;
 }
 
 /* Individual Players */
 body.viewer-mode .remote-video-player {
-    flex: 1 1 auto; /* Grow and shrink */
-    width: 100% !important;  /* Start at full width/height */
+    width: 100% !important;
     height: 100% !important;
     max-width: none !important;
     border: none !important;
@@ -95,14 +110,30 @@ body.viewer-mode .remote-video-player {
     box-shadow: none !important;
     position: relative;
     background: #000;
+    overflow: hidden !important;
+    
+    /* Mirroring is DEFINITELY possible. Applying now. */
+    transform: scaleX(-1) !important;
+    -webkit-transform: scaleX(-1) !important;
+}
+
+/* Compensate Label Flip to keep text readable */
+body.viewer-mode .remote-video-label {
+    transform: scaleX(-1) !important;
+    display: inline-block;
 }
 
 /* The video element itself */
 body.viewer-mode .remote-video-player video {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important; /* This ensures no black bars */
+    object-fit: cover !important; 
     position: absolute;
     top: 0;
     left: 0;
+}
+
+/* Box sizing reset for viewer */
+body.viewer-mode * {
+    box-sizing: border-box !important;
 }

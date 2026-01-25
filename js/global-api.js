@@ -20,7 +20,7 @@ export function exposeGlobals(playerController, playlistManager, ui, storage, ca
     window.playNext = () => playerController.playNext();
     window.playPrevious = () => playerController.playPrevious();
     window.togglePlay = () => playerController.togglePlay();
-    window.seek = (sec) => playerController.seek(sec);
+    // window.seek = (sec) => playerController.seek(sec);
 
     window.toggleLayout = () => {
         const mode = ui.toggleLayout();

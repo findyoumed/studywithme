@@ -21,10 +21,34 @@ export class UIUtils {
         }, 3000);
     }
 
-    copyToClipboard(currentLang) {
-        const url = window.location.href;
+    async copyToClipboard(currentLang) {
+        // 1. Auto Go Live if Host and not live
+        const urlParams = new URLSearchParams(window.location.search);
+        const isHost = urlParams.get('host') === 'true' || urlParams.get('host') === '1';
+        
+        if (isHost && typeof window.startBroadcasting === 'function') {
+            // Check if not live (using both local flag and UI indicator for safety)
+            const liveIndicator = document.getElementById('liveStatus');
+            const isCurrentlyLive = window.isLive || (liveIndicator && liveIndicator.style.display !== 'none');
+            
+            if (!isCurrentlyLive) {
+                console.log("[UIUtils] Auto-starting broadcast on share...");
+                try {
+                    await window.startBroadcasting();
+                } catch (e) {
+                    console.error("[UIUtils] Failed to start broadcast:", e);
+                }
+            }
+        }
+
+        // 2. Clear Copy Link (Ensure it's the viewer link)
+        const url = new URL(window.location.href);
+        url.searchParams.delete('host');
+        url.searchParams.set('mode', 'viewer');
+        const shareUrl = url.toString();
+
         const t = this.i18nManager.translations[currentLang];
-        navigator.clipboard.writeText(url).then(() => {
+        navigator.clipboard.writeText(shareUrl).then(() => {
             this.showSplash(t.copy_success);
             if (window.pmfManager) window.pmfManager.tryOpenAuto();
         }).catch(err => {

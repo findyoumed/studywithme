@@ -182,10 +182,12 @@ export class PlayerController {
     else this.player.playVideo();
   }
 
+  /*
   seek(seconds) {
     if (!this.player || !this.player.getCurrentTime) return;
     this.player.seekTo(this.player.getCurrentTime() + seconds);
   }
+  */
 
   setSpeed(speed) {
     this.playbackSpeed = speed;

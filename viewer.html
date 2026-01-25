@@ -22,26 +22,12 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/css/live-stream.css" />
+    <link rel="stylesheet" href="/style.css?v=123" />
+    <link rel="stylesheet" href="/css/live-stream.css?v=123" />
     
     <!-- Forced Viewer Mode Styles Inline to ensure they apply immediately -->
     <style>
-        body { background: #000; overflow: hidden; margin: 0; }
-        .container { display: block !important; width: 100vw; height: 100vh; background: #000; position: relative; }
-        .camera-panel { width: 100% !important; height: 100% !important; border: none; }
-        
-        .remote-videos-grid { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-            z-index: 1;
-        }
-        .remote-video-player { width: 100%; height: 100%; max-width: none; border: none; border-radius: 0; }
-        .remote-video-player video { 
-            object-fit: cover !important; 
-            transform: scaleX(-1) !important; /* User requested flip to fix mirroring */
-            -webkit-transform: scaleX(-1) !important;
-        }
+        /* The responsive grid and flip logic is now moved to viewer-mode.css for better consolidation */
         
         /* Emoji Bar */
         .camera-controls-overlay {
