@@ -22,8 +22,8 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="css/live-stream.css" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/css/live-stream.css" />
     
     <!-- Forced Viewer Mode Styles Inline to ensure they apply immediately -->
     <style>
@@ -100,6 +100,13 @@
             background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px;
         }
         .status-indicator.connected { color: #4ade80; border: 1px solid #4ade80; }
+        
+        /* Aggressively hide any leaking controls */
+        .controls, .ctrl-btn, .settings-menu, #controlsContainer, .ytp-chrome-bottom {
+            display: none !important;
+        }
+        /* Ensure Emoji Bar IS visible though */
+        .camera-controls-overlay { display: flex !important; }
     </style>
 
     <!-- Agora SDK -->
@@ -140,8 +147,8 @@
     </div>
 
     <!-- Scripts -->
-    <script type="module" src="script.js"></script>
-    <script type="module" src="js/live-manager.js"></script>
+    <script type="module" src="/script.js"></script>
+    <script type="module" src="/js/live-manager.js"></script>
 
   </body>
 </html>

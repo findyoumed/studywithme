@@ -450,7 +450,13 @@ rtcClient.on("user-unpublished", (user) => {
 if (btnGoLive) btnGoLive.addEventListener('click', toggleLive);
 
 if (btnCopyRoom) {
-    btnCopyRoom.addEventListener('click', () => {
+    btnCopyRoom.addEventListener('click', async () => {
+        // Auto Go Live if not already live
+        if (!isLive && typeof startBroadcasting === 'function') {
+            console.log("Auto-starting broadcast on share...");
+            await startBroadcasting();
+        }
+
         const url = new URL(window.location.href);
         url.searchParams.set('room', channelName);
         url.searchParams.delete('host'); // Ensure viewer link
