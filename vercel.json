@@ -2,17 +2,12 @@
   "cleanUrls": true,
   "redirects": [
     {
-      "source": "/blog/index.html",
-      "destination": "/",
+      "source": "/blog.html",
+      "destination": "/blog",
       "permanent": true
     },
     {
-      "source": "/posts/index.html",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/posts/:path*",
+      "source": "/index.html",
       "destination": "/",
       "permanent": true
     }
@@ -21,6 +16,11 @@
     {
       "source": "/api/:path*",
       "destination": "/api/:path*"
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "mode", "value": "viewer" }],
+      "destination": "/viewer.html"
     },
     {
       "source": "/((?!.*\\.).*)",
