@@ -21,7 +21,7 @@
     <link rel="canonical" href="https://studywithme.com/" />
 
     <!-- Analytics & SEO (Head Scripts) -->
-    <script src="js/analytics.js?v=11"></script>
+    <script src="/js/analytics.js?v=20"></script>
 
     <!-- AI & GEO -->
     <link rel="help" href="/llms.txt" title="AI Context" />
@@ -86,7 +86,7 @@
     </script>
 
     <!-- PWA -->
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="icon-192.png" />
 
     <!-- Fonts & Icons -->
@@ -99,25 +99,52 @@
       rel="stylesheet"
     />
 
-    <!-- Core Design System (Relative Paths for Vercel) -->
-    <link rel="stylesheet" href="css/base.css?v=11" />
-    <link rel="stylesheet" href="css/layout.css?v=11" />
-    <link rel="stylesheet" href="css/controls.css?v=11" />
-    <link rel="stylesheet" href="css/components.nextbar.css?v=11" />
-    <link rel="stylesheet" href="css/components.overlays.css?v=11" />
-    <link rel="stylesheet" href="css/live-stream.css?v=11" />
-    <link rel="stylesheet" href="css/intro-modal.css?v=11" />
-    <link rel="stylesheet" href="style.css?v=11" />
+    <!-- Core Design System (Absolute Paths for Vercel) -->
+    <link rel="stylesheet" href="/css/base.css?v=20" />
+    <link rel="stylesheet" href="/css/layout.css?v=20" />
+    <link rel="stylesheet" href="/css/controls.css?v=20" />
+    <link rel="stylesheet" href="/css/components.nextbar.css?v=20" />
+    <link rel="stylesheet" href="/css/components.overlays.css?v=20" />
+    <link rel="stylesheet" href="/css/live-stream.css?v=20" />
+    <link rel="stylesheet" href="/css/intro-modal.css?v=20" />
     
     <style>
-      /* --- EMERGENCY SAFETY CSS (Minimal) --- */
-      body { 
-        background-color: #0f172a !important; 
-        color: white !important; 
-        margin: 0; padding: 0; 
-        font-family: 'Inter', sans-serif, system-ui; 
+      /* --- CRITICAL LAYOUT FAILSAFE (Matches Localhost) --- */
+      :root {
+        --bg-primary: #0f172a;
+        --bg-secondary: #000;
+        --text-primary: #ffffff;
       }
-      .container { background: #0f172a; min-height: 100vh; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        font-family: 'Inter', sans-serif, system-ui; 
+        background: var(--bg-primary); 
+        color: var(--text-primary); 
+        overflow: hidden; 
+      }
+      .container { 
+        display: grid !important; 
+        grid-template-columns: 1fr 1fr !important; /* Split into two columns */
+        width: 100vw; 
+        height: 100vh; 
+        gap: 2px !important; 
+        background: #1e293b;
+      }
+      .panel { 
+        position: relative; 
+        width: 100%; height: 100%; 
+        overflow: hidden; 
+        background: #000; 
+        display: flex; flex-direction: column; 
+      }
+      .camera-panel { border-left: 1px solid rgba(255, 255, 255, 0.1); }
+      .player-wrapper { flex: 1; position: relative; background: #000; }
+      #player { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+      .top-left-controls { position: absolute; top: 20px; left: 20px; z-index: 100; pointer-events: none; }
+      .top-left-controls * { pointer-events: auto; }
+      .score-overlay { background: rgba(15, 23, 42, 0.8); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); }
+      .next-video-bar { background: #1e293b; height: 60px; display: flex; align-items: center; padding: 0 15px; gap: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+      @media (max-width: 768px) { .container { grid-template-columns: 1fr !important; } }
     </style>
 
     <!-- Agora SDK -->
@@ -253,8 +280,8 @@
     <div id="pmfModalContainer"></div>
 
     <!-- YouTube API & App Scripts -->
-    <script type="module" src="script.js?v=11"></script>
-    <script type="module" src="js/live-manager.js?v=11"></script>
+    <script type="module" src="/script.js?v=20"></script>
+    <script type="module" src="/js/live-manager.js?v=20"></script>
 
     <!-- Global Key Handlers -->
     <script>
