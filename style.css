@@ -20,6 +20,7 @@
 @import url('css/mobile-layout.css');
 @import url('css/mobile-controls.css');
 @import url('css/mobile-settings.css');
+@import url('css/viewer-mode.css');
 
 /* Custom Overrides for hidden elements in different modes (User Request) */
 /* The player-wrapper inner div is now commented out in index.html */

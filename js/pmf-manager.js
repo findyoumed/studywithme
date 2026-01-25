@@ -76,8 +76,8 @@ export class PMFManager {
             const isSelected = btn.getAttribute('onclick').includes(score);
             if (isSelected) {
                 btn.classList.add('selected');
-                btn.style.background = 'rgba(244, 238, 226, 0.2)'; // Highlight color
-                btn.style.borderColor = '#f4eee2';
+                btn.style.background = 'rgba(129, 140, 248, 0.2)'; // Highlight color
+                btn.style.borderColor = '#818cf8';
             } else {
                 btn.classList.remove('selected');
                 btn.style.background = 'rgba(255,255,255,0.1)';

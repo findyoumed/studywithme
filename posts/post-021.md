@@ -1,9 +1,9 @@
 ---
 id: 21
-title: "매일 10분 복습 루틴"
+title: "매일 10분, 잊어버리지 않는 복습 습관"
 category: "습관"
 readTime: "6"
-image: "/assets/images/stretching.png"
+image: "/assets/images/post_21_daily_review.jpg"
 excerpt: "짧은 복습이 긴 학습을 만든다. 10분이면 충분하다."
 title_en: "Ten Minute Daily Review Routine"
 excerpt_en: "Short daily reviews keep knowledge warm."

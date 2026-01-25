@@ -1,10 +1,10 @@
 ---
 id: 6
-title: "바쁜 주간 시험 대비 루틴 - 현실적인 계획표"
+title: "바쁜 직장인과 학생을 위한 시험 대비 요령"
 category: "계획"
 readTime: "7"
-image: "/assets/images/post_06_exam_prep_1769260178668.png"
-excerpt: "시간이 부족할수록 루틴이 필요하다. 주 4회 블록으로 효율을 높인다."
+image: "/assets/images/post_06_exam_prep_1769260178668.jpg"
+excerpt: "시간이 부족할수록, 규칙적인 공부 습관이 더욱 중요합니다. 주 4회, 정해진 시간에 공부하며 효율을 높여보세요."
 title_en: "Exam Prep Routine for Busy Weeks - A Realistic Schedule"
 excerpt_en: "When time is tight, a simple routine keeps prep on track."
 category_en: "Planning"

@@ -1,12 +1,12 @@
 ---
 id: 1
-title: "공부 시작하기 - 목표와 흐름 만들기"
+title: "제대로 공부 시작하는 법 - 목표 설정과 좋은 흐름 만들기"
 category: "계획"
 readTime: "6"
-image: "/assets/images/mental-health.png"
-excerpt: "처음엔 방향을 잡는 것이 중요하다. 목표-계획-실행의 기본 구조를 만든다."
-title_en: "Starting Study the Right Way - Set Goals and Build Momentum"
-excerpt_en: "Start with goals, a simple plan, and a small win to build momentum."
+image: "/assets/images/post_01_start_goals.jpg"
+excerpt: "공부의 방향을 잡고, '목표-계획-실행'으로 이어지는 좋은 흐름을 만들어 보세요. 첫 주를 훨씬 수월하게 시작할 수 있습니다."
+title_en: "How to Start Studying Right - Set Goals and Build Momentum"
+excerpt_en: "Start with a clear goal, a simple plan, and one quick win to build momentum."
 category_en: "Planning"
 content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Start With Direction</h3>\n  <p class='text-slate-300 mb-6'>Studying without a clear direction wastes energy. A simple goal and a plan make the first week easier.</p>\n\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 1: Define the Goal</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li><strong class='text-white'>Outcome:</strong> exam date, score, or project deadline</li>\n    <li><strong class='text-white'>Scope:</strong> chapters, topics, or skills</li>\n    <li><strong class='text-white'>Time:</strong> how many hours you can realistically study each week</li>\n  </ul>\n\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 2: Build a Small Win</h3>\n  <p class='text-slate-300 mb-6'>Choose one easy task you can finish today. Momentum starts with completion.</p>\n\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Keep the first plan simple. You can refine it after three days.</p>\n</div>"
 ---

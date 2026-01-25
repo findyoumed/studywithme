@@ -1,11 +1,11 @@
 ---
 id: 8
-title: "공부 번아웃 예방 - 오래 달리기 위한 원칙"
+title: "공부 번아웃 예방 - 지치지 않고 오래 공부하는 법"
 category: "멘탈"
 readTime: "6"
-image: "/assets/images/post_08_burnout_prevention_1769260233322.png"
+image: "/assets/images/post_08_burnout_prevention_v2.jpg"
 excerpt: "과열은 쉽게 꺼진다. 휴식과 경계가 지속가능한 성과를 만든다."
-title_en: "Burnout Prevention for Studying - Keep the Long Game"
+title_en: "Preventing Study Burnout - How to Study Sustainably"
 excerpt_en: "Overheating leads to shutdown. Boundaries and recovery keep you going."
 category_en: "Mindset"
 content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Burnout Resets Everything</h3>\n  <p class='text-slate-300 mb-6'>When you burn out, even simple tasks feel heavy. Prevention keeps progress steady.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Main Causes</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li>No rest days or breaks</li>\n    <li>Unclear goals and constant switching</li>\n    <li>Sleep debt and poor recovery</li>\n    <li>Perfectionism and fear of mistakes</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Recovery Basics</h3>\n  <p class='text-slate-300 mb-6'>Protect sleep, move your body lightly, and schedule a lighter day when needed.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>If focus collapses and irritability rises, reduce the load for 48 hours.</p>\n</div>"

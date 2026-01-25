@@ -3,7 +3,7 @@ id: 10
 title: "공부와 멘탈 케어 - 불안 줄이고 자신감 키우기"
 category: "멘탈"
 readTime: "10"
-image: "/assets/images/post_10_mental_care_1769260267619.png"
+image: "/assets/images/post_10_mental_care_1769260267619.jpg"
 excerpt: "불안은 성과를 흔든다. 작은 성공과 루틴이 자신감을 만든다."
 title_en: "Studying and Mental Care - Reduce Anxiety, Build Confidence"
 excerpt_en: "Anxiety undermines performance. Small wins and routines rebuild confidence."

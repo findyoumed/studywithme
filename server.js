@@ -17,6 +17,15 @@ const PORT = process.env.PORT || 8000;
 
 // Middleware
 app.use(cors());
+
+// Serve viewer.html if mode=viewer is present
+app.use((req, res, next) => {
+    if (req.query.mode === 'viewer' && req.path === '/') {
+        return res.sendFile(join(__dirname, "viewer.html"));
+    }
+    next();
+});
+
 app.use(express.json());
 
 // Redirect /blog.html to /blog and /index.html to /
@@ -76,6 +85,9 @@ app.get("/api/get-agora-token", (req, res) => {
   if (isNaN(uid) || uid === 0) {
     return res.status(400).json({ error: "uid must be a non-zero number" });
   }
+
+  // Debugging log
+  console.log(`Generating token for UID: ${uid}, Channel: ${channelName}, Role: ${req.query.role} (${role})`);
 
   if (!appId || !appCertificate) {
     return res.status(500).json({ error: "Agora credentials not configured" });

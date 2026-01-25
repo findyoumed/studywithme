@@ -48,11 +48,11 @@ export function renderBlogPosts(posts, translations, currentLang) {
         card.innerHTML = `
             <div class="relative aspect-[16/10] rounded-xl overflow-hidden mb-5 cursor-pointer blog-clickable" data-post-id="${post.id}">
                 ${post.image ? `
-                    <img src="${post.image}" alt="${post.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.parentNode.innerHTML='<div class=\\'absolute inset-0 bg-gradient-to-br from-primary/20 to-amber-200/20\\'></div>'">
+                    <img src="${post.image}" alt="${post.title}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.parentNode.innerHTML='<div class=\\'absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-500/20\\'></div>'">
                 ` : `
-                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-amber-200/20"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-500/20"></div>
                 `}
-                <div class="absolute top-4 left-4 bg-primary text-slate-900 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                <div class="absolute top-4 left-4 bg-primary text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
                     ${post.category}
                 </div>
             </div>

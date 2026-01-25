@@ -18,8 +18,9 @@
     left: 15px;
     right: 15px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Moved to right as requested */
     align-items: center;
+    gap: 10px;
     z-index: 10;
     pointer-events: auto;
 }
@@ -101,6 +102,11 @@
 .video-panel {
     display: flex;
     flex-direction: column;
+}
+
+/* Hide navigation bar in overlay mode (Layered Mode) */
+.container.overlay-mode .next-video-bar {
+    display: none !important;
 }
 
 .camera-panel {

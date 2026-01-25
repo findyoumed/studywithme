@@ -3,7 +3,7 @@ id: 15
 title: "공부 환경 기본기 - 공간이 집중을 만든다"
 category: "습관"
 readTime: "8"
-image: "/assets/images/post_15_environment_1769260386073.png"
+image: "/assets/images/post_15_environment_1769260386073.jpg"
 excerpt: "환경이 행동을 만든다. 책상과 알림부터 정리하자."
 title_en: "Study Environment Basics - Your Space Shapes Focus"
 excerpt_en: "Your environment designs your behavior. Start with your desk and notifications."

@@ -1,11 +1,11 @@
 ---
 id: 19
-title: "집중력 지구력 가이드 - 60분 집중 유지하기"
+title: "집중 시간 2배로 늘리기 - 60분 몰입의 기술"
 category: "집중"
 readTime: "6"
-image: "/assets/images/plank.png"
+image: "/assets/images/post_19_focus_endurance.jpg"
 excerpt: "오래 집중하는 법은 훈련할 수 있다. 자세와 리듬이 핵심이다."
-title_en: "The Complete Focus Endurance Guide - Hold 60 Minutes"
+title_en: "How to Extend Your Focus - A 60-Minute Concentration Guide"
 excerpt_en: "Sustained focus is trainable. Posture and rhythm matter."
 category_en: "Focus"
 content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Focus Endurance Is Trainable</h3>\n  <p class='text-slate-300 mb-6'>Long sessions feel hard only when you skip the basics.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Form Checklist</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li><strong class='text-white'>Posture:</strong> neutral spine and relaxed shoulders</li>\n    <li><strong class='text-white'>Screen height:</strong> eye level to reduce fatigue</li>\n    <li><strong class='text-white'>Breathing:</strong> slow and steady</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Progression</h3>\n  <p class='text-slate-300 mb-6'>Start at 30 minutes and add 5 to 10 minutes each week.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Attention Anchors</h3>\n  <p class='text-slate-300 mb-6'>Keep a guiding question on top of the page and check focus every 15 minutes.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Stop when quality drops and recover. Consistency matters more than marathon sessions.</p>\n</div>"

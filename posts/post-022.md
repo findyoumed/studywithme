@@ -1,11 +1,11 @@
 ---
 id: 22
-title: "글쓰기 루틴 집중 - 논리와 흐름 만들기"
+title: "논리적인 글쓰기를 위한 체계적인 훈련법"
 category: "학습법"
 readTime: "8"
-image: "/assets/images/upper_body_routine.png"
+image: "/assets/images/post_22_writing_routine.jpg"
 excerpt: "글쓰기는 루틴으로 는다. 구조와 문장을 분리해 연습하자."
-title_en: "Writing Routine Focus - Build Clear Essays"
+title_en: "Build Clear Essays with a Focused Writing Routine"
 excerpt_en: "Writing improves fastest with routine and structure."
 category_en: "Study Methods"
 content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Writing Is Thinking on Paper</h3>\n  <p class='text-slate-300 mb-6'>Clear writing comes from clear structure, not talent.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Three Step Writing Routine</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li><strong class='text-white'>Outline:</strong> claim, reasons, and evidence</li>\n    <li><strong class='text-white'>Draft:</strong> write quickly without editing</li>\n    <li><strong class='text-white'>Revise:</strong> tighten logic and remove fluff</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Common Mistakes</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li>No outline or weak thesis</li>\n    <li>Editing every sentence while drafting</li>\n    <li>Examples without explanation</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Write 100 to 200 words every day.</p>\n</div>"

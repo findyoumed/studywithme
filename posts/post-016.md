@@ -1,9 +1,9 @@
 ---
 id: 16
-title: "포모도로 스타터 가이드 - 짧고 강하게"
+title: "포모도로 테크닉, 제대로 시작하는 법"
 category: "집중"
 readTime: "7"
-image: "/assets/images/post_16_pomodoro_1769260407549.png"
+image: "/assets/images/post_16_pomodoro_v2.jpg"
 excerpt: "25분 집중, 5분 휴식. 간단한 규칙이 몰입을 만든다."
 title_en: "Pomodoro Starter Guide - Short and Intense"
 excerpt_en: "25 minutes on, 5 minutes off. Simple rules create focus."

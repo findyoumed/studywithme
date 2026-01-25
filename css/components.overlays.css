@@ -35,9 +35,9 @@
 
 .speed-btn.active {
     background: var(--accent-primary);
-    color: var(--accent-ink);
+    color: #fff;
     border-color: var(--accent-primary);
-    box-shadow: 0 0 10px rgba(244, 238, 226, 0.3);
+    box-shadow: 0 0 10px rgba(129, 140, 248, 0.3);
 }
 
 /* .timer-overlay is now commented out in index.html */

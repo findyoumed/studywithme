@@ -1,10 +1,10 @@
 ---
 id: 4
-title: "노트 정리 기본기 - 구조를 기록하는 법"
+title: "결과를 바꾸는 노트 정리 기술"
 category: "학습법"
 readTime: "9"
-image: "/assets/images/post_04_note_taking_1769260143498.png"
-excerpt: "좋은 노트는 이해의 구조를 담는다. 문장 대신 흐름과 키워드를 기록하자."
+image: "/assets/images/post_04_note_taking_1769260143498.jpg"
+excerpt: "좋은 노트는 이해의 구조를 담아냅니다. 문장 대신 흐름과 키워드를 기록해 보세요."
 title_en: "Mastering Note-Taking Basics - Capture Structure, Not Sentences"
 excerpt_en: "Great notes capture structure and logic, not raw sentences."
 category_en: "Study Methods"

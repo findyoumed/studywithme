@@ -18,7 +18,7 @@
 }
 
 .playlist-item.active {
-    background: rgba(244, 238, 226, 0.2);
+    background: rgba(129, 140, 248, 0.2);
     border-left: 3px solid var(--accent-primary);
 }
 

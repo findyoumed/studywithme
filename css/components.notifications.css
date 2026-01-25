@@ -7,14 +7,14 @@
     top: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(-10px);
-    background: rgba(244, 238, 226, 0.95);
-    color: var(--accent-ink);
+    background: rgba(129, 140, 248, 0.95);
+    color: #fff;
     padding: 12px 20px;
     border-radius: 25px;
     font-weight: 600;
     font-size: 14px;
     z-index: 99999;
-    box-shadow: 0 4px 20px rgba(244, 238, 226, 0.5);
+    box-shadow: 0 4px 20px rgba(129, 140, 248, 0.5);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;

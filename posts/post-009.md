@@ -1,11 +1,11 @@
 ---
 id: 9
-title: "제대로 읽는 법 - 이해를 위한 읽기 자세"
+title: "한 번을 읽어도 제대로, 독서 이해력을 높이는 기술"
 category: "학습법"
 readTime: "8"
-image: "/assets/images/post_09_reading_method_1769260251213.png"
-excerpt: "읽기는 정보 수집이 아니라 이해 설계다. 질문을 세우고 읽자."
-title_en: "Proper Reading Form - Read for Understanding"
+image: "/assets/images/post_09_reading_method_1769260251213.jpg"
+excerpt: "읽기는 단순히 정보를 수집하는 행위가 아닙니다. 질문을 품고 읽으며 자신만의 이해를 설계해 보세요."
+title_en: "Effective Reading Techniques - A Guide for Deeper Understanding"
 excerpt_en: "Reading is designing understanding, not just taking in words."
 category_en: "Study Methods"
 content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Read to Build Understanding</h3>\n  <p class='text-slate-300 mb-6'>Active reading turns pages into understanding and questions into answers.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Read With Questions</h3>\n  <p class='text-slate-300 mb-6'>Preview headings, make 2 or 3 questions, then read to answer them.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Common Mistakes</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li>Highlighting everything</li>\n    <li>Reading without summarizing</li>\n    <li>Multitasking while reading</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Write a two sentence summary after each section.</p>\n</div>"

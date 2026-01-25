@@ -33,7 +33,7 @@
     width: 50px !important;
     height: 42px !important;
     background: var(--accent-primary);
-    color: var(--accent-ink);
+    color: #fff;
     border: none;
     border-radius: 8px;
     display: flex !important;
@@ -116,12 +116,12 @@
 
 .search-add-btn {
     background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-hover) 100%) !important;
-    color: var(--accent-ink) !important;
+    color: #fff !important;
     font-weight: 500 !important;
     font-size: 11px !important;
     border: none !important;
     border-radius: 4px !important;
-    box-shadow: 0 2px 6px rgba(244, 238, 226, 0.35) !important;
+    box-shadow: 0 2px 6px rgba(129, 140, 248, 0.35) !important;
     padding: 6px 12px !important;
     margin-top: 6px !important;
     text-align: center !important;
@@ -134,7 +134,7 @@
 .search-add-btn:hover {
     background: linear-gradient(135deg, var(--accent-hover) 0%, var(--accent-primary) 100%) !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 4px 10px rgba(244, 238, 226, 0.5) !important;
+    box-shadow: 0 4px 10px rgba(129, 140, 248, 0.5) !important;
 }
 
 /* Add Form */
@@ -195,8 +195,8 @@
 
 .add-close-container .add-btn {
     background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-hover) 100%) !important;
-    color: var(--accent-ink) !important;
-    box-shadow: 0 4px 6px rgba(244, 238, 226, 0.3) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 6px rgba(129, 140, 248, 0.3) !important;
 }
 
 .add-close-container .close-btn-action {
@@ -211,14 +211,14 @@
     top: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(-10px);
-    background: rgba(244, 238, 226, 0.95);
-    color: var(--accent-ink);
+    background: rgba(129, 140, 248, 0.95);
+    color: #fff;
     padding: 12px 20px;
     border-radius: 25px;
     font-weight: 600;
     font-size: 14px;
     z-index: 99999;
-    box-shadow: 0 4px 20px rgba(244, 238, 226, 0.5);
+    box-shadow: 0 4px 20px rgba(129, 140, 248, 0.5);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;

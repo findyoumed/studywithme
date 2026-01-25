@@ -110,7 +110,7 @@
     flex: 1;
     padding: 12px;
     background: var(--accent-primary);
-    color: var(--accent-ink);
+    color: #fff;
     border: none;
     border-radius: 8px;
     font-weight: bold;

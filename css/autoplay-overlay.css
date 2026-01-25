@@ -21,8 +21,8 @@
 }
 
 .autoplay-btn {
-    background: rgba(244, 238, 226, 0.9);
-    color: var(--accent-ink);
+    background: rgba(129, 140, 248, 0.9);
+    color: var(--bg-primary);
     border: none;
     padding: 16px 32px;
     border-radius: 50px;
@@ -32,7 +32,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 0 20px rgba(244, 238, 226, 0.4);
+    box-shadow: 0 0 20px rgba(129, 140, 248, 0.4);
     transition: transform 0.2s ease, background 0.2s ease;
 }
 

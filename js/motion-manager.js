@@ -106,7 +106,7 @@ export class MotionManager {
             // Draw
             this.renderer.resize(this.videoElement.videoWidth, this.videoElement.videoHeight);
             this.renderer.clear(); // Clear previous frame
-            this.renderer.draw(pose);
+            this.renderer.draw(pose); 
         } else if (!isModelLoading) {
             this.renderer.clear();
         }

@@ -28,7 +28,7 @@
 
 .lang-btn.active {
     background: var(--accent-primary);
-    color: var(--accent-ink);
+    color: #fff;
 }
 
 .lang-divider {
@@ -72,7 +72,7 @@
 
 .start-btn {
     background: var(--accent-primary);
-    color: var(--accent-ink);
+    color: #fff;
     border: none;
     padding: 10px 24px;
     border-radius: 8px;
@@ -86,11 +86,11 @@
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(244, 238, 226, 0.3);
+    box-shadow: 0 4px 15px rgba(129, 140, 248, 0.3);
 }
 
 .start-btn:hover {
     background: var(--accent-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(244, 238, 226, 0.4);
+    box-shadow: 0 6px 20px rgba(129, 140, 248, 0.4);
 }

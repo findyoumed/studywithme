@@ -9,10 +9,10 @@
     max-width: 260px;
     z-index: 9999;
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-    border: 1px solid rgba(244, 238, 226, 0.3);
+    border: 1px solid rgba(129, 140, 248, 0.3);
     border-radius: 12px;
     padding: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 15px rgba(244, 238, 226, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 15px rgba(129, 140, 248, 0.2);
     opacity: 1 !important;
     display: none !important;
 }
@@ -102,15 +102,15 @@
 
 .speed-menu .speed-btn:active {
     transform: scale(0.95);
-    background: rgba(244, 238, 226, 0.15);
+    background: rgba(129, 140, 248, 0.15);
 }
 
 .speed-menu .speed-btn.active {
-    background: linear-gradient(135deg, rgba(244, 238, 226, 0.25) 0%, rgba(231, 220, 200, 0.25) 100%);
-    border-color: rgba(244, 238, 226, 0.5);
-    color: var(--accent-ink);
+    background: linear-gradient(135deg, rgba(129, 140, 248, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%);
+    border-color: rgba(129, 140, 248, 0.5);
+    color: #fff;
     font-weight: 600;
-    box-shadow: 0 0 12px rgba(244, 238, 226, 0.3);
+    box-shadow: 0 0 12px rgba(129, 140, 248, 0.3);
 }
 
 .speed-menu .speed-btn .material-symbols-outlined {
@@ -120,5 +120,5 @@
 
 .speed-menu .speed-btn.active .material-symbols-outlined {
     opacity: 1;
-    color: var(--accent-ink);
+    color: #fff;
 }

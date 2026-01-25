@@ -1,11 +1,11 @@
 ---
 id: 23
-title: "아침 공부 루틴 - 하루의 흐름을 잡기"
+title: "하루의 성공을 결정하는 아침 공부 습관"
 category: "습관"
 readTime: "7"
-image: "/assets/images/yoga.png"
+image: "/assets/images/post_23_morning_routine.jpg"
 excerpt: "아침 10분의 정리가 하루 공부의 방향을 결정한다."
-title_en: "Start Your Day with a Morning Study Ritual"
+title_en: "Morning Study Ritual: Set the Tone for Your Day"
 excerpt_en: "A short morning ritual sets the tone for the whole day."
 category_en: "Habits"
 content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Morning Sets the Day</h3>\n  <p class='text-slate-300 mb-6'>A short ritual in the morning reduces decision fatigue and starts momentum.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Morning Steps</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li><strong class='text-white'>5 minute plan:</strong> choose the top task</li>\n    <li><strong class='text-white'>Easiest win:</strong> a small task to warm up</li>\n    <li><strong class='text-white'>25 minute focus:</strong> one deep block</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Breathing Reset</h3>\n  <p class='text-slate-300 mb-6'>Take two slow breaths before starting to steady your attention.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Prepare materials the night before to remove friction.</p>\n</div>"

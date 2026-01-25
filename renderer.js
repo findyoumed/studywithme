@@ -19,19 +19,23 @@ export class Renderer {
     }
 
     draw(landmarks) {
+        // Frame skipping for less busy visual update (e.g. update visual every 2nd or 3rd frame)
+        // Note: For smoothness, high FPS is good, but for "less distracting", maybe smoother is better?
+        // Let's rely on heavy smoothing instead of frame dropping.
         const smoothed = this._smoothLandmarks(landmarks);
         this._drawConnections(smoothed);
         this._drawLandmarks(smoothed);
     }
-
+    
     _drawConnections(landmarks) {
         if (!this.poseConnections) return;
 
         this.ctx.save();
         this.ctx.lineCap = "round";
         this.ctx.lineJoin = "round";
-        this.ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
-        this.ctx.lineWidth = 3;
+        // Soft Pink tint for connections, lower opacity
+        this.ctx.strokeStyle = "rgba(255, 182, 193, 0.4)"; 
+        this.ctx.lineWidth = 2; // Thinner lines
 
         for (const connection of this.poseConnections) {
             const start = landmarks[connection.start];
@@ -55,14 +59,16 @@ export class Renderer {
             const cx = landmark.x * this.canvas.width;
             const cy = landmark.y * this.canvas.height;
 
+            // Outer circle - Soft Pink
             this.ctx.beginPath();
-            this.ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
-            this.ctx.fillStyle = "#FF0000";
+            this.ctx.arc(cx, cy, 3, 0, 2 * Math.PI); // Smaller radius (4 -> 3)
+            this.ctx.fillStyle = "rgba(255, 105, 180, 0.6)"; // HotPink with transparency
             this.ctx.fill();
 
+            // Inner dot - White
             this.ctx.beginPath();
-            this.ctx.arc(cx, cy, 2, 0, 2 * Math.PI);
-            this.ctx.fillStyle = "#FFFFFF";
+            this.ctx.arc(cx, cy, 1.5, 0, 2 * Math.PI); // Smaller inner dot
+            this.ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
             this.ctx.fill();
         }
         this.ctx.restore();
@@ -79,7 +85,9 @@ export class Renderer {
             const prev = this.prevLandmarks[i];
             if (!prev) return point;
 
-            const alpha = 0.5; // Smoothing factor
+            // LOWER alpha means MORE smoothing (more weight to previous position)
+            // Was 0.5, changing to 0.2 for much smoother, lazier movement
+            const alpha = 0.2; 
             return {
                 x: prev.x * (1 - alpha) + point.x * alpha,
                 y: prev.y * (1 - alpha) + point.y * alpha,

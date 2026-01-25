@@ -1,9 +1,9 @@
 ---
 id: 20
-title: "집중력 변형 루틴 - 지루함을 깨는 방법"
+title: "공부가 지루할 때 집중력을 되살리는 방법"
 category: "집중"
 readTime: "7"
-image: "/assets/images/plank_guide.png"
+image: "/assets/images/post_20_focus_variation.jpg"
 excerpt: "집중은 다양화될수록 강해진다. 변형 루틴으로 자극을 바꿔보자."
 title_en: "Focus Variations Routine - Break the Boredom"
 excerpt_en: "Varying focus drills keeps your attention strong."

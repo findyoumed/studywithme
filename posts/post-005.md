@@ -1,11 +1,11 @@
 ---
 id: 5
-title: "공부 전후 루틴 - 시작과 마무리가 기억을 만든다"
+title: "기억력을 높이는 공부 시작과 마무리 습관"
 category: "습관"
 readTime: "8"
-image: "/assets/images/post_05_study_routine_1769260162129.png"
-excerpt: "공부를 잘하는 사람은 준비와 마무리를 챙긴다. 짧은 루틴이 기억을 강화한다."
-title_en: "Pre-Study and Post-Study Routine - Start and End Strong"
+image: "/assets/images/post_05_study_routine_1769260162129.jpg"
+excerpt: "공부를 잘하는 사람은 준비와 마무리를 챙깁니다. 이 작은 습관이 기억력을 강화합니다."
+title_en: "Pre and Post-Study Routines - Boost Your Memory"
 excerpt_en: "A short start-and-finish routine boosts retention and consistency."
 category_en: "Habits"
 content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Start and End Decide the Session</h3>\n  <p class='text-slate-300 mb-6'>How you begin sets focus; how you finish locks in memory.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 1: Pre-Study Routine</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li>Clear the desk and open only what you need</li>\n    <li>Write one specific goal for the session</li>\n    <li>Do a 3 minute warm-up recall</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 2: Post-Study Routine</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li>Write a quick summary in your own words</li>\n    <li>List open questions or mistakes</li>\n    <li>Decide the next action for tomorrow</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>A 2 minute shutdown ritual protects tomorrow's focus.</p>\n</div>"

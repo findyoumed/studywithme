@@ -6,9 +6,8 @@
 :root {
   --bg-primary: #0f172a; /* Slate 900 */
   --bg-secondary: #1e293b; /* Slate 800 */
-  --accent-primary: #f4eee2; /* Ivory */
-  --accent-hover: #e7dcc8; /* Warm Ivory */
-  --accent-ink: #2f2a24; /* Soft charcoal */
+  --accent-primary: #818cf8; /* Indigo 400 */
+  --accent-hover: #6366f1; /* Indigo 500 */
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1; /* Slate 300 */
   --glass-bg: rgba(15, 23, 42, 0.8);

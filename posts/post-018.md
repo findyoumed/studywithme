@@ -1,9 +1,9 @@
 ---
 id: 18
-title: "문제 해결 루틴 집중 - 실전 감각 키우기"
+title: "실전 감각을 깨우는 문제 풀이 훈련"
 category: "학습법"
 readTime: "8"
-image: "/assets/images/post_18_problem_solving_focus_1769260462981.png"
+image: "/assets/images/post_18_problem_solving_focus_1769260462981.jpg"
 excerpt: "실전은 문제 해결력에서 나온다. 루틴으로 감각을 만든다."
 title_en: "Problem-Solving Routine Focus - Build Real Test Skills"
 excerpt_en: "Performance grows from consistent problem-solving routines."

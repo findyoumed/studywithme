@@ -3,7 +3,7 @@ id: 12
 title: "복습 vs 문제풀이 - 목표에 따라 고르기"
 category: "계획"
 readTime: "8"
-image: "/assets/images/post_12_review_vs_practice_1769260324535.png"
+image: "/assets/images/post_12_review_practice_v2.jpg"
 excerpt: "기본을 다질 때는 복습, 실전 감각은 문제풀이가 필요하다."
 title_en: "Review vs Practice - Choose by Your Goal"
 excerpt_en: "Review builds foundations; practice builds performance."

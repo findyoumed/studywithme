@@ -37,7 +37,17 @@ let appLifecycleManager;
 
 /* Initialization */
 document.addEventListener("DOMContentLoaded", async () => {
-    console.log("App Initializing...");
+    // 0. Check Viewer Mode Early
+    const urlParams = new URLSearchParams(window.location.search);
+    const isViewerMode = urlParams.get('mode') === 'viewer' || window.location.pathname.includes('viewer.html');
+
+    console.log("App Initializing... Viewer Mode:", isViewerMode);
+
+    if (isViewerMode) {
+        // In viewer mode, we only need basic UI (for shared score maybe?) and LiveManager (handled by its own script)
+        // We SKIP Player, Playlist, Motion, Timer, etc.
+        return; 
+    }
 
     // 0. Initialize UI Helpers Immediately (for static onclick handlers)
     const shareScore = new ShareScore(ui);
@@ -115,23 +125,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     const savedOpacity = storage.get(STORAGE_KEYS.OPACITY, 0.5);
     cameraManager.setOpacity(savedOpacity);
 
-    console.log("Starting Camera & Motion Detection in parallel...");
-    await Promise.all([
-        cameraManager.start(),
-        motionManager.init()
-    ]);
+    // Variables already defined at top of scope
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const isViewerMode = urlParams.get('mode') === 'viewer';
 
-    // 7. Lifecycle Management (Battery Saving)
-    appLifecycleManager = new AppLifecycleManager(
-        cameraManager,
-        motionManager,
-        playerController,
-        exerciseTimer
-    );
-    appLifecycleManager.init();
+    if (!isViewerMode) {
+        console.log("Starting Camera & Motion Detection in parallel...");
+        await Promise.all([
+            cameraManager.start(),
+            motionManager.init()
+        ]);
 
-    // 8. Link MotionManager to PlayerController (for score pausing)
-    if (motionManager && playerController) {
-        motionManager.setPlayer(playerController);
+        // 7. Lifecycle Management (Battery Saving) - ONLY for studs
+        appLifecycleManager = new AppLifecycleManager(
+            cameraManager,
+            motionManager,
+            playerController,
+            exerciseTimer
+        );
+        appLifecycleManager.init();
+
+        // 8. Link MotionManager to PlayerController (for score pausing)
+        if (motionManager && playerController) {
+            motionManager.setPlayer(playerController);
+        }
+    } else {
+        console.log("Viewer Mode: Skipping Camera & Motion Init");
+        if (document.getElementById("placeholder")) {
+            document.getElementById("placeholder").style.display = "none";
+        }
     }
 });

@@ -3,7 +3,7 @@ id: 13
 title: "새 내용 먼저? 복습 먼저? - 시작 순서 결정법"
 category: "계획"
 readTime: "7"
-image: "/assets/images/post_13_sequencing_1769260344620.png"
+image: "/assets/images/post_13_sequencing_v2.jpg"
 excerpt: "시간과 에너지에 따라 순서를 바꾸면 효율이 크게 올라간다."
 title_en: "New Material or Review First? - Pick the Right Order"
 excerpt_en: "Order matters. Match it to your energy and time."

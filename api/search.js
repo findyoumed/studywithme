@@ -10,7 +10,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Query parameter "q" is required' });
     }
 
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30&q=${encodeURIComponent(q)}&key=${apiKey}`;
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30&q=${encodeURIComponent(q)}&key=${apiKey}`; // Ensuring 30 results
 
     try {
         const response = await fetch(url);

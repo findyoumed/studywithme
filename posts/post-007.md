@@ -1,10 +1,10 @@
 ---
 id: 7
-title: "액티브 리콜 시작하기 - 초보자 가이드"
+title: "기억력을 깨우는 '액티브 리콜' 학습법"
 category: "학습법"
 readTime: "9"
-image: "/assets/images/post_07_active_recall_1769260212445.png"
-excerpt: "기억은 꺼내는 연습으로 강화된다. 간단한 질문부터 시작하자."
+image: "/assets/images/post_07_active_recall_1769260212445.jpg"
+excerpt: "기억력은 단순히 반복해서 보는 것보다 '꺼내는 연습'을 할 때 더 강해집니다. 간단한 질문부터 시작해 보세요."
 title_en: "Getting Started with Active Recall - A Beginner Guide"
 excerpt_en: "Memory grows when you practice retrieving, not rereading."
 category_en: "Study Methods"

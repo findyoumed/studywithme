@@ -38,7 +38,7 @@ export class ShareScore {
         : {};
 
     // Title
-    ctx.fillStyle = "#f4eee2";
+    ctx.fillStyle = "#818cf8";
     ctx.font = "bold 48px Inter, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(t.share_title || "StudyWithMe - AI Study Coach", 600, 100);
@@ -87,12 +87,14 @@ export class ShareScore {
       ctx.fillText(t.score || "SCORE", 600, 360);
     }
 
-    // Time
+    // Time (Removed by user request)
+    /*
     if (time) {
       ctx.fillStyle = "#aaa";
       ctx.font = "28px Inter, sans-serif";
       ctx.fillText(`${t.share_time || "Time"}: ${time}`, 600, 440);
     }
+    */
 
     // Call to action
     ctx.fillStyle = "#ffffff";
@@ -100,7 +102,7 @@ export class ShareScore {
     ctx.fillText(t.share_cta || "Can you beat my score?", 600, 500);
 
     // Site Title
-    ctx.fillStyle = "#f4eee2";
+    ctx.fillStyle = "#818cf8";
     ctx.font = "bold 24px Inter, sans-serif";
     ctx.fillText("StudyWithMe - AI Study Coach", 600, 540);
 

@@ -55,9 +55,44 @@ async function init() {
     console.log("Live Manager Initializing...");
     
     // 1. Setup Room
+    // 1. Setup Room
     const urlParams = new URLSearchParams(window.location.search);
+    
+    // Auto-generate Random Room ID if missing
+    if (!urlParams.has('room')) {
+        const randomRoomId = 'room-' + Math.random().toString(36).substring(2, 9) + '-' + Math.random().toString(36).substring(2, 9);
+        // Redirect to new room as Host
+        urlParams.set('room', randomRoomId);
+        urlParams.set('host', 'true');
+        window.location.search = urlParams.toString();
+        return; // Stop execution until reload
+    }
+
     if (urlParams.get('room')) channelName = urlParams.get('room');
     if (roomNameDisplay) roomNameDisplay.innerText = channelName;
+
+    // 1.5 View Mode Check
+    if (urlParams.get('mode') === 'viewer') {
+        document.body.classList.add('viewer-mode');
+        
+        // Programmatically remove elements hidden by CSS to "clean" the DOM as requested
+        const selectorsToRemove = [
+            '.top-left-controls',
+            '.next-video-bar',
+            '.sidebar-header', 
+            '#participantSidebar',
+            '#controlsContainer',
+            '.video-panel',
+            '#placeholder',
+            '#btnGoLive', // Specific button removal
+            '#btnCopyRoom' // Access via ID
+        ];
+        
+        selectorsToRemove.forEach(selector => {
+            const els = document.querySelectorAll(selector);
+            els.forEach(el => el.remove());
+        });
+    }
 
     // 2. Host Check
     const isHost = urlParams.get('host') === 'true' || urlParams.get('host') === '1';
@@ -93,16 +128,37 @@ async function initRTM() {
         await rtmClient.login({ token: rtmToken });
         await rtmClient.setLocalUserAttributes({ nickname: userNickname });
 
-        const streamChannel = rtmClient.createStreamChannel(channelName);
-        await streamChannel.join({ token: rtmToken, withMetadata: true, withPresence: true });
+        // Use standard subscribe
+        try {
+            // Agora RTM 2.x subscribe signature: subscribe(channelName, options)
+            // Options: { withMessage: boolean, withMetadata: boolean, withPresence: boolean, withLock: boolean }
+            await rtmClient.subscribe(channelName, { 
+                withPresence: true, 
+                withMessage: true, 
+                withMetadata: true 
+            });
+            console.log("Subscribed to channel with presence");
+        } catch (e) {
+            console.error("RTM Subscribe Failed:", e);
+        }
+        
+        // const streamChannel = rtmClient.createStreamChannel(channelName);
+        // await streamChannel.join({ token: rtmToken, withMetadata: true, withPresence: true });
 
         rtmClient.on("presence", (event) => {
-            if (event.type === "SNAPSHOT") updateParticipantsList(event.snapshot);
-            else if (event.type === "REMOTE_JOIN" || event.type === "REMOTE_LEAVE") refreshParticipants();
+            console.log("RTM Presence Event:", event.type, event);
+            if (event.type === "SNAPSHOT") {
+                updateParticipantsList(event.snapshot);
+            }
+            else if (event.type === "REMOTE_JOIN" || event.type === "REMOTE_LEAVE") {
+                console.log(`User ${event.type}: ${event.publisherId || 'unknown'}`);
+                refreshParticipants();
+            }
         });
 
         rtmClient.on("message", (event) => {
-            if (event.channelType === "STREAM" && event.channelName === channelName) {
+            // Check for Channel Message
+            if (event.channelType === "MESSAGE" && event.channelName === channelName) {
                 showFloatingEmoji(event.message);
             }
         });
@@ -130,15 +186,23 @@ async function joinRTC() {
 
 async function refreshParticipants() {
     try {
-        const { members } = await rtmClient.getOnlineUsers(channelName);
+        const response = await rtmClient.getOnlineUsers(channelName);
+        console.log("Online Users Fetch Result:", response);
+        // Agora SDK v2 structure might be { users: [...], occupants: [...] } depending on version
+        // Let's assume response.occupants or response itself is the list if V2.
+        // Actually for V2 'getOnlineUsers' usually returns { totalOccupants: number, occupants: array }
+        
+        const members = response.occupants || [];
         updateParticipantsList(members);
-    } catch (e) {}
+    } catch (e) {
+        console.error("Failed to refresh participants:", e);
+    }
 }
 
 function updateParticipantsList(members) {
     if (!participantListUI) return;
     participantListUI.innerHTML = "";
-    participantCountDisplay.innerText = members.length;
+    if (participantCountDisplay) participantCountDisplay.innerText = members.length;
 
     members.forEach(member => {
         const li = document.createElement("li");
@@ -166,7 +230,21 @@ function showFloatingEmoji(emoji) {
 }
 
 async function fetchTokens(role) {
-    const response = await fetch(`/api/get-agora-token?channelName=${channelName}&uid=${myUID}&role=${role}`);
+    // If we are host, role is publisher. If viewer, role is subscriber.
+    // However, the token generation usually just needs valid UID. Role separation is good practice.
+    const urlParams = new URLSearchParams(window.location.search);
+    const isHost = urlParams.get('host') === 'true' || urlParams.get('host') === '1';
+    
+    // Force role 'start' (publisher) if host, 'join' (subscriber) if not?
+    // Actually our server logic might be simple. Let's send what we intend.
+    // If I am NOT a host, I shoudln't ask for publisher token?
+    // But currently loop calls this with fixed strings. Let's trust the Caller or override.
+    
+    // For RTM, role doesn't matter much. 
+    // For RTC, only host needs publisher token.
+    const actualRole = isHost ? 'publisher' : 'subscriber';
+
+    const response = await fetch(`/api/get-agora-token?channelName=${channelName}&uid=${myUID}&role=${actualRole}`);
     return await response.json();
 }
 
@@ -232,7 +310,7 @@ function updateButtonsUI() {
         btnGoLive.classList.add('active');
         btnGoLive.innerHTML = '<span class="material-symbols-outlined">stop_circle</span>';
         liveStatus.style.display = 'flex';
-        emojiBar.style.display = 'flex';
+        // emojiBar.style.display = 'flex'; // Host doesn't need to cheer for themselves
     } else {
         btnGoLive.classList.remove('active');
         btnGoLive.innerHTML = '<span class="material-symbols-outlined">podcasts</span>';
@@ -270,9 +348,12 @@ if (btnCopyRoom) {
     btnCopyRoom.addEventListener('click', () => {
         const url = new URL(window.location.href);
         url.searchParams.set('room', channelName);
+        url.searchParams.delete('host'); // Ensure viewer link
+        url.searchParams.set('mode', 'viewer'); // Add viewer mode implicitly
         navigator.clipboard.writeText(url.toString());
+        const originalIcon = btnCopyRoom.innerHTML;
         btnCopyRoom.innerHTML = '<span class="material-symbols-outlined">check</span>';
-        setTimeout(() => btnCopyRoom.innerHTML = '<span class="material-symbols-outlined">link</span>', 2000);
+        setTimeout(() => btnCopyRoom.innerHTML = originalIcon, 2000);
     });
 }
 
@@ -289,7 +370,7 @@ document.querySelectorAll('.emoji-btn').forEach(btn => {
         const emoji = btn.dataset.emoji;
         if (rtmClient) {
             try {
-                await rtmClient.publish(channelName, emoji, { channelType: "STREAM" });
+                await rtmClient.publish(channelName, emoji, { channelType: "MESSAGE" });
                 showFloatingEmoji(emoji);
             } catch (e) {}
         }

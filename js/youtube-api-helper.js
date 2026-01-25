@@ -54,7 +54,7 @@ export class YouTubeAPIHelper {
             }
         }
 
-        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30&q=${encodeURIComponent(query)}&key=${apiKey}`;
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30&q=${encodeURIComponent(query)}&key=${apiKey}`; // Ensuring 30 results
 
         try {
             const resp = await fetch(url);
