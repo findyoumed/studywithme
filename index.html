@@ -21,7 +21,7 @@
     <link rel="canonical" href="https://studywithme.com/" />
 
     <!-- Analytics & SEO (Head Scripts) -->
-    <script src="/js/analytics.js?v=3"></script>
+    <script src="js/analytics.js?v=11"></script>
 
     <!-- AI & GEO -->
     <link rel="help" href="/llms.txt" title="AI Context" />
@@ -86,7 +86,7 @@
     </script>
 
     <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="icon-192.png" />
 
     <!-- Fonts & Icons -->
@@ -99,29 +99,24 @@
       rel="stylesheet"
     />
 
-    <!-- Core Design System (Direct Links for Vercel Reliability) -->
-    <link rel="stylesheet" href="/css/base.css?v=10" />
-    <link rel="stylesheet" href="/css/layout.css?v=10" />
-    <link rel="stylesheet" href="/css/controls.css?v=10" />
-    <link rel="stylesheet" href="/css/components.nextbar.css?v=10" />
-    <link rel="stylesheet" href="/css/components.overlays.css?v=10" />
-    <link rel="stylesheet" href="/css/live-stream.css?v=10" />
-    <link rel="stylesheet" href="/css/intro-modal.css?v=10" />
+    <!-- Core Design System (Relative Paths for Vercel) -->
+    <link rel="stylesheet" href="css/base.css?v=11" />
+    <link rel="stylesheet" href="css/layout.css?v=11" />
+    <link rel="stylesheet" href="css/controls.css?v=11" />
+    <link rel="stylesheet" href="css/components.nextbar.css?v=11" />
+    <link rel="stylesheet" href="css/components.overlays.css?v=11" />
+    <link rel="stylesheet" href="css/live-stream.css?v=11" />
+    <link rel="stylesheet" href="css/intro-modal.css?v=11" />
+    <link rel="stylesheet" href="style.css?v=11" />
     
     <style>
       /* --- EMERGENCY SAFETY CSS (Minimal) --- */
-      :root {
-        --bg-primary: #0f172a;
-        --text-primary: #ffffff;
-      }
       body { 
         background-color: #0f172a !important; 
         color: white !important; 
         margin: 0; padding: 0; 
         font-family: 'Inter', sans-serif, system-ui; 
       }
-      /* Hide sidebar by default until CSS loads and positions it */
-      .participant-sidebar { display: none; }
       .container { background: #0f172a; min-height: 100vh; }
     </style>
 
@@ -258,8 +253,8 @@
     <div id="pmfModalContainer"></div>
 
     <!-- YouTube API & App Scripts -->
-    <script type="module" src="/script.js?v=10"></script>
-    <script type="module" src="/js/live-manager.js?v=10"></script>
+    <script type="module" src="script.js?v=11"></script>
+    <script type="module" src="js/live-manager.js?v=11"></script>
 
     <!-- Global Key Handlers -->
     <script>
