@@ -21,7 +21,7 @@
     <link rel="canonical" href="https://studywithme.com/" />
 
     <!-- Analytics & SEO (Head Scripts) -->
-    <script src="/js/analytics.js?v=25"></script>
+    <script src="/js/analytics.js?v=30"></script>
 
     <!-- AI & GEO -->
     <link rel="help" href="/llms.txt" title="AI Context" />
@@ -99,20 +99,21 @@
       rel="stylesheet"
     />
 
-    <!-- Core Design System (Absolute Paths for Vercel) -->
-    <link rel="stylesheet" href="/css/base.css?v=25" />
-    <link rel="stylesheet" href="/css/layout.css?v=25" />
-    <link rel="stylesheet" href="/css/controls.css?v=25" />
-    <link rel="stylesheet" href="/css/components.nextbar.css?v=25" />
-    <link rel="stylesheet" href="/css/components.overlays.css?v=25" />
-    <link rel="stylesheet" href="/css/live-stream.css?v=25" />
-    <link rel="stylesheet" href="/css/intro-modal.css?v=25" />
+    <!-- Core Design System (Direct Links for Vercel) -->
+    <link rel="stylesheet" href="/css/base.css?v=30" />
+    <link rel="stylesheet" href="/css/layout.css?v=30" />
+    <link rel="stylesheet" href="/css/controls.css?v=30" />
+    <link rel="stylesheet" href="/css/components.nextbar.css?v=30" />
+    <link rel="stylesheet" href="/css/components.overlays.css?v=30" />
+    <link rel="stylesheet" href="/css/live-stream.css?v=30" />
+    <link rel="stylesheet" href="/css/intro-modal.css?v=30" />
     
     <style>
-      /* --- CRITICAL LAYOUT FAILSAFE (Matches Localhost) --- */
+      /* --- PRO-GRADE LAYOUT FAILSAFE (Matches Localhost) --- */
       :root {
         --bg-primary: #0f172a;
         --text-primary: #ffffff;
+        --accent-primary: #818cf8;
       }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { 
@@ -121,48 +122,30 @@
         color: var(--text-primary); 
         overflow: hidden; 
       }
-      /* Root Container */
+      /* Split-Screen Grid System */
       .container { 
         display: grid !important; 
-        grid-template-columns: 1fr 1fr !important; /* Split into two columns */
-        width: 100vw; 
-        height: 100vh; 
+        grid-template-columns: 1fr 1fr !important; 
+        width: 100vw; height: 100vh; 
         gap: 0 !important; 
         background: #000;
+        transition: grid-template-columns 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      
-      /* Panels */
-      .panel { 
-        position: relative; 
-        width: 100%; height: 100%; 
-        overflow: hidden; 
-        background: #000; 
-        display: flex; flex-direction: column; 
-      }
+      .panel { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; display: flex; flex-direction: column; }
       .camera-panel { border-left: 1px solid rgba(255, 255, 255, 0.1); }
       .player-wrapper { flex: 1; position: relative; background: #000; }
       #player { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
       
-      /* Overlays (MUST BE ABSOLUTE to avoid becoming grid items) */
-      .top-left-controls, 
-      .participant-sidebar, 
-      .reaction-container,
-      .camera-controls-overlay {
-        position: absolute !important;
-        z-index: 100 !important;
-        pointer-events: none;
+      /* Floats & UI Overlays */
+      .top-left-controls, .participant-sidebar, .reaction-container, .camera-controls-overlay {
+        position: absolute !important; z-index: 100 !important; pointer-events: none;
       }
-      .top-left-controls *, .participant-sidebar *, .camera-controls-overlay * { 
-        pointer-events: auto; 
-      }
-      
+      .top-left-controls *, .participant-sidebar *, .camera-controls-overlay * { pointer-events: auto; }
       .top-left-controls { top: 20px; left: 20px; }
-      .participant-sidebar { top: 0; right: 0; width: 300px; height: 100%; background: #0f172a; }
-      .camera-controls-overlay { top: 60px; right: 15px; width: auto; }
-      
-      .score-overlay { background: rgba(15, 23, 42, 0.8); padding: 8px 15px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); }
+      .score-overlay { background: rgba(15, 23, 42, 0.82); padding: 10px 18px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
       .next-video-bar { background: #1e293b; height: 60px; display: flex; align-items: center; padding: 0 15px; gap: 10px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
       
+      /* Mobile Fluidity */
       @media (max-width: 768px) { .container { grid-template-columns: 1fr !important; } }
     </style>
 
@@ -299,8 +282,8 @@
     <div id="pmfModalContainer"></div>
 
     <!-- YouTube API & App Scripts -->
-    <script type="module" src="/script.js?v=25"></script>
-    <script type="module" src="/js/live-manager.js?v=25"></script>
+    <script type="module" src="/script.js?v=30"></script>
+    <script type="module" src="/js/live-manager.js?v=30"></script>
 
     <!-- Global Key Handlers -->
     <script>

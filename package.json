@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Live Study Together with Agora RTC/RTM",
   "type": "module",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
     "dev": "nodemon server.js",
     "posts:index": "python scripts/update-post-index.py",
     "posts:new": "python scripts/create-post.py"
