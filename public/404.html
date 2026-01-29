@@ -1,52 +1,240 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>페이지를 찾을 수 없습니다</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #343a40;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            padding: 2rem;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        a {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        a:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found | StudyWithMe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      text-align: center;
+      color: white;
+      max-width: 600px;
+    }
+
+    .error-code {
+      font-size: 120px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .error-message {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .error-description {
+      font-size: 16px;
+      opacity: 0.9;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: white;
+      color: #667eea;
+      padding: 15px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      background: #f0f0f0;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .lang-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 30px;
+      padding: 10px 20px;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .lang-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 80px;
+      }
+
+      .error-message {
+        font-size: 22px;
+      }
+
+      .error-description {
+        font-size: 14px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>404</h1>
-        <p>요청하신 페이지를 찾을 수 없습니다.<br>입력하신 주소가 정확한지 다시 한번 확인해 주세요.</p>
-        <a href="/">홈으로 돌아가기</a>
+  <div class="container">
+    <div class="icon">😵</div>
+    <div class="error-code">404</div>
+    <h1 class="error-message" data-i18n="title">페이지를 찾을 수 없습니다</h1>
+    <p class="error-description" data-i18n="description">
+      요청하신 페이지가 존재하지 않거나 이동되었습니다.<br>
+      URL을 다시 확인해주시거나 홈으로 돌아가주세요.
+    </p>
+
+    <div class="action-buttons">
+      <a href="/" class="btn">
+        <span>🏠</span>
+        <span data-i18n="home">홈으로 돌아가기</span>
+      </a>
+      <a href="javascript:history.back()" class="btn btn-secondary">
+        <span>←</span>
+        <span data-i18n="back">이전 페이지</span>
+      </a>
     </div>
+  </div>
+
+  <button class="lang-toggle" onclick="toggleLanguage()">
+    <span id="langIcon">🇰🇷</span>
+    <span id="langText">한국어</span>
+  </button>
+
+  <script>
+    // 다국어 텍스트
+    const translations = {
+      ko: {
+        title: '페이지를 찾을 수 없습니다',
+        description: '요청하신 페이지가 존재하지 않거나 이동되었습니다.<br>URL을 다시 확인해주시거나 홈으로 돌아가주세요.',
+        home: '홈으로 돌아가기',
+        back: '이전 페이지'
+      },
+      en: {
+        title: 'Page Not Found',
+        description: 'The page you requested does not exist or has been moved.<br>Please check the URL or return to the homepage.',
+        home: 'Go Home',
+        back: 'Go Back'
+      }
+    };
+
+    // localStorage에서 언어 가져오기
+    function getCurrentLang() {
+      try {
+        return localStorage.getItem('studywithme_lang') || 'ko';
+      } catch (e) {
+        return 'ko';
+      }
+    }
+
+    // localStorage에 언어 저장
+    function setCurrentLang(lang) {
+      try {
+        localStorage.setItem('studywithme_lang', lang);
+      } catch (e) {
+        console.warn('Failed to save language preference');
+      }
+    }
+
+    // 페이지 텍스트 업데이트
+    function updateText(lang) {
+      const texts = translations[lang] || translations.ko;
+      
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (texts[key]) {
+          element.innerHTML = texts[key];
+        }
+      });
+
+      // HTML lang 속성 변경
+      document.documentElement.lang = lang;
+
+      // 언어 토글 버튼 업데이트
+      const langIcon = document.getElementById('langIcon');
+      const langText = document.getElementById('langText');
+      
+      if (lang === 'ko') {
+        langIcon.textContent = '🇰🇷';
+        langText.textContent = '한국어';
+      } else {
+        langIcon.textContent = '🇺🇸';
+        langText.textContent = 'English';
+      }
+    }
+
+    // 언어 토글
+    function toggleLanguage() {
+      const currentLang = getCurrentLang();
+      const newLang = currentLang === 'ko' ? 'en' : 'ko';
+      setCurrentLang(newLang);
+      updateText(newLang);
+    }
+
+    // 페이지 로드 시 언어 설정
+    window.addEventListener('DOMContentLoaded', () => {
+      const lang = getCurrentLang();
+      updateText(lang);
+    });
+  </script>
 </body>
 </html>
