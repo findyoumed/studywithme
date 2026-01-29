@@ -25,6 +25,10 @@ export class PlayerController {
     this.stateHandler = null;
     this.apiLoader = new YouTubeApiLoader(ui);
     this.uiHandler = new PlayerUiHandler(this, ui);
+    
+    // Background playback control
+    this.wasPlayingBeforeHidden = false;
+    document.addEventListener("visibilitychange", () => this.handleVisibilityChange());
   }
 
   init() {
@@ -182,5 +186,27 @@ export class PlayerController {
     if (!this.player || typeof this.player.getPlayerState !== "function")
       return false;
     return this.player.getPlayerState() === YT.PlayerState.PLAYING;
+  }
+
+  handleVisibilityChange() {
+    if (!this.player || typeof this.player.getPlayerState !== "function") return;
+
+    if (document.hidden) {
+      // Entering background: Save state and pause
+      if (this.isPlaying()) {
+        this.wasPlayingBeforeHidden = true;
+        this.player.pauseVideo();
+        console.log("Background mode: Video paused to save battery.");
+      } else {
+        this.wasPlayingBeforeHidden = false;
+      }
+    } else {
+      // Creating foreground: Resume if it was playing
+      if (this.wasPlayingBeforeHidden) {
+        this.player.playVideo();
+        this.wasPlayingBeforeHidden = false;
+        console.log("Foreground mode: Video resumed.");
+      }
+    }
   }
 }
