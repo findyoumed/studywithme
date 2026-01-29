@@ -68,6 +68,74 @@ app.get("/api/get-api-key", (req, res) => {
   res.json({ apiKey });
 });
 
+// ========================================
+// 🔒 Room Participant Limit System
+// ========================================
+const MAX_PARTICIPANTS_PER_ROOM = 10; // 방당 최대 10명
+const roomParticipants = new Map(); // { channelName: Set([uid1, uid2, ...]) }
+
+// 방 참여자 수 확인
+function getRoomParticipantCount(channelName) {
+  const participants = roomParticipants.get(channelName);
+  return participants ? participants.size : 0;
+}
+
+// 참여자 추가
+function addParticipant(channelName, uid) {
+  if (!roomParticipants.has(channelName)) {
+    roomParticipants.set(channelName, new Set());
+  }
+  roomParticipants.get(channelName).add(uid);
+  console.log(`✅ [${channelName}] Added UID ${uid}. Total: ${roomParticipants.get(channelName).size}`);
+}
+
+// 참여자 제거
+function removeParticipant(channelName, uid) {
+  const participants = roomParticipants.get(channelName);
+  if (participants) {
+    participants.delete(uid);
+    console.log(`❌ [${channelName}] Removed UID ${uid}. Total: ${participants.size}`);
+    
+    // 방 비었으면 삭제
+    if (participants.size === 0) {
+      roomParticipants.delete(channelName);
+      console.log(`🗑️ [${channelName}] Room deleted (empty)`);
+    }
+  }
+}
+
+// API: 참여자 퇴장 알림
+app.post("/api/participant-left", express.json(), (req, res) => {
+  const { channelName, uid } = req.body;
+  
+  if (!channelName || !uid) {
+    return res.status(400).json({ error: "channelName and uid required" });
+  }
+  
+  removeParticipant(channelName, uid);
+  res.json({ success: true });
+});
+
+// API: 현재 방 상태 조회
+app.get("/api/room-status", (req, res) => {
+  const { channelName } = req.query;
+  
+  if (!channelName) {
+    return res.status(400).json({ error: "channelName required" });
+  }
+  
+  const count = getRoomParticipantCount(channelName);
+  const isFull = count >= MAX_PARTICIPANTS_PER_ROOM;
+  
+  res.json({
+    channelName,
+    currentParticipants: count,
+    maxParticipants: MAX_PARTICIPANTS_PER_ROOM,
+    isFull,
+    canJoin: !isFull
+  });
+});
+
 // API endpoint to generate Agora token
 app.get("/api/get-agora-token", (req, res) => {
   const appId = process.env.AGORA_APP_ID;
@@ -84,9 +152,6 @@ app.get("/api/get-agora-token", (req, res) => {
     return res.status(400).json({ error: "uid must be a non-zero number" });
   }
 
-  // Debugging log
-  console.log(`Generating token for UID: ${uid}, Channel: ${channelName}, Role: ${req.query.role} (${role})`);
-
   if (!appId || !appCertificate) {
     return res.status(500).json({ error: "Agora credentials not configured" });
   }
@@ -94,6 +159,25 @@ app.get("/api/get-agora-token", (req, res) => {
   if (!channelName) {
     return res.status(400).json({ error: "channelName is required" });
   }
+
+  // 🔒 참여자 수 제한 체크
+  const currentCount = getRoomParticipantCount(channelName);
+  const participants = roomParticipants.get(channelName);
+  const isAlreadyInRoom = participants && participants.has(uid);
+  
+  // 이미 방에 있는 사용자는 재접속 허용
+  if (!isAlreadyInRoom && currentCount >= MAX_PARTICIPANTS_PER_ROOM) {
+    console.log(`⛔ [${channelName}] Room full! Rejected UID ${uid} (${currentCount}/${MAX_PARTICIPANTS_PER_ROOM})`);
+    return res.status(403).json({ 
+      error: "ROOM_FULL",
+      message: `방이 가득 찼습니다! (${currentCount}/${MAX_PARTICIPANTS_PER_ROOM}명)`,
+      currentParticipants: currentCount,
+      maxParticipants: MAX_PARTICIPANTS_PER_ROOM
+    });
+  }
+
+  // Debugging log
+  console.log(`Generating token for UID: ${uid}, Channel: ${channelName}, Role: ${req.query.role} (${role})`);
 
   const rtcToken = RtcTokenBuilder.buildTokenWithUid(
     appId,
@@ -111,6 +195,9 @@ app.get("/api/get-agora-token", (req, res) => {
     uid.toString(),
     privilegeExpireTime
   );
+
+  // ✅ 토큰 발급 성공 시 참여자 추가
+  addParticipant(channelName, uid);
 
   res.json({ rtcToken, rtmToken });
 });

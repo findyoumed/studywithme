@@ -230,12 +230,44 @@ function stopScoreBroadcasting() {
 // --- API ---
 
 async function fetchTokens(role) {
+    const endpoint = `/api/get-agora-token?channelName=${channelName}&uid=${myUID}&role=${role}`;
     try {
-        const response = await fetch(`/api/get-agora-token?channelName=${channelName}&uid=${myUID}&role=${role}`);
-        if (!response.ok) throw new Error(`Token fetch error: ${response.status}`);
-        return await response.json();
-    } catch (e) {
-        console.error(e);
-        return {};
+        const response = await fetch(endpoint);
+        
+        // 🔒 방이 가득 찬 경우 처리
+        if (!response.ok) {
+            const errorData = await response.json();
+            
+            if (errorData.error === 'ROOM_FULL') {
+                console.error(`⛔ Room full: ${errorData.message}`);
+                alert(`❌ ${errorData.message}\n\n다른 방을 이용해주세요.`);
+                throw new Error('ROOM_FULL');
+            }
+            
+            throw new Error(`Token fetch failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch Agora token:", error);
+        throw error;
     }
 }
+
+// 페이지 닫힐 때 서버에 퇴장 알림
+window.addEventListener('beforeunload', async () => {
+    try {
+        await fetch('/api/participant-left', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                channelName, 
+                uid: myUID 
+            }),
+            keepalive: true  // 페이지 닫혀도 요청 완료
+        });
+    } catch (error) {
+        console.error('Failed to notify participant left:', error);
+    }
+});
