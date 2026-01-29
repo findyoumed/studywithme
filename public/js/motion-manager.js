@@ -98,12 +98,13 @@ export class MotionManager {
         if (document.hidden) {
             // Switch to Background Mode
             if (this.rafId) cancelAnimationFrame(this.rafId);
-            if (this.bgInterval) clearInterval(this.bgInterval); // safety
-            this.bgInterval = setInterval(() => this._runOneStep(), 1000);
+            if (this.bgInterval) clearInterval(this.bgInterval); 
+            // Check every 3 seconds in background to save CPU for video lectures
+            this.bgInterval = setInterval(() => this._runOneStep(), 3000);
         } else {
             // Switch to Foreground Mode
             if (this.bgInterval) clearInterval(this.bgInterval);
-            this.lastTime = performance.now(); // Reset time to avoid huge jump
+            this.lastTime = performance.now(); 
             this._runRAF();
             
             // Force UI sync immediately upon returning
@@ -121,9 +122,10 @@ export class MotionManager {
 
     _runOneStep() {
         const now = performance.now();
-        // Prevent huge delta jumps (max 2000ms)
+        // Prevent huge delta jumps, but allow compensation for throttling in background
         const rawDelta = now - this.lastTime;
-        const deltaMs = rawDelta > 2000 ? 1000 : rawDelta; 
+        const maxGap = document.hidden ? 10000 : 2000; // Allow up to 10s gap in background
+        const deltaMs = rawDelta > maxGap ? 1000 : rawDelta; 
         this.lastTime = now;
 
         if (this.videoElement.readyState >= 2 && !this.isScoringPaused) {
