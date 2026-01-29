@@ -54,13 +54,31 @@ document.addEventListener('DOMContentLoaded', () => {
       const mediaStreamTrack = videoTracks[0];
       console.log('[Viewer] Got media stream track');
 
-      // Check if liveManager exists
-      if (!window.liveManager || !window.liveManager.rtcClient) {
-        throw new Error('Live manager not initialized. Please refresh the page.');
+      // Check multiple ways to get rtcClient
+      let rtcClient = null;
+      
+      // Method 1: window.liveManager
+      if (window.liveManager && window.liveManager.rtcClient) {
+        rtcClient = window.liveManager.rtcClient;
+        console.log('[Viewer] Found rtcClient via window.liveManager');
+      }
+      // Method 2: window.rtcClient (direct)
+      else if (window.rtcClient) {
+        rtcClient = window.rtcClient;
+        console.log('[Viewer] Found rtcClient via window.rtcClient');
+      }
+      // Method 3: Search for AgoraRTCClient
+      else if (window.AgoraRTCClient) {
+        rtcClient = window.AgoraRTCClient;
+        console.log('[Viewer] Found rtcClient via window.AgoraRTCClient');
+      }
+      
+      if (!rtcClient || !rtcClient.client) {
+        console.error('[Viewer] Available window properties:', Object.keys(window).filter(k => k.includes('live') || k.includes('rtc') || k.includes('agora')));
+        throw new Error('RTC Client not found. Please make sure you are connected to the room.');
       }
 
-      const rtcClient = window.liveManager.rtcClient;
-      console.log('[Viewer] RTC Client ready');
+      console.log('[Viewer] RTC Client ready:', rtcClient);
 
       // Create Agora video track from MediaStreamTrack
       console.log('[Viewer] Creating Agora video track...');
