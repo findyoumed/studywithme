@@ -5,6 +5,7 @@ import pkg from "agora-token";
 const { RtcTokenBuilder, RtcRole, RtmTokenBuilder } = pkg;
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { appendFileSync } from "fs";
 
 // Load .env file
 dotenv.config();
@@ -66,6 +67,28 @@ app.get("/api/get-api-key", (req, res) => {
   }
 
   res.json({ apiKey });
+});
+
+// API endpoint to log 404 errors
+app.post("/api/report-404", express.json(), (req, res) => {
+  const { url, pathname, referer, userAgent, timestamp, language } = req.body;
+  
+  const logEntry = `[${timestamp}] 404 Error\n` +
+    `  URL: ${url}\n` +
+    `  Path: ${pathname}\n` +
+    `  Referer: ${referer}\n` +
+    `  Language: ${language}\n` +
+    `  User-Agent: ${userAgent}\n` +
+    `  ---\n`;
+  
+  try {
+    appendFileSync(join(__dirname, "404-errors.log"), logEntry);
+    console.log(`📝 404 Error logged: ${pathname}`);
+  } catch (e) {
+    console.error('Failed to write 404 log:', e);
+  }
+  
+  res.json({ success: true });
 });
 
 // ========================================

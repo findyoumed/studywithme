@@ -234,7 +234,37 @@
     window.addEventListener('DOMContentLoaded', () => {
       const lang = getCurrentLang();
       updateText(lang);
+      
+      // 404 에러 서버에 리포트
+      reportError();
     });
+
+    // 404 에러 리포트 함수
+    function reportError() {
+      try {
+        const errorData = {
+          url: window.location.href,
+          pathname: window.location.pathname,
+          referer: document.referrer || 'Direct access',
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          language: getCurrentLang()
+        };
+
+        fetch('/api/report-404', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(errorData)
+        }).catch(err => {
+          // 에러 리포팅 실패는 조용히 무시
+          console.debug('Failed to report 404:', err);
+        });
+      } catch (e) {
+        // 에러 발생해도 페이지는 정상 표시
+      }
+    }
   </script>
 </body>
 </html>
