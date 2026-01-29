@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 - Page Not Found | StudyWithMe</title>
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6LB7SMP96"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-G6LB7SMP96');
+  </script>
+  
   <style>
     * {
       margin: 0;
@@ -251,6 +261,7 @@
           language: getCurrentLang()
         };
 
+        // 서버에 리포트
         fetch('/api/report-404', {
           method: 'POST',
           headers: {
@@ -261,6 +272,17 @@
           // 에러 리포팅 실패는 조용히 무시
           console.debug('Failed to report 404:', err);
         });
+
+        // Google Analytics에 리포트
+        if (typeof gtag === 'function') {
+          gtag('event', 'page_not_found', {
+            page_path: window.location.pathname,
+            page_url: window.location.href,
+            page_referer: document.referrer || 'Direct access',
+            user_language: getCurrentLang()
+          });
+          console.debug('404 reported to Google Analytics');
+        }
       } catch (e) {
         // 에러 발생해도 페이지는 정상 표시
       }
