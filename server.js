@@ -71,7 +71,7 @@ app.get("/api/get-api-key", (req, res) => {
 // ========================================
 // 🔒 Room Participant Limit System
 // ========================================
-const MAX_PARTICIPANTS_PER_ROOM = 10; // 방당 최대 10명
+const MAX_PARTICIPANTS_PER_ROOM = 6; // 방당 최대 6명
 const roomParticipants = new Map(); // { channelName: Set([uid1, uid2, ...]) }
 
 // 방 참여자 수 확인
