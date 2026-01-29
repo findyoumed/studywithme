@@ -1,9 +1,8 @@
 /**
  * Viewer Go Live Functionality
- * Allows viewers to start their own broadcast
+ * Allows viewers to start their own broadcast WITHOUT cameraManager
  */
 
-// Wait for DOM and live-manager to be ready
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[Viewer] Initializing Go Live button...');
   
@@ -15,16 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let isViewerLive = false;
+  let localVideoStream = null;
+  let localVideoTrack = null;
 
   btnGoLiveMeToo.addEventListener('click', async () => {
     console.log('[Viewer] Go Live button clicked, current state:', isViewerLive);
 
     try {
       if (!isViewerLive) {
-        // Start viewer's own broadcast
         await startViewerBroadcast();
       } else {
-        // Stop viewer's broadcast
         await stopViewerBroadcast();
       }
     } catch (error) {
@@ -36,80 +35,114 @@ document.addEventListener('DOMContentLoaded', () => {
   async function startViewerBroadcast() {
     console.log('[Viewer] Starting viewer broadcast...');
 
-    // Check if cameraManager exists
-    if (!window.cameraManager) {
-      alert('카메라를 먼저 켜주세요!');
-      return;
+    try {
+      // Get camera directly using MediaDevices API
+      console.log('[Viewer] Requesting camera access...');
+      localVideoStream = await navigator.mediaDevices.getUserMedia({ 
+        video: true, 
+        audio: false 
+      });
+      
+      console.log('[Viewer] Camera access granted');
+
+      // Get video track from stream
+      const videoTracks = localVideoStream.getVideoTracks();
+      if (videoTracks.length === 0) {
+        throw new Error('No video track found');
+      }
+
+      const mediaStreamTrack = videoTracks[0];
+      console.log('[Viewer] Got media stream track');
+
+      // Check if liveManager exists
+      if (!window.liveManager || !window.liveManager.rtcClient) {
+        throw new Error('Live manager not initialized. Please refresh the page.');
+      }
+
+      const rtcClient = window.liveManager.rtcClient;
+      console.log('[Viewer] RTC Client ready');
+
+      // Create Agora video track from MediaStreamTrack
+      console.log('[Viewer] Creating Agora video track...');
+      localVideoTrack = AgoraRTC.createCustomVideoTrack({
+        mediaStreamTrack: mediaStreamTrack
+      });
+
+      console.log('[Viewer] Created Agora track');
+
+      // Publish to Agora
+      console.log('[Viewer] Publishing video track...');
+      await rtcClient.client.publish([localVideoTrack]);
+
+      // Update UI
+      isViewerLive = true;
+      btnGoLiveMeToo.classList.add('active');
+      btnGoLiveMeToo.querySelector('.material-symbols-outlined').textContent = 'stop_circle';
+      btnGoLiveMeToo.querySelector('.btn-text').textContent = 'Stop Live';
+      btnGoLiveMeToo.title = '방송 종료';
+
+      console.log('[Viewer] ✅ Broadcast started successfully');
+      showNotification('✅ 방송이 시작되었습니다!');
+
+    } catch (error) {
+      console.error('[Viewer] Start broadcast error:', error);
+      
+      // Clean up on error
+      if (localVideoStream) {
+        localVideoStream.getTracks().forEach(track => track.stop());
+        localVideoStream = null;
+      }
+      if (localVideoTrack) {
+        localVideoTrack.close();
+        localVideoTrack = null;
+      }
+      
+      throw error;
     }
-
-    // Check camera state
-    const cameraState = window.cameraManager.getState();
-    console.log('[Viewer] Camera state:', cameraState);
-
-    if (!cameraState || !cameraState.streaming) {
-      alert('카메라가 켜져있지 않습니다. 카메라를 먼저 켜주세요.');
-      return;
-    }
-
-    // Get video track
-    let videoTrack = window.cameraManager.getVideoTrack();
-    console.log('[Viewer] Video track:', videoTrack);
-
-    if (!videoTrack) {
-      alert('비디오 트랙을 가져올 수 없습니다.');
-      return;
-    }
-
-    // Check if rtcClient exists (from live-manager)
-    if (!window.liveManager || !window.liveManager.rtcClient) {
-      alert('라이브 시스템이 초기화되지 않았습니다.');
-      return;
-    }
-
-    // Publish video
-    const rtcClient = window.liveManager.rtcClient;
-    await rtcClient.publish(videoTrack);
-
-    // Update UI
-    isViewerLive = true;
-    btnGoLiveMeToo.classList.add('active');
-    btnGoLiveMeToo.querySelector('.material-symbols-outlined').textContent = 'stop_circle';
-    btnGoLiveMeToo.querySelector('.btn-text').textContent = 'Stop Live';
-    btnGoLiveMeToo.title = '방송 종료';
-
-    console.log('[Viewer] Broadcast started successfully');
-    showNotification('✅ 방송이 시작되었습니다!');
   }
 
   async function stopViewerBroadcast() {
     console.log('[Viewer] Stopping viewer broadcast...');
 
-    if (!window.liveManager || !window.liveManager.rtcClient) {
-      return;
+    try {
+      // Unpublish from Agora
+      if (window.liveManager && window.liveManager.rtcClient && localVideoTrack) {
+        const rtcClient = window.liveManager.rtcClient;
+        console.log('[Viewer] Unpublishing track...');
+        await rtcClient.client.unpublish([localVideoTrack]);
+        
+        // Close Agora track
+        localVideoTrack.close();
+        localVideoTrack = null;
+      }
+
+      // Stop local media stream
+      if (localVideoStream) {
+        console.log('[Viewer] Stopping local stream...');
+        localVideoStream.getTracks().forEach(track => {
+          track.stop();
+          console.log('[Viewer] Stopped track:', track.kind);
+        });
+        localVideoStream = null;
+      }
+
+      // Update UI
+      isViewerLive = false;
+      btnGoLiveMeToo.classList.remove('active');
+      btnGoLiveMeToo.querySelector('.material-symbols-outlined').textContent = 'podcasts';
+      btnGoLiveMeToo.querySelector('.btn-text').textContent = 'Join & Go Live';
+      btnGoLiveMeToo.title = '나도 방송 참여하기';
+
+      console.log('[Viewer] ⏹️ Broadcast stopped successfully');
+      showNotification('⏹️ 방송이 종료되었습니다');
+      
+    } catch (error) {
+      console.error('[Viewer] Stop broadcast error:', error);
+      throw error;
     }
-
-    const rtcClient = window.liveManager.rtcClient;
-    
-    // Unpublish
-    if (rtcClient.localTracks && rtcClient.localTracks.videoTrack) {
-      await rtcClient.client.unpublish([rtcClient.localTracks.videoTrack]);
-      rtcClient.localTracks.videoTrack.close();
-      rtcClient.localTracks.videoTrack = null;
-    }
-
-    // Update UI
-    isViewerLive = false;
-    btnGoLiveMeToo.classList.remove('active');
-    btnGoLiveMeToo.querySelector('.material-symbols-outlined').textContent = 'podcasts';
-    btnGoLiveMeToo.querySelector('.btn-text').textContent = 'Join & Go Live';
-    btnGoLiveMeToo.title = '나도 방송 참여하기';
-
-    console.log('[Viewer] Broadcast stopped');
-    showNotification('⏹️ 방송이 종료되었습니다');
   }
 
   function showNotification(message) {
-    // Simple notification
     const notification = document.createElement('div');
     notification.style.cssText = `
       position: fixed;
