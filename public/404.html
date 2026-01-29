@@ -177,12 +177,12 @@
       }
     };
 
-    // localStorage에서 언어 가져오기
+    // localStorage에서 언어 가져오기 (기본값: 영어)
     function getCurrentLang() {
       try {
-        return localStorage.getItem('studywithme_lang') || 'ko';
+        return localStorage.getItem('studywithme_lang') || 'en';
       } catch (e) {
-        return 'ko';
+        return 'en';
       }
     }
 
@@ -197,7 +197,7 @@
 
     // 페이지 텍스트 업데이트
     function updateText(lang) {
-      const texts = translations[lang] || translations.ko;
+      const texts = translations[lang] || translations.en;
       
       document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
