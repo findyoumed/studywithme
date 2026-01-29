@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyWithMe - Viewer</title>
+
+  <!-- Meta Tags -->
+  <meta name="description" content="StudyWithMe Viewer Mode" />
+  <meta name="theme-color" content="#000000" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://studywithme.co/viewer.html" />
+  <meta property="og:title" content="StudyWithMe - Viewer Mode" />
+  <meta property="og:description"
+    content="Join a StudyWithMe session and study together with real-time focus tracking." />
+  <meta property="og:image" content="https://studywithme.co/og_image.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://studywithme.co/viewer.html" />
+  <meta name="twitter:title" content="StudyWithMe - Viewer Mode" />
+  <meta name="twitter:description"
+    content="Join a StudyWithMe session and study together with real-time focus tracking." />
+  <meta name="twitter:image" content="https://studywithme.co/og_image.png" />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "StudyWithMe Viewer",
+        "description": "Viewer mode for StudyWithMe, allowing users to join study sessions.",
+        "url": "https://studywithme.co/viewer.html",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web Browser"
+      }
+    </script>
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://studywithme.co/viewer.html" />
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/base.css?v=32" />
+  <link rel="stylesheet" href="/css/layout.css?v=32" />
+  <link rel="stylesheet" href="/css/live-stream.css?v=32" />
+  <link rel="stylesheet" href="/css/viewer-mode.css?v=32" />
+  <style>
+    body {
+      background: #000;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+  <!-- Forced Viewer Mode Styles Inline to ensure they apply immediately -->
+  <style>
+    /* The responsive grid and flip logic is now moved to viewer-mode.css for better consolidation */
+
+    /* Emoji Bar */
+    .camera-controls-overlay {
+      position: absolute;
+      bottom: 30px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 20000 !important;
+    }
+
+    .emoji-bar {
+      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      padding: 5px 10px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .emoji-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .emoji-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .emoji-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* Reaction Container & Animation */
+    .reaction-container {
+      z-index: 21000 !important;
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .floating-emoji {
+      position: absolute;
+      bottom: 0;
+      font-size: 32px;
+      animation: floatUp 3s forwards ease-out;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+        transform: translateY(-50px) scale(1);
+      }
+
+      100% {
+        transform: translateY(-60vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    /* Host Score Overlay */
+    .host-score-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px 15px;
+      border-radius: 20px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      z-index: 20050 !important;
+    }
+
+    .score-icon {
+      font-size: 18px;
+    }
+
+    /* Connection Status */
+    .status-indicator {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 12px;
+      color: #666;
+      z-index: 20050 !important;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .status-indicator.connected {
+      color: #4ade80;
+      border: 1px solid #4ade80;
+    }
+
+    /* Aggressively hide any leaking controls */
+    .controls,
+    .ctrl-btn,
+    .settings-menu,
+    #controlsContainer,
+    .ytp-chrome-bottom {
+      display: none !important;
+    }
+
+    /* Ensure Emoji Bar IS visible though */
+    .camera-controls-overlay {
+      display: flex !important;
+    }
+  </style>
+
+  <!-- Agora SDK -->
+  <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+  <script src="/js/agora-rtm-2.2.0.js"></script>
+</head>
+
+<body class="viewer-mode">
+  <div class="container full-live-mode">
+
+    <!-- Camera Panel (Full Screen) -->
+    <div class="panel camera-panel">
+
+      <!-- Remote Videos Container (Host will appear here) -->
+      <div id="remoteVideoContainer" class="remote-videos-grid"></div>
+
+      <!-- Host Score Display -->
+      <div id="hostScoreDisplay" class="host-score-overlay" style="display: none;">
+        <span class="score-icon">🏆</span>
+        <span id="hostScoreValue">00:00:00</span>
+      </div>
+
+      <!-- Emoji Controls -->
+      <div class="camera-controls-overlay">
+        <!-- <div id="emojiBar" class="emoji-bar">
+              <button class="emoji-btn" data-emoji="🔥">🔥</button>
+              <button class="emoji-btn" data-emoji="👏">👏</button>
+              <button class="emoji-btn" data-emoji="💪">💪</button>
+              <button class="emoji-btn" data-emoji="💯">💯</button>
+              <button class="emoji-btn" data-emoji="✨">✨</button>
+            </div> -->
+      </div>
+
+    </div>
+
+    <!-- Floating Emoji Container -->
+    <div id="reactionContainer" class="reaction-container"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/script.js?v=32"></script>
+  <script type="module" src="/js/live-manager.js?v=32"></script>
+
+</body>
+
+</html>
