@@ -1,6 +1,8 @@
 import { PlayerStateHandler } from "./player-state-handler.js";
 import { YouTubeApiLoader } from "./youtube-api-loader.js";
 import { PlayerUiHandler } from "./player-ui-handler.js";
+import { createYouTubePlayer } from "./player/player-factory.js";
+import { showPlayerError, isCriticalError } from "./player/player-error-handler.js";
 
 export class PlayerController {
   constructor(
@@ -38,13 +40,7 @@ export class PlayerController {
   }
 
   handleAPILoadFailure() {
-    const t =
-      this.ui && this.ui.i18nManager
-        ? this.ui.i18nManager.translations[this.ui.currentLang]
-        : null;
-    const msg = t && t.api_load_error ? t.api_load_error : "YouTube API load failed.";
-    this.ui.showSplash(msg);
-
+    const msg = showPlayerError(this.ui, "api_load_error", "YouTube API load failed.");
     // Show visual placeholder if UI handler supports it
     if (this.uiHandler && this.uiHandler.showErrorPlaceholder) {
       this.uiHandler.showErrorPlaceholder(msg);
@@ -57,22 +53,10 @@ export class PlayerController {
     const videoId = video ? video.id : "372ByJedKsY";
 
     try {
-      this.player = new YT.Player("player", {
-        height: "100%",
-        width: "100%",
-        videoId: videoId,
-        playerVars: {
-          autoplay: 0,
-          playsinline: 1,
-          controls: 1,
-          rel: 0,
-          enablejsapi: 1,
-        },
-        events: {
+      this.player = createYouTubePlayer("player", videoId, {
           onReady: (e) => this.onPlayerReady(e),
           onStateChange: (e) => this.onPlayerStateChange(e),
           onError: (e) => this.onPlayerError(e),
-        },
       });
       this.stateHandler = new PlayerStateHandler(
         this.player,
@@ -81,15 +65,7 @@ export class PlayerController {
         this.exerciseTimer,
       );
     } catch (e) {
-      const t =
-        this.ui && this.ui.i18nManager
-          ? this.ui.i18nManager.translations[this.ui.currentLang]
-          : null;
-      this.ui.showSplash(
-        t && t.player_create_error
-          ? t.player_create_error
-          : "Failed to create player.",
-      );
+      showPlayerError(this.ui, "player_create_error", "Failed to create player.");
     }
   }
 
@@ -127,16 +103,8 @@ export class PlayerController {
   }
 
   onPlayerError(event) {
-    if (event.data === 150 || event.data === 101) {
-      const t =
-        this.ui && this.ui.i18nManager
-          ? this.ui.i18nManager.translations[this.ui.currentLang]
-          : null;
-      this.ui.showSplash(
-        t && t.video_unavailable_skip
-          ? t.video_unavailable_skip
-          : "Video unavailable.",
-      );
+    if (isCriticalError(event.data)) {
+      showPlayerError(this.ui, "video_unavailable_skip", "Video unavailable.");
       setTimeout(() => this.playNext(), 2000);
     }
   }

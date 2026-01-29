@@ -6,6 +6,7 @@ import { STORAGE_KEYS } from "./storage-manager.js";
 import { ScoreControls } from "./score-controls.js";
 import { ui } from "./ui-controls.js";
 import { AchievementManager } from "./achievement-manager.js";
+import { ScoreUIManager } from "./motion/score-ui-manager.js";
 
 /**
  * Motion Manager
@@ -21,12 +22,18 @@ export class MotionManager {
         this.videoElement = document.getElementById("camera");
         this.canvasElement = document.getElementById("output_canvas");
         this.scoreElement = document.getElementById("score");
-        this.scoreValueElement = document.getElementById("scoreValue");
-        this.medalElement = document.getElementById("scoreMedal");
+        // dedicated UI manager handles score text/medal
         this.playerController = null;
         this.lastMilestone = 0; // Track 1000-point milestones
         this.scoreControls = null;
         this.achievementManager = new AchievementManager();
+        this.scoreUIManager = new ScoreUIManager(this.achievementManager);
+
+        // Loop control
+        this.rafId = null;
+        this.bgInterval = null;
+        this.lastTime = 0;
+        document.addEventListener("visibilitychange", () => this._handleVisibilityChange());
     }
 
     setPlayer(playerController) {
@@ -69,36 +76,64 @@ export class MotionManager {
     startLoop() {
         if (this.isRunning) return;
         this.isRunning = true;
-        let lastTime = performance.now();
+        this.lastTime = performance.now();
 
-        const loop = () => {
-            if (!this.isRunning) return;
-
-            const now = performance.now();
-            const deltaMs = now - lastTime;
-            lastTime = now;
-
-            if (this.videoElement.readyState >= 2 && !this.isScoringPaused) { // HAVE_CURRENT_DATA
-                const isModelLoading = !this.poseDetector || !this.poseDetector.poseLandmarker;
-                if (!isModelLoading) {
-                    this.poseDetector.detect(this.videoElement, now, (result) => {
-                        this.handleDetectionResult(result, deltaMs);
-                    });
-                } else {
-                    this.handleDetectionResult(null, deltaMs);
-                }
-            } else if (this.isScoringPaused) {
-                // If paused, we do nothing (keep the last frame's rendering)
-                // but we still need to manage deltaMs for a clean resume next time
-            }
-            requestAnimationFrame(loop);
-        };
-        loop();
+        if (document.hidden) {
+            console.log("Starting in Background Mode (Interval)");
+            this.bgInterval = setInterval(() => this._runOneStep(), 1000);
+        } else {
+            this._runRAF();
+        }
     }
 
     stopLoop() {
         this.isRunning = false;
+        if (this.rafId) cancelAnimationFrame(this.rafId);
+        if (this.bgInterval) clearInterval(this.bgInterval);
     }
+
+    _handleVisibilityChange() {
+        if (!this.isRunning) return;
+
+        if (document.hidden) {
+            // Switch to Background Mode
+            if (this.rafId) cancelAnimationFrame(this.rafId);
+            if (this.bgInterval) clearInterval(this.bgInterval); // safety
+            this.bgInterval = setInterval(() => this._runOneStep(), 1000);
+        } else {
+            // Switch to Foreground Mode
+            if (this.bgInterval) clearInterval(this.bgInterval);
+            this.lastTime = performance.now(); // Reset time to avoid huge jump
+            this._runRAF();
+        }
+    }
+
+    _runRAF() {
+        if (!this.isRunning || document.hidden) return;
+        this._runOneStep();
+        this.rafId = requestAnimationFrame(() => this._runRAF());
+    }
+
+    _runOneStep() {
+        const now = performance.now();
+        // Prevent huge delta jumps (max 2000ms)
+        const rawDelta = now - this.lastTime;
+        const deltaMs = rawDelta > 2000 ? 1000 : rawDelta; 
+        this.lastTime = now;
+
+        if (this.videoElement.readyState >= 2 && !this.isScoringPaused) {
+            const isModelLoading = !this.poseDetector || !this.poseDetector.poseLandmarker;
+            if (!isModelLoading) {
+                this.poseDetector.detect(this.videoElement, now, (result) => {
+                    this.handleDetectionResult(result, deltaMs);
+                });
+            } else {
+                this.handleDetectionResult(null, deltaMs);
+            }
+        }
+    }
+
+
 
     handleDetectionResult(result, deltaMs) {
         const isModelLoading = !this.poseDetector || !this.poseDetector.poseLandmarker;
@@ -133,27 +168,7 @@ export class MotionManager {
             }
 
             // Update Score UI
-            const totalSeconds = Math.floor(score);
-            const hrs = Math.floor(totalSeconds / 3600).toString().padStart(2, "0");
-            const mins = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, "0");
-            const secs = (totalSeconds % 60).toString().padStart(2, "0");
-                
-            if (this.scoreValueElement) {
-                this.scoreValueElement.textContent = `SCORE: ${hrs}:${mins}:${secs}`;
-            }
-
-            // Update Medal UI
-            if (this.medalElement) {
-                const currentMedal = this.achievementManager.getMedalForScore(currentScoreInt);
-                if (this.medalElement.textContent !== currentMedal) {
-                    this.medalElement.textContent = currentMedal;
-                    this.medalElement.title = this.achievementManager.getMedalName(currentScoreInt);
-                    this.medalElement.style.transform = "scale(1.3)";
-                    setTimeout(() => {
-                        this.medalElement.style.transform = "scale(1)";
-                    }, 300);
-                }
-            }
+            this.scoreUIManager.update(score);
     }
 
 
@@ -185,14 +200,7 @@ export class MotionManager {
     resetScore() {
         if (this.motionAnalyzer) {
             this.motionAnalyzer.reset();
-            const currentScore = this.motionAnalyzer.getScore();
-            if (this.scoreValueElement) {
-                this.scoreValueElement.textContent = "SCORE: 00:00:00";
-            }
-            if (this.medalElement) {
-                this.medalElement.textContent = "🥉";
-                this.medalElement.title = this.achievementManager.getMedalName(0);
-            }
+            this.scoreUIManager.reset();
             this.lastMilestone = 0;
         }
     }

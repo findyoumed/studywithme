@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import pkg from "agora-token";
-const { RtcTokenBuilder, RtcRole, RtmTokenBuilder } = pkg;
+import { createAgoraToken } from "./server/agora-controller.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { appendFileSync } from "fs";
+import { RoomManager } from "./server/room-manager.js";
 
 // Load .env file
 dotenv.config();
@@ -15,6 +15,7 @@ const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+const roomManager = new RoomManager();
 
 // Middleware
 app.use(cors());
@@ -93,39 +94,8 @@ app.post("/api/report-404", express.json(), (req, res) => {
 
 // ========================================
 // 🔒 Room Participant Limit System
+// Logic handled by RoomManager
 // ========================================
-const MAX_PARTICIPANTS_PER_ROOM = 6; // 방당 최대 6명
-const roomParticipants = new Map(); // { channelName: Set([uid1, uid2, ...]) }
-
-// 방 참여자 수 확인
-function getRoomParticipantCount(channelName) {
-  const participants = roomParticipants.get(channelName);
-  return participants ? participants.size : 0;
-}
-
-// 참여자 추가
-function addParticipant(channelName, uid) {
-  if (!roomParticipants.has(channelName)) {
-    roomParticipants.set(channelName, new Set());
-  }
-  roomParticipants.get(channelName).add(uid);
-  console.log(`✅ [${channelName}] Added UID ${uid}. Total: ${roomParticipants.get(channelName).size}`);
-}
-
-// 참여자 제거
-function removeParticipant(channelName, uid) {
-  const participants = roomParticipants.get(channelName);
-  if (participants) {
-    participants.delete(uid);
-    console.log(`❌ [${channelName}] Removed UID ${uid}. Total: ${participants.size}`);
-    
-    // 방 비었으면 삭제
-    if (participants.size === 0) {
-      roomParticipants.delete(channelName);
-      console.log(`🗑️ [${channelName}] Room deleted (empty)`);
-    }
-  }
-}
 
 // API: 참여자 퇴장 알림
 app.post("/api/participant-left", express.json(), (req, res) => {
@@ -135,7 +105,7 @@ app.post("/api/participant-left", express.json(), (req, res) => {
     return res.status(400).json({ error: "channelName and uid required" });
   }
   
-  removeParticipant(channelName, uid);
+  roomManager.removeParticipant(channelName, Number(uid));
   res.json({ success: true });
 });
 
@@ -147,87 +117,23 @@ app.get("/api/room-status", (req, res) => {
     return res.status(400).json({ error: "channelName required" });
   }
   
-  const count = getRoomParticipantCount(channelName);
-  const isFull = count >= MAX_PARTICIPANTS_PER_ROOM;
+  
+  const count = roomManager.getCount(channelName);
+  const isFull = roomManager.isFull(channelName);
   
   res.json({
     channelName,
     currentParticipants: count,
-    maxParticipants: MAX_PARTICIPANTS_PER_ROOM,
+    maxParticipants: roomManager.MAX_PARTICIPANTS_PER_ROOM,
     isFull,
     canJoin: !isFull
   });
 });
 
 // API endpoint to generate Agora token
+// API endpoint to generate Agora token
 app.get("/api/get-agora-token", (req, res) => {
-  const appId = process.env.AGORA_APP_ID;
-  const appCertificate = process.env.AGORA_APP_CERTIFICATE;
-  const channelName = req.query.channelName;
-  const uid = Number(req.query.uid);
-  const role =
-    req.query.role === "publisher" ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER;
-  const expireTime = 3600; // 1 hour
-  const currentTime = Math.floor(Date.now() / 1000);
-  const privilegeExpireTime = currentTime + expireTime;
-
-  if (isNaN(uid) || uid === 0) {
-    return res.status(400).json({ error: "uid must be a non-zero number" });
-  }
-
-  if (!appId || !appCertificate) {
-    return res.status(500).json({ error: "Agora credentials not configured" });
-  }
-
-  if (!channelName) {
-    return res.status(400).json({ error: "channelName is required" });
-  }
-
-  // 🔒 참여자 수 제한 체크
-  const currentCount = getRoomParticipantCount(channelName);
-  const participants = roomParticipants.get(channelName);
-  const isAlreadyInRoom = participants && participants.has(uid);
-  
-  // 이미 방에 있는 사용자는 재접속 허용 (카운트 증가 안 함)
-  if (isAlreadyInRoom) {
-    console.log(`♻️ [${channelName}] UID ${uid} reconnecting (already in room)`);
-  } else if (currentCount >= MAX_PARTICIPANTS_PER_ROOM) {
-    // 새 사용자인데 방이 가득 참
-    console.log(`⛔ [${channelName}] Room full! Rejected UID ${uid} (${currentCount}/${MAX_PARTICIPANTS_PER_ROOM})`);
-    return res.status(403).json({ 
-      error: "ROOM_FULL",
-      message: `방이 가득 찼습니다! (${currentCount}/${MAX_PARTICIPANTS_PER_ROOM}명)`,
-      currentParticipants: currentCount,
-      maxParticipants: MAX_PARTICIPANTS_PER_ROOM
-    });
-  }
-
-  // Debugging log
-  console.log(`Generating token for UID: ${uid}, Channel: ${channelName}, Role: ${req.query.role} (${role})`);
-
-  const rtcToken = RtcTokenBuilder.buildTokenWithUid(
-    appId,
-    appCertificate,
-    channelName,
-    uid,
-    role,
-    privilegeExpireTime,
-    privilegeExpireTime
-  );
-
-  const rtmToken = RtmTokenBuilder.buildToken(
-    appId,
-    appCertificate,
-    uid.toString(),
-    privilegeExpireTime
-  );
-
-  // ✅ 토큰 발급 성공 시 참여자 추가 (재접속이 아닐 때만)
-  if (!isAlreadyInRoom) {
-    addParticipant(channelName, uid);
-  }
-
-  res.json({ rtcToken, rtmToken });
+  createAgoraToken(req, res, roomManager);
 });
 
 // Serve static files from 'public' directory with .html extension support for clean URLs
