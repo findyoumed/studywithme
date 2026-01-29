@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>핵심 학습 기술 3가지 - 흔들리지 않는 기본기 - StudyWithMe Premium</title>
+    <meta name="description" content="기본은 단순하다. 꺼내기, 간격 두기, 섞어 학습하기가 핵심이다.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="핵심 학습 기술 3가지 - 흔들리지 않는 기본기">
+    <meta property="og:description" content="기본은 단순하다. 꺼내기, 간격 두기, 섞어 학습하기가 핵심이다.">
+    <meta property="og:image" content="/assets/images/post_14_core_skills_1769260364952.jpg">
+
+    <!-- Analytics & SEO (Head Scripts) -->
+    <script src="../js/analytics.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../blog.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#818cf8",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-background-dark to-slate-900 font-display text-white">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-effect border-b border-white/10 px-6 lg:px-20 py-4">
+        <div class="max-w-[1400px] mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.href='../blog.html'">
+                <img src="/favicon.png" alt="Logo" class="w-10 h-10 rounded-lg">
+                <h1 class="text-xl font-extrabold tracking-tighter uppercase italic">StudyWithMe <span class="text-primary">Premium</span></h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Language Toggle -->
+                <div class="flex bg-white/5 rounded-full p-1 border border-white/10">
+                    <button id="langKoBtn" onclick="changeLanguage('ko')" class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all bg-white/10 text-white">KO</button>
+                    <button id="langEnBtn" onclick="changeLanguage('en')" class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all text-slate-500 hover:text-white">EN</button>
+                </div>
+                <button onclick="location.href='../blog.html'" class="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all">
+                    목록으로
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto pb-20 px-6 lg:px-0 mt-10">
+        <article>
+            <!-- Header -->
+            <header class="mb-10 text-center">
+                <div class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-sm">category</span>
+                    <span id="post-category">학습법</span>
+                </div>
+                <h1 id="post-title" class="text-3xl md:text-5xl font-black leading-tight tracking-tighter mb-6 italic uppercase">
+                    핵심 학습 기술 3가지 - 흔들리지 않는 기본기
+                </h1>
+                <div class="flex items-center justify-center gap-4 text-slate-400 text-sm">
+                    <div class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-lg">schedule</span>
+                        <span id="post-readTime">7</span>분
+                    </div>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            <div class="relative w-full aspect-video rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
+                <img id="post-image" src="/assets/images/post_14_core_skills_1769260364952.jpg" alt="핵심 학습 기술 3가지 - 흔들리지 않는 기본기" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+            </div>
+
+            <!-- Content -->
+            <div id="post-content" class="prose prose-invert prose-lg max-w-none prose-headings:font-black prose-headings:italic prose-headings:uppercase prose-p:text-slate-300 prose-strong:text-white prose-a:text-primary hover:prose-a:text-primary/80">
+                <div class="prose prose-invert max-w-none">
+  <h3 class="text-xl font-bold text-primary mb-4">들어가며: 도구는 바뀌어도 원리는 남는다</h3>
+  <p class="text-slate-300 mb-6">학습의 핵심 원리는 생각보다 훨씬 간단하다는 것을 알게 되실 거예요. 복잡한 것보다는 단순한 원칙이 더 오래도록 우리 곁에 머문답니다.</p>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">핵심 1: 기본기 3가지</h3>
+  <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <li><strong class="text-white">액티브 리콜:</strong> 보지 않고 꺼내기</li>
+    <li><strong class="text-white">간격 반복:</strong> 점점 넓혀가며 복습</li>
+    <li><strong class="text-white">섞어서 학습:</strong> 비슷한 개념을 교차 학습</li>
+  </ul>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">팁</h3>
+  <p class="text-slate-300">배우고, 연습하고, 복습하고, 테스트하는 단계를 묶어서 한 주 단위로 꾸준히 반복해보시는 건 어떠세요? 분명히 학습에 많은 도움이 될 거라고 생각해요.</p>
+</div>
+            </div>
+            
+            <!-- Hidden English Content -->
+            <div id="post-content-en" class="hidden">
+                <div class='prose prose-invert max-w-none'>
+  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Principles Beat Tools</h3>
+  <p class='text-slate-300 mb-6'>You'll discover that the core principles of learning are much simpler than you might think. Simple principles last longer than complex ones.</p>
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Three Essentials</h3>
+  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>
+    <li><strong class='text-white'>Active recall:</strong> retrieve without looking</li>
+    <li><strong class='text-white'>Spaced repetition:</strong> review at increasing intervals</li>
+    <li><strong class='text-white'>Interleaving:</strong> mix related topics to strengthen discrimination</li>
+  </ul>
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>
+  <p class='text-slate-300'>Create a weekly cycle and consistently rotate through learn-practice-review-test. The results will be remarkably effective.</p>
+</div>
+            </div>
+            
+            <!-- Data for JS -->
+            <script>
+                const postData = {
+                    ko: {
+                        title: "핵심 학습 기술 3가지 - 흔들리지 않는 기본기",
+                        category: "학습법",
+                        content: "<div class=\"prose prose-invert max-w-none\">\r\n  <h3 class=\"text-xl font-bold text-primary mb-4\">들어가며: 도구는 바뀌어도 원리는 남는다</h3>\r\n  <p class=\"text-slate-300 mb-6\">학습의 핵심 원리는 생각보다 훨씬 간단하다는 것을 알게 되실 거예요. 복잡한 것보다는 단순한 원칙이 더 오래도록 우리 곁에 머문답니다.</p>\r\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">핵심 1: 기본기 3가지</h3>\r\n  <ul class=\"list-disc list-inside text-slate-300 space-y-2 mb-6\">\r\n    <li><strong class=\"text-white\">액티브 리콜:</strong> 보지 않고 꺼내기</li>\r\n    <li><strong class=\"text-white\">간격 반복:</strong> 점점 넓혀가며 복습</li>\r\n    <li><strong class=\"text-white\">섞어서 학습:</strong> 비슷한 개념을 교차 학습</li>\r\n  </ul>\r\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">팁</h3>\r\n  <p class=\"text-slate-300\">배우고, 연습하고, 복습하고, 테스트하는 단계를 묶어서 한 주 단위로 꾸준히 반복해보시는 건 어떠세요? 분명히 학습에 많은 도움이 될 거라고 생각해요.</p>\r\n</div>"
+                    },
+                    en: {
+                        title: "The 3 Core Study Skills - Build an Unshakable Foundation",
+                        category: "Study Methods",
+                        content: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Principles Beat Tools</h3>\n  <p class='text-slate-300 mb-6'>You'll discover that the core principles of learning are much simpler than you might think. Simple principles last longer than complex ones.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Three Essentials</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li><strong class='text-white'>Active recall:</strong> retrieve without looking</li>\n    <li><strong class='text-white'>Spaced repetition:</strong> review at increasing intervals</li>\n    <li><strong class='text-white'>Interleaving:</strong> mix related topics to strengthen discrimination</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Create a weekly cycle and consistently rotate through learn-practice-review-test. The results will be remarkably effective.</p>\n</div>"
+                    }
+                };
+
+                function changeLanguage(lang) {
+                    const titleEl = document.getElementById('post-title');
+                    const categoryEl = document.getElementById('post-category');
+                    const contentEl = document.getElementById('post-content');
+                    const koBtn = document.getElementById('langKoBtn');
+                    const enBtn = document.getElementById('langEnBtn');
+
+                    if (lang === 'en' && postData.en.content) {
+                        titleEl.textContent = postData.en.title;
+                        categoryEl.textContent = postData.en.category;
+                        contentEl.innerHTML = postData.en.content;
+                        
+                        enBtn.classList.add('bg-white/10', 'text-white');
+                        enBtn.classList.remove('text-slate-500');
+                        koBtn.classList.remove('bg-white/10', 'text-white');
+                        koBtn.classList.add('text-slate-500');
+                    } else {
+                        titleEl.textContent = postData.ko.title;
+                        categoryEl.textContent = postData.ko.category;
+                        contentEl.innerHTML = postData.ko.content;
+                        
+                        koBtn.classList.add('bg-white/10', 'text-white');
+                        koBtn.classList.remove('text-slate-500');
+                        enBtn.classList.remove('bg-white/10', 'text-white');
+                        enBtn.classList.add('text-slate-500');
+                    }
+                }
+            </script>
+
+        </article>
+    </main>
+
+    <footer class="bg-background-dark border-t border-white/10 py-16 px-6 lg:px-20 mt-20">
+        <div class="max-w-[1400px] mx-auto text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-primary flex items-center justify-center rounded-lg text-white"><span class="material-symbols-outlined text-xl">menu_book</span></div>
+                <h1 class="text-lg font-black tracking-tighter uppercase italic">StudyWithMe <span class="text-primary">Premium</span></h1>
+            </div>
+            <p class="text-slate-400 text-sm max-w-md mx-auto mb-8 leading-relaxed">과학적이고 검증된 학습 인사이트로 당신의 성장을 응원합니다.</p>
+            <div class="text-xs text-slate-500">
+                <p>&copy; 2026 StudyWithMe Premium. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyWithMe 프리미엄 블로그 - 공부 & 학습 인사이트</title>
+    <meta name="description" content="스터디, 학습 가이드, 집중 습관을 제공하는 StudyWithMe 프리미엄 블로그">
+
+    <!-- Analytics & SEO (Head Scripts) -->
+    <script src="js/analytics.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="blog.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#818cf8",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-background-dark to-slate-900 font-display text-white">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-effect border-b border-white/10 px-6 lg:px-20 py-4">
+        <div class="max-w-[1400px] mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="/favicon.png" alt="Logo" class="w-10 h-10 rounded-lg">
+                <h1 class="text-xl font-extrabold tracking-tighter uppercase italic">StudyWithMe <span
+                        class="text-primary">Premium</span></h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Language Toggle -->
+                <div class="flex bg-white/5 rounded-full p-1 border border-white/10">
+                    <button id="langKoBtn" onclick="changeLanguage('ko')"
+                        class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all">KO</button>
+                    <button id="langEnBtn" onclick="changeLanguage('en')"
+                        class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all">EN</button>
+                </div>
+                <button onclick="location.href='/'"
+                    class="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all"
+                    data-i18n="back_to_app">메인으로</button>
+            </div>
+        </div>
+    </header>
+    <main class="w-full max-w-[1400px] mx-auto pb-20">
+        <!-- Hero Section -->
+        <section class="px-6 lg:px-20 pt-10">
+            <div class="@container">
+                <div
+                    class="relative min-h-[480px] rounded-xl overflow-hidden flex flex-col items-center justify-start md:justify-center text-center px-8 pt-4 pb-4 md:p-8">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-500/20 to-pink-500/20">
+                    </div>
+                    <div class="absolute inset-0 backdrop-blur-3xl"></div>
+                    <div class="relative z-10 max-w-3xl">
+                        <div
+                            class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest">
+                            <span class="material-symbols-outlined text-sm">stars</span>
+                            <span data-i18n="hero_badge">프리미엄 학습 가이드</span>
+                        </div>
+                        <h1 class="text-white text-5xl md:text-7xl font-black leading-[1.1] tracking-tighter mb-6 italic uppercase"
+                            data-i18n="hero_title">
+                            당신의 최고 집중을<br />지금 시작하세요</h1>
+                        <p class="text-slate-300 text-lg md:text-xl font-light mb-10 max-w-2xl mx-auto"
+                            data-i18n="hero_subtitle">입문부터 심화까지,
+                            과학적이고 검증된
+                            학습 인사이트를 전합니다.</p>
+                        <!-- Search Bar -->
+                        <div
+                            class="w-full max-w-xl mx-auto flex items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full p-1.5 focus-within:border-primary transition-all">
+                            <div class="pl-4 text-white/50"><span class="material-symbols-outlined">search</span></div>
+                            <input
+                                class="flex-1 bg-transparent border-none text-white focus:ring-0 placeholder:text-white/40 px-3 text-sm"
+                                placeholder="학습 정보 검색..." type="text" id="searchInput"
+                                data-i18n-placeholder="search_placeholder">
+                            <button onclick="searchPosts()"
+                                class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full text-sm font-bold transition-colors"
+                                data-i18n="search_btn">검색</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Main Content -->
+        <section class="px-6 lg:px-20 mt-16">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-black uppercase tracking-tighter italic" data-i18n="section_title">학습 <span
+                            class="text-primary">가이드</span>
+                    </h2>
+                    <div class="text-sm text-slate-400"><span data-i18n="total">총</span> <span id="post-count"
+                            class="text-primary font-bold">0</span><span data-i18n="posts_unit">개 글</span></div>
+                </div>
+                <div id="blog-posts-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Blog posts will be rendered here by JavaScript -->
+                </div>
+
+                <!-- Load More Button -->
+                <div id="load-more-container" class="mt-12 text-center hidden">
+                    <button id="loadMoreBtn" onclick="loadMorePosts()"
+                        class="bg-white/5 hover:bg-white/10 border border-white/10 text-white px-10 py-4 rounded-full text-sm font-bold transition-all flex items-center gap-2 mx-auto">
+                        <span class="material-symbols-outlined">add</span>
+                        <span data-i18n="load_more">더 보기</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="bg-background-dark border-t border-white/10 py-16 px-6 lg:px-20 mt-20">
+        <div class="max-w-[1400px] mx-auto text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-primary flex items-center justify-center rounded-lg text-white"><span
+                        class="material-symbols-outlined text-xl">menu_book</span></div>
+                <h1 class="text-lg font-black tracking-tighter uppercase italic">StudyWithMe <span
+                        class="text-primary">Premium</span></h1>
+            </div>
+            <p class="text-slate-400 text-sm max-w-md mx-auto mb-8 leading-relaxed" data-i18n="footer_desc">과학적이고 검증된 학습
+                인사이트로 당신의 성장을 응원합니다.
+            </p>
+            <div class="text-xs text-slate-500">
+                <p>&copy; 2026 StudyWithMe Premium. All rights reserved.</p>
+                <p class="mt-2" data-i18n="footer_disclaimer">학습법은 개인차가 있으니 필요 시 전문가와 상담하세요.</p>
+            </div>
+        </div>
+    </footer>
+    <script type="module" src="blog.js?v=2"></script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+/* =========================================
+   Next Video Bar
+   ========================================= */
+.next-video-bar {
+    height: 50px;
+    background: var(--bg-primary);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.next-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    margin-left: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    text-align: left;
+}
+
+.next-info:hover .next-label,
+.next-info:hover .next-title {
+    color: var(--accent-primary);
+}
+
+.next-label {
+    color: #e0e0e0;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.next-title {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.next-video-bar button span {
+    color: var(--accent-primary);
+}

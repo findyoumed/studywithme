@@ -1,0 +1,140 @@
+/* =========================================
+   Camera & Live Panel Layout
+   (Extracted from layout.css)
+   ========================================= */
+
+.camera-header {
+    position: absolute;
+    top: 60px; /* Aligned with .top-left-controls */
+    left: 15px;
+    right: 15px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    z-index: 20;
+    pointer-events: auto;
+}
+
+.camera-header > * {
+    pointer-events: auto;
+}
+
+.camera-body {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Remote Videos Grid */
+.remote-videos-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 2px; /* Small gap between videos */
+    background: #000;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.remote-videos-grid .remote-video-player {
+    pointer-events: auto;
+    overflow: hidden; /* Hide any overflow */
+}
+
+/* Grid logic based on participant count */
+.remote-videos-grid[data-count="2"] {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: 1fr !important;
+}
+.remote-videos-grid[data-count="3"],
+.remote-videos-grid[data-count="4"] {
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-rows: 1fr 1fr !important;
+}
+.remote-videos-grid[data-count="5"],
+.remote-videos-grid[data-count="6"] {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-template-rows: 1fr 1fr !important;
+}
+.remote-videos-grid[data-count="7"],
+.remote-videos-grid[data-count="8"],
+.remote-videos-grid[data-count="9"] {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    grid-template-rows: 1fr 1fr 1fr !important;
+}
+
+.remote-video-player {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border-radius: 0px; /* No radius in grid */
+    overflow: hidden;
+    border: none; /* No border in grid */
+    position: relative;
+    transform: scaleX(-1) !important;
+    -webkit-transform: scaleX(-1) !important;
+}
+
+.remote-video-label {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 10px;
+    padding: 2px 5px;
+    border-radius: 4px;
+    z-index: 10;
+    transform: scaleX(-1) !important;
+    /* Correct label text */
+}
+
+.camera-panel {
+    position: relative;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+}
+
+.camera-click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 8;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.01); /* Subtle background for reliable hit testing */
+}
+
+/* Camera Elements */
+#camera, #output_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    transform: scaleX(-1) !important; /* Force Mirror orientation (Selfie Mode) */
+}
+
+.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #666;
+    background: #111;
+}

@@ -1,0 +1,93 @@
+/* =========================================
+   Playlist Items & Drag-and-Drop
+   ========================================= */
+.playlist-item {
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.playlist-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.playlist-item.active {
+    background: rgba(129, 140, 248, 0.2);
+    border-left: 3px solid var(--accent-primary);
+}
+
+.playlist-item.drag-over {
+    border-top: 2px solid #FDB927;
+    margin-top: 5px;
+}
+
+.drag-handle {
+    cursor: grab;
+    font-size: 20px;
+    color: #888;
+    padding: 0 5px;
+    min-width: 24px;
+    text-align: center;
+    user-select: none;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+    color: var(--accent-primary);
+}
+
+.item-info {
+    flex: 1;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+}
+
+.item-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.delete-btn,
+.move-btn,
+.playlist-btn.icon-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-btn.icon-btn {
+    padding: 4px 8px;
+    min-width: 30px;
+    height: 30px;
+}
+
+.delete-btn {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.delete-btn:hover {
+    background: rgba(255, 0, 0, 0.3);
+    border-color: #ff5555;
+}
+
+.move-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}

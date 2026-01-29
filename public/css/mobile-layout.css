@@ -1,0 +1,94 @@
+/* =========================================
+   Mobile Layout & Positioning
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* Layout */
+    .container:not(.overlay-mode) {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .container:not(.overlay-mode) .panel {
+        width: 100%;
+        height: 50% !important;
+        position: relative;
+        flex: 0 0 50%;
+    }
+
+    /* Split Mode Adjustments */
+    .container:not(.overlay-mode) .video-panel {
+        padding-top: 60px;
+        background: #000;
+    }
+
+    .container:not(.overlay-mode) .player-wrapper {
+        height: calc(100% - 60px);
+    }
+
+    .container.overlay-mode {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: #000;
+    }
+
+    .container.overlay-mode .video-panel {
+        display: flex !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent !important;
+        pointer-events: none;
+        z-index: 10;
+    }
+    
+    .container.overlay-mode .player-wrapper {
+        display: none !important;
+    }
+
+    .container.overlay-mode .next-video-bar {
+        display: none !important;
+    }
+
+    .container.overlay-mode .next-video-bar .settings-container {
+        pointer-events: auto;
+    }
+
+    .container.overlay-mode .camera-panel {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        aspect-ratio: 16/9; /* Restore aspect ratio */
+        transform: translateY(-50%); /* Center vertically, flip handled by JS */
+        z-index: 5;
+        height: auto; /* Allow auto height based on aspect ratio */
+        pointer-events: auto;
+        margin-top: -25px; /* Offset from backup */
+    }
+
+    .container.overlay-mode .camera-panel #remoteVideoContainer {
+        pointer-events: auto;
+        margin-top: -25px; /* Offset for next-video-bar height */
+    }
+    
+    /* Overlays */
+    .speed-overlay {
+        display: none !important;
+    }
+
+    .search-results-grid {
+        max-height: 200px;
+    }
+
+    /* Adjust Top Left Controls position for mobile */
+    .top-left-controls,
+    .camera-header {
+        top: 10px !important;
+    }
+}

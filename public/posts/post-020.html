@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공부가 지루할 때 집중력을 되살리는 방법 - StudyWithMe Premium</title>
+    <meta name="description" content="집중은 다양화될수록 강해진다. 변형 루틴으로 자극을 바꿔보자.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="공부가 지루할 때 집중력을 되살리는 방법">
+    <meta property="og:description" content="집중은 다양화될수록 강해진다. 변형 루틴으로 자극을 바꿔보자.">
+    <meta property="og:image" content="/assets/images/post_20_focus_variation.jpg">
+
+    <!-- Analytics & SEO (Head Scripts) -->
+    <script src="../js/analytics.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../blog.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#818cf8",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-background-dark to-slate-900 font-display text-white">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-effect border-b border-white/10 px-6 lg:px-20 py-4">
+        <div class="max-w-[1400px] mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.href='../blog.html'">
+                <img src="/favicon.png" alt="Logo" class="w-10 h-10 rounded-lg">
+                <h1 class="text-xl font-extrabold tracking-tighter uppercase italic">StudyWithMe <span class="text-primary">Premium</span></h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Language Toggle -->
+                <div class="flex bg-white/5 rounded-full p-1 border border-white/10">
+                    <button id="langKoBtn" onclick="changeLanguage('ko')" class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all bg-white/10 text-white">KO</button>
+                    <button id="langEnBtn" onclick="changeLanguage('en')" class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all text-slate-500 hover:text-white">EN</button>
+                </div>
+                <button onclick="location.href='../blog.html'" class="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all">
+                    목록으로
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto pb-20 px-6 lg:px-0 mt-10">
+        <article>
+            <!-- Header -->
+            <header class="mb-10 text-center">
+                <div class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-sm">category</span>
+                    <span id="post-category">집중</span>
+                </div>
+                <h1 id="post-title" class="text-3xl md:text-5xl font-black leading-tight tracking-tighter mb-6 italic uppercase">
+                    공부가 지루할 때 집중력을 되살리는 방법
+                </h1>
+                <div class="flex items-center justify-center gap-4 text-slate-400 text-sm">
+                    <div class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-lg">schedule</span>
+                        <span id="post-readTime">7</span>분
+                    </div>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            <div class="relative w-full aspect-video rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
+                <img id="post-image" src="/assets/images/post_20_focus_variation.jpg" alt="공부가 지루할 때 집중력을 되살리는 방법" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+            </div>
+
+            <!-- Content -->
+            <div id="post-content" class="prose prose-invert prose-lg max-w-none prose-headings:font-black prose-headings:italic prose-headings:uppercase prose-p:text-slate-300 prose-strong:text-white prose-a:text-primary hover:prose-a:text-primary/80">
+                <div class="prose prose-invert max-w-none">
+  <h3 class="text-xl font-bold text-primary mb-4">들어가며: 변화가 집중을 강하게 만든다</h3>
+  <p class="text-slate-300 mb-6">루틴이 너무 익숙해지셨다면, 아마 변화가 필요하다는 신호일 거예요. 새로운 자극을 주면 다시 집중력을 높이는 데 도움이 될 수 있답니다. 마치 잠자던 감각을 깨우는 것처럼요.</p>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">핵심 1: 추천 변형</h3>
+  <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <li>조용히 읽고 요약하기</li>
+    <li>쉬운 말로 소리 내어 설명하기</li>
+    <li>노트 없이 회상한 뒤 확인하기</li>
+    <li>시간 제한 문제 세트</li>
+  </ul>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">핵심 2: 루틴 구성</h3>
+  <p class="text-slate-300 mb-6">20분씩 시간을 나눠서 진행하시되, 두 가지 방법을 번갈아 사용해보시면 집중력을 훨씬 높이는 데 도움이 되실 거예요. 혹시 한 가지 방법만 계속하시면 지루해질 수도 있으니, 번갈아 하시는 걸 추천드려요. 편안하게, 자신에게 맞는 방식으로 시도해보세요.</p>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">팁</h3>
+  <p class="text-slate-300">변형 작업을 하실 때, 멀티태스킹처럼 여러 일을 한꺼번에 하려고 하시기보다는, 하나의 작업에 집중하시는 게 훨씬 효과적이랍니다. 마치 깊은 물속에 잠수하듯, 하나의 과제에 온전히 몰두하는 것이 중요해요. 그렇게 집중하면 훨씬 더 좋은 결과를 얻으실 수 있을 거예요.</p>
+</div>
+            </div>
+            
+            <!-- Hidden English Content -->
+            <div id="post-content-en" class="hidden">
+                <div class='prose prose-invert max-w-none'>
+  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Variation Keeps Focus Strong</h3>
+  <p class='text-slate-300 mb-6'>When your routine becomes too familiar, you'll discover that you need variations to change the stimulus. New stimulation reawakens your focus.</p>
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Recommended Variations</h3>
+  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>
+    <li>Silent reading plus written summary</li>
+    <li>Teach the idea out loud in simple words</li>
+    <li>Closed-book recall before checking notes</li>
+    <li>Timed practice sets</li>
+  </ul>
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Routine Structure</h3>
+  <p class='text-slate-300 mb-6'>Work in 20-minute blocks and alternate between two variations. You'll find your focus improving significantly.</p>
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>
+  <p class='text-slate-300'>Remember that variation isn't multitasking. Focus on just one task per block. Deep focus is what matters.</p>
+</div>
+            </div>
+            
+            <!-- Data for JS -->
+            <script>
+                const postData = {
+                    ko: {
+                        title: "공부가 지루할 때 집중력을 되살리는 방법",
+                        category: "집중",
+                        content: "<div class=\"prose prose-invert max-w-none\">\r\n  <h3 class=\"text-xl font-bold text-primary mb-4\">들어가며: 변화가 집중을 강하게 만든다</h3>\r\n  <p class=\"text-slate-300 mb-6\">루틴이 너무 익숙해지셨다면, 아마 변화가 필요하다는 신호일 거예요. 새로운 자극을 주면 다시 집중력을 높이는 데 도움이 될 수 있답니다. 마치 잠자던 감각을 깨우는 것처럼요.</p>\r\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">핵심 1: 추천 변형</h3>\r\n  <ul class=\"list-disc list-inside text-slate-300 space-y-2 mb-6\">\r\n    <li>조용히 읽고 요약하기</li>\r\n    <li>쉬운 말로 소리 내어 설명하기</li>\r\n    <li>노트 없이 회상한 뒤 확인하기</li>\r\n    <li>시간 제한 문제 세트</li>\r\n  </ul>\r\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">핵심 2: 루틴 구성</h3>\r\n  <p class=\"text-slate-300 mb-6\">20분씩 시간을 나눠서 진행하시되, 두 가지 방법을 번갈아 사용해보시면 집중력을 훨씬 높이는 데 도움이 되실 거예요. 혹시 한 가지 방법만 계속하시면 지루해질 수도 있으니, 번갈아 하시는 걸 추천드려요. 편안하게, 자신에게 맞는 방식으로 시도해보세요.</p>\r\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">팁</h3>\r\n  <p class=\"text-slate-300\">변형 작업을 하실 때, 멀티태스킹처럼 여러 일을 한꺼번에 하려고 하시기보다는, 하나의 작업에 집중하시는 게 훨씬 효과적이랍니다. 마치 깊은 물속에 잠수하듯, 하나의 과제에 온전히 몰두하는 것이 중요해요. 그렇게 집중하면 훨씬 더 좋은 결과를 얻으실 수 있을 거예요.</p>\r\n</div>"
+                    },
+                    en: {
+                        title: "Focus Variations Routine - Break the Boredom",
+                        category: "Focus",
+                        content: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Variation Keeps Focus Strong</h3>\n  <p class='text-slate-300 mb-6'>When your routine becomes too familiar, you'll discover that you need variations to change the stimulus. New stimulation reawakens your focus.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Recommended Variations</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li>Silent reading plus written summary</li>\n    <li>Teach the idea out loud in simple words</li>\n    <li>Closed-book recall before checking notes</li>\n    <li>Timed practice sets</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Routine Structure</h3>\n  <p class='text-slate-300 mb-6'>Work in 20-minute blocks and alternate between two variations. You'll find your focus improving significantly.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Remember that variation isn't multitasking. Focus on just one task per block. Deep focus is what matters.</p>\n</div>"
+                    }
+                };
+
+                function changeLanguage(lang) {
+                    const titleEl = document.getElementById('post-title');
+                    const categoryEl = document.getElementById('post-category');
+                    const contentEl = document.getElementById('post-content');
+                    const koBtn = document.getElementById('langKoBtn');
+                    const enBtn = document.getElementById('langEnBtn');
+
+                    if (lang === 'en' && postData.en.content) {
+                        titleEl.textContent = postData.en.title;
+                        categoryEl.textContent = postData.en.category;
+                        contentEl.innerHTML = postData.en.content;
+                        
+                        enBtn.classList.add('bg-white/10', 'text-white');
+                        enBtn.classList.remove('text-slate-500');
+                        koBtn.classList.remove('bg-white/10', 'text-white');
+                        koBtn.classList.add('text-slate-500');
+                    } else {
+                        titleEl.textContent = postData.ko.title;
+                        categoryEl.textContent = postData.ko.category;
+                        contentEl.innerHTML = postData.ko.content;
+                        
+                        koBtn.classList.add('bg-white/10', 'text-white');
+                        koBtn.classList.remove('text-slate-500');
+                        enBtn.classList.remove('bg-white/10', 'text-white');
+                        enBtn.classList.add('text-slate-500');
+                    }
+                }
+            </script>
+
+        </article>
+    </main>
+
+    <footer class="bg-background-dark border-t border-white/10 py-16 px-6 lg:px-20 mt-20">
+        <div class="max-w-[1400px] mx-auto text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-primary flex items-center justify-center rounded-lg text-white"><span class="material-symbols-outlined text-xl">menu_book</span></div>
+                <h1 class="text-lg font-black tracking-tighter uppercase italic">StudyWithMe <span class="text-primary">Premium</span></h1>
+            </div>
+            <p class="text-slate-400 text-sm max-w-md mx-auto mb-8 leading-relaxed">과학적이고 검증된 학습 인사이트로 당신의 성장을 응원합니다.</p>
+            <div class="text-xs text-slate-500">
+                <p>&copy; 2026 StudyWithMe Premium. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,137 @@
+/* =========================================
+   Playlist Modal Base
+   ========================================= */
+.playlist-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--bg-primary);
+    padding: 30px;
+    border-radius: 15px;
+    width: 650px;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 10000;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* Custom Scrollbar */
+.playlist-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.playlist-modal::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.playlist-modal.active {
+    display: block;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.close-btn {
+    background: transparent;
+    color: white;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    text-align: center !important;
+    border-radius: 4px !important;
+    padding-bottom: 2px !important;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================================
+   Add Form Styles (Restored from Backup)
+   ========================================= */
+.add-form {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.divider-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.add-close-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.add-btn, .close-btn-action {
+    flex: 1;
+    padding: 12px;
+    background: var(--accent-primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.add-btn:hover {
+    background: var(--accent-hover);
+}
+
+.close-btn-action {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.close-btn-action:hover {
+    background: rgba(255, 255, 255, 0.2);
+}

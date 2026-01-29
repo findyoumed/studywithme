@@ -1,0 +1,136 @@
+/* =========================================
+   Bottom Controls Bar
+   ========================================= */
+.controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 15px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    align-items: center;
+    z-index: 1000;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.ctrl-btn {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 10px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.btn-icon-only {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+#cameraBtn.active {
+    background: transparent !important;
+    color: var(--accent-primary) !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: none !important;
+}
+
+/* =========================================
+   Sliders & Containers
+   ========================================= */
+.opacity-container,
+.sensitivity-container {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10px;
+    padding-left: 15px;
+    border-left: 1px solid var(--border-color);
+    position: relative;
+    pointer-events: auto;
+    opacity: 1;
+}
+
+.opacity-container span,
+.sensitivity-container span {
+    color: var(--accent-primary) !important;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100px;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: var(--accent-primary) !important;
+    border-radius: 2px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #fff !important;
+    border: 2px solid var(--accent-primary);
+    height: 16px;
+    width: 16px;
+    margin-top: -6px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.slider-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.slider-label {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--accent-primary);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Motion Detection Canvas */
+#output_canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: auto;
+    cursor: pointer;
+
+    z-index: 10;
+    transform: scaleX(-1);
+    transition: transform 0.3s ease;
+}

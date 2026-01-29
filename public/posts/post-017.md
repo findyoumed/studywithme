@@ -1,0 +1,28 @@
+---
+id: 17
+title: "집에서도 집중력 잃지 않는 공부 습관"
+category: "습관"
+readTime: "7"
+image: "/assets/images/post_17_home_session_1769260445100.jpg"
+excerpt: "집에서도 흐트러지지 않게. 워밍업-본공부-정리 순서로 진행하자."
+title_en: "A Structured At-Home Study Routine"
+excerpt_en: "Even at home, a simple structure keeps you on track."
+category_en: "Habits"
+content_en: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Home Study Needs Structure</h3>\n  <p class='text-slate-300 mb-6'>When studying at home, it's really easy to get distracted. Planning your sequence in advance is crucial. Having structure makes focusing so much easier.</p>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point: Session Outline</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li><strong class='text-white'>10 min warm-up:</strong> recall yesterday's notes</li>\n    <li><strong class='text-white'>50 min deep block:</strong> new material or hard problems</li>\n    <li><strong class='text-white'>30 min practice:</strong> exercises or past questions</li>\n    <li><strong class='text-white'>10 min wrap-up:</strong> summary and next step</li>\n  </ul>\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Keep your phone in another room if possible. Out of sight, out of mind—and your focus will thank you.</p>\n</div>"
+---
+
+<div class="prose prose-invert max-w-none">
+  <h3 class="text-xl font-bold text-primary mb-4">들어가며: 집에서는 구조가 필요하다</h3>
+  <p class="text-slate-300 mb-6">집에서 공부하실 때는 아무래도 마음이 편안해서 흐트러지기가 쉽지요. 미리 공부 순서를 정해두시면 훨씬 도움이 되실 거예요. 계획이 있으면 집중하기도 훨씬 수월해지니까요.</p>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">핵심 1: 세션 구성</h3>
+  <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <li><strong class="text-white">10분 워밍업:</strong> 어제 내용 회상</li>
+    <li><strong class="text-white">50분 집중:</strong> 새 내용이나 어려운 문제</li>
+    <li><strong class="text-white">30분 연습:</strong> 문제 풀이</li>
+    <li><strong class="text-white">10분 정리:</strong> 요약과 다음 단계</li>
+  </ul>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">팁</h3>
+  <p class="text-slate-300">휴대폰은 되도록이면 다른 방에 두시는 게 훨씬 마음이 편하실 거예요. 눈에 안 보이면 신경도 덜 쓰이고, 정말 도움이 많이 되거든요.</p>
+</div>

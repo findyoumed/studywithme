@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="dark" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제대로 공부 시작하는 법 - 목표 설정과 좋은 흐름 만들기 - StudyWithMe Premium</title>
+    <meta name="description" content="공부의 방향을 잡고, '목표-계획-실행'으로 이어지는 좋은 흐름을 만들어 보세요. 첫 주를 훨씬 수월하게 시작할 수 있습니다.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="제대로 공부 시작하는 법 - 목표 설정과 좋은 흐름 만들기">
+    <meta property="og:description" content="공부의 방향을 잡고, '목표-계획-실행'으로 이어지는 좋은 흐름을 만들어 보세요. 첫 주를 훨씬 수월하게 시작할 수 있습니다.">
+    <meta property="og:image" content="/assets/images/post_01_start_goals.jpg">
+
+    <!-- Analytics & SEO (Head Scripts) -->
+    <script src="../js/analytics.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../blog.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#818cf8",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"],
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-br from-background-dark to-slate-900 font-display text-white">
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-effect border-b border-white/10 px-6 lg:px-20 py-4">
+        <div class="max-w-[1400px] mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.href='../blog.html'">
+                <img src="/favicon.png" alt="Logo" class="w-10 h-10 rounded-lg">
+                <h1 class="text-xl font-extrabold tracking-tighter uppercase italic">StudyWithMe <span class="text-primary">Premium</span></h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <!-- Language Toggle -->
+                <div class="flex bg-white/5 rounded-full p-1 border border-white/10">
+                    <button id="langKoBtn" onclick="changeLanguage('ko')" class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all bg-white/10 text-white">KO</button>
+                    <button id="langEnBtn" onclick="changeLanguage('en')" class="px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest transition-all text-slate-500 hover:text-white">EN</button>
+                </div>
+                <button onclick="location.href='../blog.html'" class="bg-primary/20 hover:bg-primary/30 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-full transition-all">
+                    목록으로
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl mx-auto pb-20 px-6 lg:px-0 mt-10">
+        <article>
+            <!-- Header -->
+            <header class="mb-10 text-center">
+                <div class="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 border border-primary/30 text-white text-xs font-bold uppercase tracking-widest">
+                    <span class="material-symbols-outlined text-sm">category</span>
+                    <span id="post-category">계획</span>
+                </div>
+                <h1 id="post-title" class="text-3xl md:text-5xl font-black leading-tight tracking-tighter mb-6 italic uppercase">
+                    제대로 공부 시작하는 법 - 목표 설정과 좋은 흐름 만들기
+                </h1>
+                <div class="flex items-center justify-center gap-4 text-slate-400 text-sm">
+                    <div class="flex items-center gap-1">
+                        <span class="material-symbols-outlined text-lg">schedule</span>
+                        <span id="post-readTime">6</span>분
+                    </div>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            <div class="relative w-full aspect-video rounded-2xl overflow-hidden mb-12 border border-white/10 shadow-2xl">
+                <img id="post-image" src="/assets/images/post_01_start_goals.jpg" alt="제대로 공부 시작하는 법 - 목표 설정과 좋은 흐름 만들기" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+            </div>
+
+            <!-- Content -->
+            <div id="post-content" class="prose prose-invert prose-lg max-w-none prose-headings:font-black prose-headings:italic prose-headings:uppercase prose-p:text-slate-300 prose-strong:text-white prose-a:text-primary hover:prose-a:text-primary/80">
+                <div class="prose prose-invert max-w-none">
+  <h3 class="text-xl font-bold text-primary mb-4">들어가며: 방향부터 정하자</h3>
+  <p class="text-slate-300 mb-6">막연하게 공부를 시작하면 괜히 힘만 빠지고 마음만 급해지기 쉽잖아요. 그런데 말이죠, 딱 하나라도 좋으니까 분명한 목표를 정하고, 아주 간단한 계획이라도 세워보면, 생각보다 훨씬 마음 편하게 첫 주를 시작할 수 있을 거예요. 혹시 부담되면 한 걸음씩 함께 걸어간다고 생각해도 좋으니, 천천히 해보셔도 괜찮습니다.</p>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">핵심 1: 목표 정의</h3>
+  <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <li><strong class="text-white">결과:</strong> 시험일, 목표 점수, 과제 마감</li>
+    <li><strong class="text-white">범위:</strong> 단원, 주제, 필요한 기술</li>
+    <li><strong class="text-white">시간:</strong> 주당 실제로 가능한 공부 시간</li>
+  </ul>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">핵심 2: 작은 성공 만들기</h3>
+  <p class="text-slate-300 mb-6">오늘 하루 안에 가볍게 끝낼 수 있는 작은 과제를 하나 선택해 보시면 어떨까요? 작은 일이라도 해냈다는 뿌듯함이 내일 공부에도 긍정적인 영향을 주어 기분 좋게 이어갈 수 있도록 도와줄 거예요. 마치 작은 씨앗이 예쁜 꽃을 피우듯 말이죠.</p>
+
+  <h3 class="text-xl font-bold text-primary mb-4 mt-8">팁</h3>
+  <p class="text-slate-300">처음부터 너무 완벽하게 계획을 세우려고 애쓰지 않으셔도 괜찮아요. 며칠 생활하시면서 조금씩 수정하고 보완해 나가시면 되니까요. 편안한 마음으로 시작해 보시면 좋겠습니다.</p>
+</div>
+            </div>
+            
+            <!-- Hidden English Content -->
+            <div id="post-content-en" class="hidden">
+                <div class='prose prose-invert max-w-none'>
+  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Start With Direction</h3>
+  <p class='text-slate-300 mb-6'>When you study without clear direction, your precious energy scatters and anxiety builds. But setting one clear goal and making a simple plan can make your first week surprisingly comfortable.</p>
+
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 1: Define the Goal</h3>
+  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>
+    <li><strong class='text-white'>Outcome:</strong> exam date, score, or project deadline</li>
+    <li><strong class='text-white'>Scope:</strong> chapters, topics, or skills</li>
+    <li><strong class='text-white'>Time:</strong> how many hours you can realistically study each week</li>
+  </ul>
+
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 2: Build a Small Win</h3>
+  <p class='text-slate-300 mb-6'>Choose just one tiny task you can definitely finish today. That small accomplishment becomes the lovely motivation that carries you into tomorrow's study session.</p>
+
+  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>
+  <p class='text-slate-300'>Don't pressure yourself to create the perfect plan from the start. You can always refine it as you go. Give yourself grace and begin gently.</p>
+</div>
+            </div>
+            
+            <!-- Data for JS -->
+            <script>
+                const postData = {
+                    ko: {
+                        title: "제대로 공부 시작하는 법 - 목표 설정과 좋은 흐름 만들기",
+                        category: "계획",
+                        content: "<div class=\"prose prose-invert max-w-none\">\r\n  <h3 class=\"text-xl font-bold text-primary mb-4\">들어가며: 방향부터 정하자</h3>\r\n  <p class=\"text-slate-300 mb-6\">막연하게 공부를 시작하면 괜히 힘만 빠지고 마음만 급해지기 쉽잖아요. 그런데 말이죠, 딱 하나라도 좋으니까 분명한 목표를 정하고, 아주 간단한 계획이라도 세워보면, 생각보다 훨씬 마음 편하게 첫 주를 시작할 수 있을 거예요. 혹시 부담되면 한 걸음씩 함께 걸어간다고 생각해도 좋으니, 천천히 해보셔도 괜찮습니다.</p>\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">핵심 1: 목표 정의</h3>\r\n  <ul class=\"list-disc list-inside text-slate-300 space-y-2 mb-6\">\r\n    <li><strong class=\"text-white\">결과:</strong> 시험일, 목표 점수, 과제 마감</li>\r\n    <li><strong class=\"text-white\">범위:</strong> 단원, 주제, 필요한 기술</li>\r\n    <li><strong class=\"text-white\">시간:</strong> 주당 실제로 가능한 공부 시간</li>\r\n  </ul>\r\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">핵심 2: 작은 성공 만들기</h3>\r\n  <p class=\"text-slate-300 mb-6\">오늘 하루 안에 가볍게 끝낼 수 있는 작은 과제를 하나 선택해 보시면 어떨까요? 작은 일이라도 해냈다는 뿌듯함이 내일 공부에도 긍정적인 영향을 주어 기분 좋게 이어갈 수 있도록 도와줄 거예요. 마치 작은 씨앗이 예쁜 꽃을 피우듯 말이죠.</p>\r\n\r\n  <h3 class=\"text-xl font-bold text-primary mb-4 mt-8\">팁</h3>\r\n  <p class=\"text-slate-300\">처음부터 너무 완벽하게 계획을 세우려고 애쓰지 않으셔도 괜찮아요. 며칠 생활하시면서 조금씩 수정하고 보완해 나가시면 되니까요. 편안한 마음으로 시작해 보시면 좋겠습니다.</p>\r\n</div>"
+                    },
+                    en: {
+                        title: "How to Start Studying Right - Set Goals and Build Momentum",
+                        category: "Planning",
+                        content: "<div class='prose prose-invert max-w-none'>\n  <h3 class='text-xl font-bold text-primary mb-4'>Introduction: Start With Direction</h3>\n  <p class='text-slate-300 mb-6'>When you study without clear direction, your precious energy scatters and anxiety builds. But setting one clear goal and making a simple plan can make your first week surprisingly comfortable.</p>\n\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 1: Define the Goal</h3>\n  <ul class='list-disc list-inside text-slate-300 space-y-2 mb-6'>\n    <li><strong class='text-white'>Outcome:</strong> exam date, score, or project deadline</li>\n    <li><strong class='text-white'>Scope:</strong> chapters, topics, or skills</li>\n    <li><strong class='text-white'>Time:</strong> how many hours you can realistically study each week</li>\n  </ul>\n\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Key Point 2: Build a Small Win</h3>\n  <p class='text-slate-300 mb-6'>Choose just one tiny task you can definitely finish today. That small accomplishment becomes the lovely motivation that carries you into tomorrow's study session.</p>\n\n  <h3 class='text-xl font-bold text-primary mb-4 mt-8'>Tip</h3>\n  <p class='text-slate-300'>Don't pressure yourself to create the perfect plan from the start. You can always refine it as you go. Give yourself grace and begin gently.</p>\n</div>"
+                    }
+                };
+
+                function changeLanguage(lang) {
+                    const titleEl = document.getElementById('post-title');
+                    const categoryEl = document.getElementById('post-category');
+                    const contentEl = document.getElementById('post-content');
+                    const koBtn = document.getElementById('langKoBtn');
+                    const enBtn = document.getElementById('langEnBtn');
+
+                    if (lang === 'en' && postData.en.content) {
+                        titleEl.textContent = postData.en.title;
+                        categoryEl.textContent = postData.en.category;
+                        contentEl.innerHTML = postData.en.content;
+                        
+                        enBtn.classList.add('bg-white/10', 'text-white');
+                        enBtn.classList.remove('text-slate-500');
+                        koBtn.classList.remove('bg-white/10', 'text-white');
+                        koBtn.classList.add('text-slate-500');
+                    } else {
+                        titleEl.textContent = postData.ko.title;
+                        categoryEl.textContent = postData.ko.category;
+                        contentEl.innerHTML = postData.ko.content;
+                        
+                        koBtn.classList.add('bg-white/10', 'text-white');
+                        koBtn.classList.remove('text-slate-500');
+                        enBtn.classList.remove('bg-white/10', 'text-white');
+                        enBtn.classList.add('text-slate-500');
+                    }
+                }
+            </script>
+
+        </article>
+    </main>
+
+    <footer class="bg-background-dark border-t border-white/10 py-16 px-6 lg:px-20 mt-20">
+        <div class="max-w-[1400px] mx-auto text-center">
+            <div class="flex items-center justify-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-primary flex items-center justify-center rounded-lg text-white"><span class="material-symbols-outlined text-xl">menu_book</span></div>
+                <h1 class="text-lg font-black tracking-tighter uppercase italic">StudyWithMe <span class="text-primary">Premium</span></h1>
+            </div>
+            <p class="text-slate-400 text-sm max-w-md mx-auto mb-8 leading-relaxed">과학적이고 검증된 학습 인사이트로 당신의 성장을 응원합니다.</p>
+            <div class="text-xs text-slate-500">
+                <p>&copy; 2026 StudyWithMe Premium. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

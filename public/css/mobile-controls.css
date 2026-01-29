@@ -1,0 +1,127 @@
+/* =========================================
+   Mobile Controls & Sliders
+   ========================================= */
+
+@media (max-width: 768px) {
+  /* Controls */
+  .controls {
+    width: 100%;
+    justify-content: center;
+    padding: 5px 2px;
+    bottom: 0;
+    gap: 1px;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .ctrl-btn {
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+  }
+
+  .ctrl-btn.active {
+    background: rgba(129, 140, 248, 0.2);
+  }
+
+  .btn-text {
+    display: none;
+  }
+
+  /* Hide buttons moved to settings menu */
+  #flipCameraBtn,
+  #flipYoutubeBtn,
+  .settings-container {
+    display: none !important;
+  }
+
+  /* Show buttons in controls */
+  .controls button[onclick="toggleAbout()"],
+  .controls button[onclick="copyToClipboard()"] {
+    display: flex !important;
+  }
+
+  /* Sliders */
+  .opacity-container,
+  .sensitivity-container {
+    border: none !important;
+    margin-left: 2px;
+    padding-left: 2px;
+    width: 28px;
+    height: 28px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    position: relative !important;
+  }
+
+  .opacity-container .slider-wrapper,
+  .sensitivity-container .slider-wrapper {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 20px;
+    padding: 0 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    display: block;
+  }
+
+  /* Specific adjustment for sensitivity slider (rightmost item) */
+  .sensitivity-container .slider-wrapper {
+    left: auto !important;
+    right: 10px !important;
+    transform: none !important;
+  }
+
+  .opacity-container.active .slider-wrapper,
+  .sensitivity-container.active .slider-wrapper {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    bottom: 60px;
+  }
+
+  .slider-label {
+    display: block;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+  }
+
+    .slider-label {
+        display: block;
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        white-space: nowrap;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        pointer-events: none;
+    }
+
+    /* Hide speed settings button on mobile - not used */
+    .settings-container {
+        display: none !important;
+    }
+}

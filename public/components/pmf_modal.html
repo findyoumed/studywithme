@@ -1,0 +1,75 @@
+<div class="modal-overlay" id="pmfModal" style="display: none;">
+    <div class="glass-modal pmf-modal" style="max-width: 500px; position: relative;">
+        <!-- Close Button -->
+        <button onclick="closePMFModal()" class="pmf-close-btn"
+            style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+            <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+        </button>
+
+        <div class="pmf-content" style="padding: 30px 20px; text-align: center;">
+            <div style="font-size: 40px; margin-bottom: 20px;">📊</div>
+            <h3 data-i18n="pmf_question"
+                style="font-size: 1.2rem; margin-bottom: 25px; line-height: 1.5; color: white;">
+                How would you rate your overall experience with StudyWithMe so far?
+            </h3>
+
+            <div class="pmf-options" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px;">
+                <button class="pmf-btn" onclick="submitPMF('satisfied')"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s;">
+                    <span data-i18n="pmf_satisfied">Satisfied</span>
+                </button>
+                <button class="pmf-btn" onclick="submitPMF('neutral')"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s;">
+                    <span data-i18n="pmf_neutral">Neutral</span>
+                </button>
+                <button class="pmf-btn" onclick="submitPMF('disappointed')"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px; border-radius: 12px; cursor: pointer; transition: all 0.2s;">
+                    <span data-i18n="pmf_disappointed">Disappointed</span>
+                </button>
+            </div>
+
+            <textarea id="pmfFeedback" data-i18n-placeholder="pmf_feedback_placeholder"
+                style="width: 100%; height: 80px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; padding: 10px; resize: none; margin-bottom: 20px;"
+                placeholder="Please tell us why (optional)"></textarea>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="pmfSubmitBtn" onclick="submitPMF()" class="submit-btn"
+                    style="width: 100%; padding: 12px; background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%); color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(129, 140, 248, 0.3);">
+                    <span data-i18n="pmf_submit">Send Feedback</span> 🚀
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #pmfModal {
+        z-index: 2147483647 !important;
+        /* Max Z-Index */
+        background: rgba(0, 0, 0, 0.8);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+    }
+
+    .pmf-modal {
+        background: rgba(30, 30, 40, 0.95) !important;
+        /* Make sure it's opaque enough */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .pmf-btn:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-2px);
+    }
+
+    .pmf-btn:active {
+        transform: translateY(0);
+    }
+</style>

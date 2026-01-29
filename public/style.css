@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+/* =========================================
+   Main Style Manifest
+   ========================================= */
+
+@import url('css/base.css');
+@import url('css/layout.css');
+@import url('css/components.nextbar.css');
+@import url('css/components.overlays.css');
+@import url('css/components.error.css');
+@import url('css/components.notifications.css');
+@import url('css/components.misc.css');
+@import url('css/controls.css');
+@import url('css/modals_playlist_base.css');
+@import url('css/playlist_items.css');
+@import url('css/search_ui.css');
+@import url('css/modals_about.css');
+@import url('css/modals_pmf.css');
+@import url('css/mobile-layout.css');
+@import url('css/mobile-controls.css');
+@import url('css/mobile-settings.css');
+@import url('css/viewer-mode.css');
+
+/* Custom Overrides for hidden elements in different modes (User Request) */
+/* The player-wrapper inner div is now commented out in index.html */
+
+
+body > div.container.split-mode > div.top-left-controls > div.refresh-overlay {
+    display: none !important;
+}

@@ -1,0 +1,116 @@
+@import url('autoplay-overlay.css');
+@import url('layout-camera.css');
+
+/* =========================================
+   Main Layout Container
+   ========================================= */
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+
+
+/* Mobile Adjustment */
+@media (max-width: 768px) {
+}
+
+/* --- Split Mode (Default) --- */
+.container:not(.overlay-mode) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--bg-secondary);
+}
+
+.container:not(.overlay-mode) .panel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* --- Full Live Mode (All Camera, No YouTube) --- */
+.container.full-live-mode {
+    display: block;
+}
+
+.container.full-live-mode .video-panel {
+    display: none;
+}
+
+.container.full-live-mode .camera-panel {
+    width: 100%;
+    height: 100%;
+}
+
+/* =========================================
+   Panel Specifics
+   ========================================= */
+.panel {
+    background: #000;
+}
+
+.video-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Full Camera Mode (Layered Mode) in Desktop - Hide YouTube */
+@media (min-width: 769px) {
+    .container.overlay-mode .video-panel {
+        display: none !important;
+    }
+    .container.overlay-mode .camera-panel {
+        width: 100%;
+        height: 100%;
+        /* border-left: none;  <-- This is now handled in layout-camera if needed, but border is on camera-panel base */
+        border-left: none; 
+    }
+}
+
+/* Keep settings gear visible in overlay mode even if bar is 'hidden' */
+.container.overlay-mode .next-video-bar {
+    display: none !important;
+}
+.container.overlay-mode .next-video-bar .next-info,
+.container.overlay-mode .next-video-bar .ctrl-btn:not(.btn-icon-only) {
+    display: none !important;
+}
+.container.overlay-mode .next-video-bar .settings-container {
+    pointer-events: auto;
+    z-index: 1001; /* Above camera and other layers */
+}
+
+/* Video Player Area */
+.player-wrapper {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+.player-click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 40px); /* Leave room for YT progress bar at bottom */
+    z-index: 5;
+    cursor: pointer;
+    background: transparent;
+}

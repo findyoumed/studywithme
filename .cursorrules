@@ -1,0 +1,47 @@
+# AI 코딩 규칙
+1. 코드 생략 금지: 
+   - 수정 사항이 적더라도 전체 코드를 생략 없이 출력할 것.
+   - // ... 기존 코드와 동일 또는 /* rest of code */ 같은 표현을 절대 사용하지 말 것.
+2. 모듈화 원칙:
+   - 한 파일이 너무 길어지면 나에게 보고하고 파일을 분리할 것을 제안할 것.
+3. 변경 사항 확인:
+   - 기존의 중요한 로직을 삭제할 때는 반드시 이유를 설명할 것.
+
+# AI Coding Rules (Mandatory)
+
+You must strictly follow the rules below when modifying or writing code in this project.
+
+## 1. No Code Omission (ABSOLUTE RULE)
+- Never omit code under any circumstances.
+- Even if changes are minimal, output the FULL FILE CONTENT.
+- The following are strictly forbidden:
+  - `// ...`
+  - `/* existing code */`
+  - `/* rest of code */`
+  - Any placeholder indicating omitted code
+
+## 2. Modularization Policy
+- If a single file becomes too large or complex:
+  - Do NOT split files automatically.
+  - First, report to the user:
+    - Why the file is too large
+    - How you propose to split it
+- Only proceed after user approval.
+
+## 3. Critical Logic Protection
+- Never delete or modify important logic without explanation.
+- If removing or changing:
+  - Authentication
+  - State management
+  - Business logic
+  - Data processing logic
+- You MUST clearly explain:
+  - What was removed
+  - Why it was removed
+  - What replaces it (if applicable)
+
+## 4. Change Transparency
+- Always describe what changed compared to the previous version.
+- If no behavior change occurred, explicitly state that.
+
+Failure to follow these rules is considered a critical error.

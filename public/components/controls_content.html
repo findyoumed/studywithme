@@ -1,0 +1,81 @@
+<button class="ctrl-btn" onclick="playPrevious()" data-i18n-title="prev" data-i18n-label="prev">
+    <span class="material-symbols-outlined">skip_previous</span>
+</button>
+<!-- <button class="ctrl-btn" onclick="seek(-10)" data-i18n-title="seek_back" data-i18n-label="seek_back">
+    <span class="material-symbols-outlined">replay_10</span>
+</button> -->
+<button class="ctrl-btn" onclick="togglePlay()" aria-label="Play/Pause">
+    <span class="material-symbols-outlined" id="playIcon">play_arrow</span>
+</button>
+<!-- <button class="ctrl-btn" onclick="seek(10)" data-i18n-title="seek_forward"
+    data-i18n-label="seek_forward">
+    <span class="material-symbols-outlined">forward_10</span>
+</button> -->
+<button class="ctrl-btn" onclick="playNext()" data-i18n-title="next" data-i18n-label="next">
+    <span class="material-symbols-outlined">skip_next</span>
+</button>
+<button class="ctrl-btn" onclick="togglePlaylist()" data-i18n-title="playlist" data-i18n-label="playlist">
+    <span class="material-symbols-outlined">playlist_play</span>
+</button>
+<!-- <button class="ctrl-btn" onclick="toggleYoutubeFlip()" id="flipYoutubeBtn" data-i18n-title="flip_yt"
+    data-i18n-label="flip_yt">
+    <span class="material-symbols-outlined">flip_camera_android</span>
+</button>
+<!-- <button class="ctrl-btn active" onclick="toggleCameraFlip()" id="flipCameraBtn" title="Flip Camera"
+    data-i18n-title="flip_cc" data-i18n-label="flip_cc">
+    <span class="material-symbols-outlined">switch_camera</span>
+</button> -->
+
+<!-- Divider -->
+<div style="width: 1px; height: 20px; background: rgba(255, 255, 255, 0.3); margin: 0 5px;"></div>
+
+<button class="ctrl-btn" onclick="toggleLayout()" aria-label="Switch Layout" data-i18n-title="layout"
+    data-i18n-label="layout_label">
+    <span class="material-symbols-outlined" id="layoutIcon">layers</span>
+</button>
+
+<!-- Share Button (Referral) -->
+<button class="ctrl-btn" onclick="copyToClipboard()" aria-label="Share" data-i18n-title="share"
+    data-i18n-label="share_label">
+    <span class="material-symbols-outlined">share</span>
+</button>
+
+
+<!-- About/Help Button -->
+<button class="ctrl-btn" onclick="toggleAbout()" aria-label="About & Guide" data-i18n-title="about"
+    data-i18n-label="about_label">
+    <span class="material-symbols-outlined">help</span>
+</button>
+
+
+
+<!-- Language Toggle -->
+<div class="ctrl-btn-group"
+    style="display: flex; background: rgba(255,255,255,0.1); border-radius: 20px; padding: 2px; margin-left: 5px;">
+    <button id="langKoBtn" class="ctrl-btn"
+        style="padding: 4px 8px; font-size: 10px; min-width: 35px; height: auto; background: transparent; border: none; color: white;"
+        onclick="changeLanguage('ko')" title="Korean" aria-label="Change language to Korean">KO</button>
+    <button id="langEnBtn" class="ctrl-btn"
+        style="padding: 4px 8px; font-size: 10px; min-width: 35px; height: auto; background: transparent; border: none; color: #666;"
+        onclick="changeLanguage('en')" title="English" aria-label="Change language to English">EN</button>
+</div>
+
+<div class="opacity-container" title="Camera Brightness" data-i18n-title="opacity_container">
+    <span class="material-symbols-outlined" style="font-size: 18px">brightness_6</span>
+    <div class="slider-wrapper">
+        <span class="slider-label">○ ── ●</span>
+        <input type="range" id="opacitySlider" min="0" max="1" step="0.1" value="0.5"
+            oninput="updateOpacityFromSlider(this.value)" data-i18n-title="opacity_slider"
+            aria-label="Camera Brightness" />
+    </div>
+</div>
+
+<div class="sensitivity-container" data-i18n-title="sensitivity_container">
+    <span class="material-symbols-outlined" style="font-size: 18px">speed</span>
+    <div class="slider-wrapper">
+        <span class="slider-label">− ── +</span>
+        <input type="range" id="sensitivitySlider" min="0" max="100" step="1" value="50"
+            oninput="updateSensitivityFromSlider(this.value)" data-i18n-title="sensitivity_slider"
+            aria-label="Motion Sensitivity" />
+    </div>
+</div>

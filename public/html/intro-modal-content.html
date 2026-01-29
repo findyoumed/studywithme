@@ -1,0 +1,79 @@
+<div class="intro-modal-overlay" id="introModalOverlay">
+    <div class="intro-modal-card">
+        <!-- Header -->
+        <div class="intro-header">
+            <div class="intro-logo">
+                <img src="/favicon.png" alt="Logo" class="logo-icon-img" style="width: 24px; height: 24px; border-radius: 4px; margin-right: 8px;">
+                <span class="logo-text">StudyWithMe</span>
+            </div>
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="ko">KO</button>
+                <div class="lang-divider"></div>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="intro-content">
+            <div class="welcome-section">
+                <h1 class="welcome-title">
+                    <span data-i18n="intro_welcome">Welcome to StudyWithMe</span>
+                    <span class="material-symbols-outlined welcome-icon">auto_stories</span>
+                </h1>
+                <p class="welcome-desc" data-i18n="intro_desc">
+                    AI가 실시간으로 학습 자세를 분석합니다.<br>
+                    YouTube 스터디 영상을 보며 집중 학습을 시작해보세요!
+                </p>
+            </div>
+
+            <!-- 3 Steps -->
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-icon-box">
+                        <span class="material-symbols-outlined">videocam</span>
+                    </div>
+                    <div class="step-text">
+                        <h3 data-i18n="intro_step1_title">카메라 연결</h3>
+                        <p data-i18n="intro_step1_desc">카메라 권한을 허용해주세요</p>
+                    </div>
+                </div>
+                <div class="step-arrow">
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </div>
+                <div class="step-item">
+                    <div class="step-icon-box">
+                        <span class="material-symbols-outlined">play_circle</span>
+                    </div>
+                    <div class="step-text">
+                        <h3 data-i18n="intro_step2_title">영상 선택</h3>
+                        <p data-i18n="intro_step2_desc">YouTube 스터디 영상 재생</p>
+                    </div>
+                </div>
+                <div class="step-arrow">
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </div>
+                <div class="step-item">
+                    <div class="step-icon-box">
+                        <span class="material-symbols-outlined">accessibility_new</span>
+                    </div>
+                    <div class="step-text">
+                        <h3 data-i18n="intro_step3_title">AI 코칭</h3>
+                        <p data-i18n="intro_step3_desc">실시간 SCORE 확인</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="intro-footer">
+            <div class="dont-show-wrapper">
+                <input type="checkbox" id="dontShowIntro" class="intro-checkbox">
+                <label for="dontShowIntro" data-i18n="intro_dont_show">다시 보지 않기</label>
+            </div>
+            <button class="start-btn" id="startStudyWithMeBtn">
+                <span data-i18n="intro_start">시작하기</span>
+                <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+</div>

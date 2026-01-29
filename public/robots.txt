@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Disallow API endpoints
+Disallow: /api/
+
+# Disallow non-content pages
+Disallow: /404.html
+Disallow: /shorts-test.html
+
+Sitemap: https://studywithme.co/sitemap.xml
