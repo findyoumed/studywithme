@@ -209,6 +209,11 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
       pointer-events: auto !important;  /* 중요! 클릭 가능하게 */
+      opacity: 0;  /* 처음엔 숨김 - FOUC 방지 */
+    }
+    
+    .go-live-me-too-btn.ready {
+      opacity: 1;  /* JavaScript로 추가되면 표시 */
     }
 
     .go-live-me-too-btn:hover {

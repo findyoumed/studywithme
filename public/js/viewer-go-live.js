@@ -13,6 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  // 폰트 로드 후 버튼 표시 (FOUC 방지)
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      btnGoLiveMeToo.classList.add('ready');
+    });
+  } else {
+    // Fallback: 폰트 API 미지원 브라우저
+    setTimeout(() => {
+      btnGoLiveMeToo.classList.add('ready');
+    }, 100);
+  }
+
   let isViewerLive = false;
   let localVideoStream = null;
   let localVideoTrack = null;
