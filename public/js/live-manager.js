@@ -46,6 +46,17 @@ async function init() {
     rtmClient = new AgoraRTMClient(APP_ID, myUID);
 
     remoteParticipantManager = new RemoteParticipantManager(participantsMap);
+
+    // ✅ Expose globally for viewer-go-live.js
+    window.liveManager = {
+        rtcClient,
+        rtmClient,
+        isLive: () => isLive,
+        channelName,
+        myUID
+    };
+    window.rtcClient = rtcClient;  // Direct access as backup
+    console.log('[LiveManager] ✅ Exposed to window.liveManager and window.rtcClient');
     liveUIManager = new LiveUIManager({
         toggleLive,
         startBroadcasting,
