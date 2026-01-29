@@ -29,8 +29,11 @@ export class LiveUIManager {
         if (this.btnCopyRoom) {
             this.btnCopyRoom.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                if (!this.liveManager.isLive) {
+                if (typeof this.liveManager.getIsLive === 'function' && !this.liveManager.getIsLive()) {
                     console.log("Auto-starting broadcast on share...");
+                    await this.liveManager.startBroadcasting();
+                } else if (!this.liveManager.getIsLive && !this.liveManager.isLive) {
+                    // Fallback for older interface if needed, though getIsLive is preferred
                     await this.liveManager.startBroadcasting();
                 }
 

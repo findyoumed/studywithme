@@ -84,7 +84,7 @@
         overflow: hidden;
       }
 
-      body:not(.viewer-mode) .remote-videos-grid {
+      body:not(.viewer-mode):not(.is-live) .remote-videos-grid {
         display: none !important;
       }
     </style>
@@ -212,7 +212,7 @@
 
     <!-- YouTube API & App Scripts -->
     <script type="module" src="/script.js?v=35"></script>
-    <script type="module" src="/js/live-manager.js?v=38"></script>
+    <script type="module" src="/js/live-manager.js?v=39"></script>
 
     <!-- Global Key Handlers -->
     <script>

@@ -1,5 +1,5 @@
 /**
- * live-manager.js
+ * live-manager.js (RESTORED STABLE VERSION)
  * Main Controller for Live Interactions
  * Coordinates AgoraRTCClient, AgoraRTMClient, and UI.
  */
@@ -16,21 +16,29 @@ let rtmClient = null;
 let isLive = false;
 let channelName = "study-room-default";
 
-// UID: localStorage에 저장하여 재사용 (새로고침해도 같은 UID 유지)
-let myUID = localStorage.getItem('agora_uid');
-if (!myUID) {
+// UID Logic: Avoid collision when testing Host/Viewer in same browser
+const urlParamsForID = new URLSearchParams(window.location.search);
+let myUID = null;
+
+if (urlParamsForID.get('mode') === 'viewer') {
+    // Viewer always gets a random temporary UID
     myUID = Math.floor(100000 + Math.random() * 900000);
-    localStorage.setItem('agora_uid', myUID);
-    console.log('🆕 New UID created:', myUID);
+    console.log('👀 Viewer Mode: Generated temporary UID:', myUID);
 } else {
-    myUID = parseInt(myUID);
-    console.log('♻️ Reusing existing UID:', myUID);
+    // Host uses persistent UID from storage
+    myUID = localStorage.getItem('agora_uid');
+    if (!myUID) {
+        myUID = Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('agora_uid', myUID);
+        console.log('🆕 Host Mode: New persistent UID created:', myUID);
+    } else {
+        myUID = parseInt(myUID);
+        console.log('♻️ Host Mode: Reusing persistent UID:', myUID);
+    }
 }
 
 let userNickname = "Anonymous User";
 let participantsMap = new Map();
-
-// --- Modules ---
 let remoteParticipantManager = null;
 let liveUIManager = null;
 
@@ -38,7 +46,8 @@ let liveUIManager = null;
 document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
-    console.log("Live Manager Initializing...");
+    console.log(`[LifeManager] 🚀 Initializing... Mode: ${urlParamsForID.get('mode') || 'HOST'}, UID: ${myUID}`);
+
 
     const urlParams = new URLSearchParams(window.location.search);
     if (!urlParams.has('room')) {
@@ -50,35 +59,26 @@ async function init() {
     }
     channelName = urlParams.get('room');
     userNickname = localStorage.getItem('study_nickname_auto') || userNickname;
-    localStorage.setItem('study_nickname_auto', userNickname);
 
     // Initialize Modules
     rtcClient = new AgoraRTCClient(APP_ID);
     rtmClient = new AgoraRTMClient(APP_ID, myUID);
-
     remoteParticipantManager = new RemoteParticipantManager(participantsMap);
 
-    // ✅ Expose globally for viewer-go-live.js
-    window.liveManager = {
-        rtcClient,
-        rtmClient,
-        isLive: () => isLive,
-        channelName,
-        myUID
-    };
-    window.rtcClient = rtcClient;  // Direct access as backup
-    console.log('[LiveManager] ✅ Exposed to window.liveManager and window.rtcClient');
+    // Global Expose
+    window.liveManager = { rtcClient, rtmClient, isLive: () => isLive, channelName, myUID };
+    window.rtcClient = rtcClient;
+
     liveUIManager = new LiveUIManager({
         toggleLive,
         startBroadcasting,
-        isLive,
+        getIsLive: () => isLive,
         channelName,
-        rtmClient: rtmClient.client, // Pass raw client if needed by UI, or refactor UI to use wrapper
+        rtmClient: rtmClient.client,
         showFloatingEmoji: (emoji) => console.log(emoji)
     });
     liveUIManager.init();
 
-    // Expose localTracks for CameraManager (backward compatibility)
     window.localTracks = rtcClient.localTracks;
     window.isLive = false;
 
@@ -92,10 +92,19 @@ async function init() {
 async function setupSDKs(isViewer) {
     // Setup RTC
     rtcClient.init({
-        onUserPublished: handleUserPublished,
-        onUserUnpublished: handleUserUnpublished,
-        onUserJoined: handleUserJoined,
-        onUserLeft: handleUserUnpublished
+        onUserPublished: async (user, mediaType) => {
+            console.log(`[LiveManager] User published: ${user.uid}, media: ${mediaType}`);
+            if (mediaType === 'video') remoteParticipantManager.addParticipant(user);
+        },
+        onUserUnpublished: (user) => {
+            console.log(`[LiveManager] User unpublished: ${user.uid}`);
+            remoteParticipantManager.removeParticipant(user);
+        },
+        onUserJoined: (user) => { 
+            console.log(`[LiveManager] User joined: ${user.uid}`);
+            if (user.hasVideo) remoteParticipantManager.addParticipant(user); 
+        },
+        onUserLeft: (user) => remoteParticipantManager.removeParticipant(user)
     });
 
     // Setup RTM
@@ -103,23 +112,15 @@ async function setupSDKs(isViewer) {
         const RTM_SDK = await waitForRTM();
         if (RTM_SDK) {
             const { rtmToken } = await fetchTokens("subscriber");
-            const success = await rtmClient.init(
-                RTM_SDK.RTM,
-                rtmToken,
-                userNickname,
-                channelName,
-                {
-                    onPresence: handlePresenceEvent,
-                    onMessage: handleRTMMessage
-                }
-            );
-            if (success) refreshParticipants();
-        } else {
-            console.warn("RTM SDK not found, features disabled.");
+            await rtmClient.init(RTM_SDK.RTM, rtmToken, userNickname, channelName, {
+                onPresence: handlePresenceEvent,
+                onMessage: handleRTMMessage
+            });
+            refreshParticipants();
         }
     }
 
-    // Join RTC
+    // Join RTC (Immediately upon load)
     const { rtcToken } = await fetchTokens("publisher");
     await rtcClient.join(channelName, rtcToken, myUID);
 }
@@ -134,47 +135,26 @@ async function waitForRTM() {
 }
 
 // --- Event Handlers ---
-
-async function handleUserPublished(user, mediaType) {
-    if (mediaType === 'video') {
-        remoteParticipantManager.addParticipant(user);
-    }
-}
-
-function handleUserUnpublished(user) {
-    remoteParticipantManager.removeParticipant(user);
-}
-
-function handleUserJoined(user) {
-    if (user.hasVideo) {
-        handleUserPublished(user, 'video');
-    }
-}
-
 function handlePresenceEvent(e) {
-    if (e.type === "SNAPSHOT") updateParticipantsList(e.snapshot);
-    else if (e.type === "REMOTE_JOIN" || e.type === "REMOTE_LEAVE") refreshParticipants();
+    if (e.type === "SNAPSHOT") {
+        const newMap = new Map();
+        e.snapshot.forEach(user => newMap.set(user.userId, user.states));
+        participantsMap = newMap;
+    } else if (e.type === "REMOTE_JOIN" || e.type === "REMOTE_LEAVE") {
+        refreshParticipants();
+    }
 }
 
-function handleRTMMessage(msg, publisher) {
-    // Handle message content (e.g., emoji, score)
-    // Logic can be expanded here or delegated
-}
+function handleRTMMessage(msg, publisher) {}
 
 async function refreshParticipants() {
     const users = await rtmClient.getOnlineUsers(channelName);
-    updateParticipantsList(users);
-}
-
-function updateParticipantsList(users) {
     const newMap = new Map();
     users.forEach(user => newMap.set(user.userId, user.states));
     participantsMap = newMap;
-    // UI update logic if needed
 }
 
 // --- Broadcasting Control ---
-
 async function toggleLive() {
     if (isLive) await stopBroadcasting();
     else await startBroadcasting();
@@ -183,11 +163,8 @@ async function toggleLive() {
 async function startBroadcasting() {
     if (isLive) return;
     try {
-        let videoTrack = window.cameraManager ? window.cameraManager.getVideoTrack() : null;
-        if (!videoTrack || videoTrack.readyState === 'ended') {
-            videoTrack = await rtcClient.createCameraTrack();
-        }
-
+        // [Simple Logic] Just create and publish
+        let videoTrack = await rtcClient.createCameraTrack();
         await rtcClient.publish(videoTrack);
 
         isLive = true;
@@ -197,6 +174,7 @@ async function startBroadcasting() {
         console.log("Broadcasting started.");
     } catch (e) {
         console.error("Start broadcasting failed:", e);
+        alert("방송 시작 실패. 페이지를 새로고침 해주세요.");
     }
 }
 
@@ -204,7 +182,6 @@ async function stopBroadcasting() {
     if (!isLive) return;
     try {
         await rtcClient.unpublish();
-
         isLive = false;
         window.isLive = false;
         liveUIManager.updateButtonsUI(isLive);
@@ -216,19 +193,13 @@ async function stopBroadcasting() {
 }
 
 // --- Score Broadcasting ---
-
 function startScoreBroadcasting() {
     if (window.scoreBroadcastInterval) return;
     window.scoreBroadcastInterval = setInterval(async () => {
         if (rtmClient.connected && window.motionManager) {
             const score = window.motionManager.getScore();
             const payload = JSON.stringify({ type: 'SCORE', value: score });
-            try {
-                await rtmClient.publish(channelName, payload);
-            } catch (e) {
-                console.warn("Score publish failed.");
-                stopScoreBroadcasting();
-            }
+            try { await rtmClient.publish(channelName, payload); } catch (e) {}
         }
     }, 1000);
 }
@@ -238,47 +209,20 @@ function stopScoreBroadcasting() {
     window.scoreBroadcastInterval = null;
 }
 
-// --- API ---
-
+// --- API (Inline to Restore Stability) ---
 async function fetchTokens(role) {
     const endpoint = `/api/get-agora-token?channelName=${channelName}&uid=${myUID}&role=${role}`;
-    try {
-        const response = await fetch(endpoint);
-        
-        // 🔒 방이 가득 찬 경우 처리
-        if (!response.ok) {
-            const errorData = await response.json();
-            
-            if (errorData.error === 'ROOM_FULL') {
-                console.error(`⛔ Room full: ${errorData.message}`);
-                alert(`❌ ${errorData.message}\n\n다른 방을 이용해주세요.`);
-                throw new Error('ROOM_FULL');
-            }
-            
-            throw new Error(`Token fetch failed: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error("Failed to fetch Agora token:", error);
-        throw error;
-    }
+    const response = await fetch(endpoint);
+    return await response.json();
 }
 
-// 페이지 닫힐 때 서버에 퇴장 알림
 window.addEventListener('beforeunload', async () => {
     try {
         await fetch('/api/participant-left', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                channelName, 
-                uid: myUID 
-            }),
-            keepalive: true  // 페이지 닫혀도 요청 완료
+            body: JSON.stringify({ channelName, uid: myUID }),
+            keepalive: true
         });
-    } catch (error) {
-        console.error('Failed to notify participant left:', error);
-    }
+    } catch(e) {}
 });

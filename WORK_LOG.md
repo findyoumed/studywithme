@@ -97,3 +97,49 @@ node server.js
 **버전:** v=38
 
 **결과:** ✅ 수정 완료 - 테스트 필요
+
+---
+
+## [2026-01-29 22:30] 백그라운드 최적화 및 모듈화, 버그 수정
+
+**LOG_ID: 20260129_2230**
+
+**목표:**
+
+1. 백그라운드 실행 시 시스템 자원(CPU/GPU/배터리/데이터) 최적화 및 공부 시간 누락 방지
+2. 'Copy Room Link' 버튼 클릭 시 방송 자동 시작 기능 복구
+3. `server.js` 및 `index.html` 파일 크기 축소 (모듈화)
+
+**변경 파일:**
+
+- `public/js/motion-manager.js`: 백그라운드 감지 로직, 3초 주기 완화, 렌더링 중단, 스로틀링 보정, 메모리 누수 방지
+- `public/js/player-controller.js`: 백그라운드 시 유튜브 일시정지, 포그라운드 복귀 시 자동 재생
+- `public/js/live-manager.js`: `getIsLive()` 게터 추가
+- `public/js/live-ui-manager.js`: `isLive` 상태 동기화 방식 수정
+- `public/index.html`: CSS 링크 제거 및 `main.css` 도입 (280줄 -> 200줄 이하)
+- `public/css/main.css`: 신규 생성 (CSS @import 관리)
+- `server.js`: Agora 토큰 로직 분리 (150줄 내외)
+- `server/agora-controller.js`: 신규 생성
+
+**수행 작업:**
+
+1. **백그라운드 최적화 (Smart Study Mode):**
+   - **AI 감시:** 3초 주기로 완화하여 인강 렉 방지 (`setInterval`)
+   - **점수 보정:** 브라우저 스로틀링 고려하여 최대 10초 갭까지 인정
+   - **자원 절약:** 캔버스 렌더링 및 UI 업데이트 중단, 유튜브 일시정지
+   - **메모리 보호:** 루프마다 `pose = null` 처리로 GC 유도
+
+2. **기능 복구:**
+   - `LiveManager`에서 `isLive` 상태를 `getIsLive()` 함수로 전달하도록 변경하여 UI 매니저가 항상 최신 상태를 참조하도록 함.
+
+3. **코드 다이어트:**
+   - `index.html`의 CSS 링크들을 `main.css`로 통합 (@import)
+   - `server.js`의 토큰 로직을 컨트롤러로 이관
+
+**실행 검증:**
+
+```bash
+node --check public/js/motion-manager.js public/js/player-controller.js public/js/live-manager.js public/js/live-ui-manager.js server.js server/agora-controller.js
+```
+
+**결과:** ✅ Syntax OK

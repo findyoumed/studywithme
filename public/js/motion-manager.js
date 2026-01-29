@@ -149,8 +149,10 @@ export class MotionManager {
         if (result && result.landmarks && result.landmarks.length > 0) {
             pose = result.landmarks[0];
 
-            // Draw (Only if visible)
-            if (!document.hidden) {
+            // Draw (Only if visible OR broadcasting)
+            // Use safe check for global liveManager
+            const isLive = window.liveManager && typeof window.liveManager.isLive === 'function' && window.liveManager.isLive();
+            if (!document.hidden || isLive) {
                 this.renderer.resize(this.videoElement.videoWidth, this.videoElement.videoHeight);
                 this.renderer.clear();
                 this.renderer.draw(pose);
@@ -180,6 +182,9 @@ export class MotionManager {
             if (!document.hidden) {
                 this.scoreUIManager.update(score);
             }
+        
+        // Explicitly clear reference to help GC in long-running sessions
+        pose = null;
     }
 
 
