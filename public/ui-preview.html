@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyWithMe UI 개선안 미리보기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 32px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 10px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 8px 8px 0 0;
+      transition: all 0.3s;
+    }
+
+    .tab.active {
+      background: #1e293b;
+      color: white;
+      font-weight: 600;
+    }
+
+    .preview-section {
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    .preview-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .mockup-frame {
+      background: #000;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      position: relative;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .description {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      border-left: 4px solid #4ade80;
+    }
+
+    .description h3 {
+      margin-bottom: 10px;
+      color: #4ade80;
+    }
+
+    .description ul {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+
+    /* SCORE Card Mock */
+    .score-card {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid #4ade80;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(74, 222, 128, 0.2);
+      width: 200px;
+    }
+
+    .score-card .icon {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .score-card .label {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .score-card .timer {
+      text-align: center;
+      font-size: 48px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .score-card .badge {
+      text-align: center;
+      font-size: 14px;
+      color: #fbbf24;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .score-card .progress {
+      margin-top: 12px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .score-card .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4ade80, #22c55e);
+      width: 85%;
+      transition: width 0.3s;
+    }
+
+    /* Live Button Mock */
+    .live-buttons {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .live-btn {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 20px 30px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      min-width: 150px;
+    }
+
+    .live-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .live-btn .icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .live-btn .label {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .live-btn.active {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border-color: #ef4444;
+      animation: pulse 2s infinite;
+    }
+
+    .live-btn.active .viewers {
+      margin-top: 8px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      }
+      50% {
+        box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+      }
+    }
+
+    /* Minimal Mode */
+    .minimal-mode {
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .minimal-mode .mode-label {
+      color: #94a3b8;
+      font-size: 18px;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    .minimal-mode .timer-large {
+      font-size: 96px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      background: linear-gradient(135deg, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .minimal-mode .progress-text {
+      font-size: 20px;
+      color: #4ade80;
+      margin-bottom: 40px;
+      letter-spacing: 4px;
+    }
+
+    .minimal-mode .control-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 15px 40px;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .minimal-mode .control-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+
+    /* Mobile Layout */
+    .mobile-frame {
+      width: 375px;
+      height: 667px;
+      background: #0f172a;
+      border-radius: 30px;
+      border: 8px solid #1e293b;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-header {
+      background: #1e293b;
+      padding: 15px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .mobile-score {
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid #4ade80;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .mobile-score .timer {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .mobile-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .mobile-camera {
+      flex: 2;
+      background: #1e293b;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+    }
+
+    .mobile-video {
+      flex: 1;
+      background: #000;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+    }
+
+    .mobile-tabs {
+      display: flex;
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 8px;
+    }
+
+    .mobile-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .mobile-tab.active {
+      background: #4ade80;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    .code-example {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .code-example pre {
+      color: #e2e8f0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .toggle-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background: #334155;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .switch.active {
+      background: #4ade80;
+    }
+
+    .switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+
+    .switch.active::after {
+      left: 33px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 StudyWithMe UI 개선안 미리보기</h1>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('score')">1. SCORE 카드</button>
+      <button class="tab" onclick="showTab('live')">2. Live 버튼</button>
+      <button class="tab" onclick="showTab('minimal')">3. 미니멀 모드</button>
+      <button class="tab" onclick="showTab('mobile')">4. 모바일 레이아웃</button>
+    </div>
+
+    <!-- Tab 1: SCORE Card -->
+    <div id="score" class="preview-section active">
+      <div class="description">
+        <h3>⭐ SCORE 표시 강화</h3>
+        <ul>
+          <li>Glassmorphism 디자인으로 프리미엄 느낌</li>
+          <li>타이머 폰트 크기 48px로 확대</li>
+          <li>등급 배지 추가 (Gold Master)</li>
+          <li>집중도 프로그레스 바 시각화</li>
+          <li>초록색 글로우 테두리</li>
+        </ul>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="score-card">
+          <div class="icon">⏱️</div>
+          <div class="label">집중 시간</div>
+          <div class="timer" id="mockTimer1">01:23:45</div>
+          <div class="badge">🏅 Gold Master</div>
+          <div class="progress">
+            <div class="progress-bar"></div>
+          </div>
+        </div>
+        <div style="color: #94a3b8; text-align: center;">
+          <p style="font-size: 14px;">↖ 화면 왼쪽 상단에 배치됩니다</p>
+        </div>
+      </div>
+
+      <div class="code-example">
+        <pre>
+/* CSS 구현 */
+.score-card {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid #4ade80;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(74, 222, 128, 0.2);
+}</pre>
+      </div>
+    </div>
+
+    <!-- Tab 2: Live Button -->
+    <div id="live" class="preview-section">
+      <div class="description">
+        <h3>🎥 Go Live 버튼 상태 표시</h3>
+        <ul>
+          <li>꺼짐 상태: 투명 배경 + 아이콘</li>
+          <li>켜짐 상태: 빨간 그라데이션 + 펄스 애니메이션</li>
+          <li>시청자 수 표시</li>
+          <li>명확한 텍스트 레이블</li>
+        </ul>
+        
+        <div class="toggle-switch">
+          <span>상태 전환:</span>
+          <div class="switch" id="liveSwitch" onclick="toggleLive()"></div>
+          <span id="liveStatus">꺼짐</span>
+        </div>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="live-buttons">
+          <div class="live-btn" id="liveBtnMock">
+            <div class="icon material-symbols-outlined">podcasts</div>
+            <div class="label">Go Live</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-example">
+        <pre>
+/* 펄스 애니메이션 */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(239, 68, 68, 0);
+  }
+}
+
+.live-btn.active {
+  animation: pulse 2s infinite;
+}</pre>
+      </div>
+    </div>
+
+    <!-- Tab 3: Minimal Mode -->
+    <div id="minimal" class="preview-section">
+      <div class="description">
+        <h3>✨ 잡스 스타일 미니멀 집중 모드</h3>
+        <ul>
+          <li>화면의 80%는 빈 공간</li>
+          <li>타이머만 크게 강조 (96px)</li>
+          <li>불필요한 UI 요소 제거</li>
+          <li>zen 분위기로 집중 유도</li>
+          <li>단일 버튼으로 컨트롤</li>
+        </ul>
+      </div>
+
+      <div class="mockup-frame" style="min-height: 600px;">
+        <div class="minimal-mode">
+          <div class="mode-label">집중 모드</div>
+          <div class="timer-large" id="mockTimer2">01:23:45</div>
+          <div class="progress-text">████████░░ 85%</div>
+          <button class="control-btn">일시정지</button>
+        </div>
+      </div>
+
+      <div class="code-example">
+        <pre>
+/* 미니멀 철학 */
+- 화면 대부분 비우기
+- 타이머가 주인공
+- 설정은 제스처로 숨김
+- 모든 것이 직관적</pre>
+      </div>
+    </div>
+
+    <!-- Tab 4: Mobile Layout -->
+    <div id="mobile" class="preview-section">
+      <div class="description">
+        <h3>📱 모바일 반응형 레이아웃</h3>
+        <ul>
+          <li>세로 스택 구조로 재구성</li>
+          <li>SCORE 상단 고정</li>
+          <li>카메라 영역 중앙 배치</li>
+          <li>YouTube 영상 하단 PIP</li>
+          <li>탭으로 영역 전환</li>
+        </ul>
+      </div>
+
+      <div class="mockup-frame">
+        <div class="mobile-frame">
+          <div class="mobile-header">
+            <div class="mobile-score">
+              <div style="font-size: 12px; color: #94a3b8; margin-bottom: 5px;">집중 시간</div>
+              <div class="timer">01:23:45</div>
+            </div>
+          </div>
+          <div class="mobile-content">
+            <div class="mobile-camera">
+              <span>📹 카메라 영역</span>
+            </div>
+            <div class="mobile-video">
+              <span>▶️ 유튜브 영상</span>
+            </div>
+            <div class="mobile-tabs">
+              <div class="mobile-tab active">영상</div>
+              <div class="mobile-tab">카메라</div>
+              <div class="mobile-tab">통계</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-example">
+        <pre>
+/* 모바일 미디어 쿼리 */
+@media (max-width: 768px) {
+  .container {
+    display: block !important;
+  }
+  
+  .camera-panel {
+    order: 1; /* 카메라 먼저 */
+  }
+  
+  .video-panel {
+    order: 2; /* 비디오 나중에 */
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.preview-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function toggleLive() {
+      const switchEl = document.getElementById('liveSwitch');
+      const btnEl = document.getElementById('liveBtnMock');
+      const statusEl = document.getElementById('liveStatus');
+      
+      switchEl.classList.toggle('active');
+      btnEl.classList.toggle('active');
+      
+      if (btnEl.classList.contains('active')) {
+        btnEl.innerHTML = `
+          <div class="icon material-symbols-outlined">stop_circle</div>
+          <div class="label">● LIVE</div>
+          <div class="viewers">3 viewers</div>
+        `;
+        statusEl.textContent = '켜짐';
+      } else {
+        btnEl.innerHTML = `
+          <div class="icon material-symbols-outlined">podcasts</div>
+          <div class="label">Go Live</div>
+        `;
+        statusEl.textContent = '꺼짐';
+      }
+    }
+
+    // Animated timer
+    function updateTimer() {
+      const timers = document.querySelectorAll('[id^="mockTimer"]');
+      let seconds = 5025; // 01:23:45
+      
+      setInterval(() => {
+        seconds++;
+        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        const timeStr = `${h}:${m}:${s}`;
+        
+        timers.forEach(timer => {
+          timer.textContent = timeStr;
+        });
+      }, 1000);
+    }
+
+    updateTimer();
+  </script>
+</body>
+</html>

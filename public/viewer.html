@@ -192,6 +192,38 @@
     .camera-controls-overlay {
       display: flex !important;
     }
+
+    /* Go Live Me Too Button */
+    .go-live-me-too-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 30px;
+      padding: 12px 24px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .go-live-me-too-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+
+    .go-live-me-too-btn .material-symbols-outlined {
+      font-size: 24px;
+    }
+
+    .go-live-me-too-btn.active {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      animation: pulse 2s infinite;
+    }
   </style>
 
   <!-- Agora SDK -->
@@ -216,6 +248,11 @@
 
       <!-- Emoji Controls -->
       <div class="camera-controls-overlay">
+        <!-- Go Live Me Too Button -->
+        <button id="btnGoLiveMeToo" class="go-live-me-too-btn" title="나도 방송 참여하기">
+          <span class="material-symbols-outlined">podcasts</span>
+          <span class="btn-text">Join & Go Live</span>
+        </button>
         <!-- <div id="emojiBar" class="emoji-bar">
               <button class="emoji-btn" data-emoji="🔥">🔥</button>
               <button class="emoji-btn" data-emoji="👏">👏</button>
@@ -234,6 +271,7 @@
   <!-- Scripts -->
   <script type="module" src="/script.js?v=32"></script>
   <script type="module" src="/js/live-manager.js?v=32"></script>
+  <script src="/js/viewer-go-live.js?v=1"></script>
 
 </body>
 
