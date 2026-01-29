@@ -105,6 +105,11 @@ export class MotionManager {
             if (this.bgInterval) clearInterval(this.bgInterval);
             this.lastTime = performance.now(); // Reset time to avoid huge jump
             this._runRAF();
+            
+            // Force UI sync immediately upon returning
+            if (this.motionAnalyzer) {
+                 this.scoreUIManager.update(this.motionAnalyzer.getScore());
+            }
         }
     }
 
@@ -142,11 +147,13 @@ export class MotionManager {
         if (result && result.landmarks && result.landmarks.length > 0) {
             pose = result.landmarks[0];
 
-            // Draw
-            this.renderer.resize(this.videoElement.videoWidth, this.videoElement.videoHeight);
-            this.renderer.clear(); // Clear previous frame
-            this.renderer.draw(pose); 
-        } else if (!isModelLoading) {
+            // Draw (Only if visible)
+            if (!document.hidden) {
+                this.renderer.resize(this.videoElement.videoWidth, this.videoElement.videoHeight);
+                this.renderer.clear();
+                this.renderer.draw(pose);
+            }
+        } else if (!isModelLoading && !document.hidden) {
             this.renderer.clear();
         }
 
@@ -167,8 +174,10 @@ export class MotionManager {
                 // window.motionManager.triggerAutoShare(currentScoreInt); // Deactivated per user request
             }
 
-            // Update Score UI
-            this.scoreUIManager.update(score);
+            // Update Score UI (Only if visible)
+            if (!document.hidden) {
+                this.scoreUIManager.update(score);
+            }
     }
 
 
