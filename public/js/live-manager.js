@@ -15,7 +15,18 @@ let rtcClient = null;
 let rtmClient = null;
 let isLive = false;
 let channelName = "study-room-default";
-let myUID = Math.floor(100000 + Math.random() * 900000);
+
+// UID: localStorage에 저장하여 재사용 (새로고침해도 같은 UID 유지)
+let myUID = localStorage.getItem('agora_uid');
+if (!myUID) {
+    myUID = Math.floor(100000 + Math.random() * 900000);
+    localStorage.setItem('agora_uid', myUID);
+    console.log('🆕 New UID created:', myUID);
+} else {
+    myUID = parseInt(myUID);
+    console.log('♻️ Reusing existing UID:', myUID);
+}
+
 let userNickname = "Anonymous User";
 let participantsMap = new Map();
 

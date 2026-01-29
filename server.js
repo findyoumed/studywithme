@@ -165,8 +165,11 @@ app.get("/api/get-agora-token", (req, res) => {
   const participants = roomParticipants.get(channelName);
   const isAlreadyInRoom = participants && participants.has(uid);
   
-  // 이미 방에 있는 사용자는 재접속 허용
-  if (!isAlreadyInRoom && currentCount >= MAX_PARTICIPANTS_PER_ROOM) {
+  // 이미 방에 있는 사용자는 재접속 허용 (카운트 증가 안 함)
+  if (isAlreadyInRoom) {
+    console.log(`♻️ [${channelName}] UID ${uid} reconnecting (already in room)`);
+  } else if (currentCount >= MAX_PARTICIPANTS_PER_ROOM) {
+    // 새 사용자인데 방이 가득 참
     console.log(`⛔ [${channelName}] Room full! Rejected UID ${uid} (${currentCount}/${MAX_PARTICIPANTS_PER_ROOM})`);
     return res.status(403).json({ 
       error: "ROOM_FULL",
@@ -196,8 +199,10 @@ app.get("/api/get-agora-token", (req, res) => {
     privilegeExpireTime
   );
 
-  // ✅ 토큰 발급 성공 시 참여자 추가
-  addParticipant(channelName, uid);
+  // ✅ 토큰 발급 성공 시 참여자 추가 (재접속이 아닐 때만)
+  if (!isAlreadyInRoom) {
+    addParticipant(channelName, uid);
+  }
 
   res.json({ rtcToken, rtmToken });
 });
