@@ -225,8 +225,13 @@ async function startBroadcasting() {
         // [LOG: 20260130_1406] Use existing camera track to avoid hardware conflict on mobile
         let videoTrack = null;
         if (window.cameraManager && typeof window.cameraManager.getVideoTrack === 'function') {
-            videoTrack = window.cameraManager.getVideoTrack();
-            console.log("[LiveManager] Syncing existing focus camera for broadcast");
+            const originalTrack = window.cameraManager.getVideoTrack();
+            if (originalTrack) {
+                // [LOG: 20260130_1411] Clone the track to prevent the original video from freezing.
+                // Cloning creates a separate instance that doesn't affect the source <video> element.
+                videoTrack = originalTrack.clone();
+                console.log("[LiveManager] Using cloned track for broadcast to protect original video");
+            }
         }
 
         // If no focus camera active, then create a new one

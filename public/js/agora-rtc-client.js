@@ -97,8 +97,16 @@ export class AgoraRTCClient {
     async unpublish() {
         try {
             if (this.localTracks.videoTrack) {
-                // [LOG: 20260130_1406] Only close if it's an Agora-created track
-                // If it's a shared MediaStreamTrack, let CameraManager handle it.
+                // [LOG: 20260130_1411] If it's an Agora track wrapping a cloned MediaStreamTrack,
+                // we must stop the underlying track to release the hardware correctly.
+                const mediaTrack = this.localTracks.videoTrack.getMediaStreamTrack
+                    ? this.localTracks.videoTrack.getMediaStreamTrack()
+                    : null;
+
+                if (mediaTrack && typeof mediaTrack.stop === 'function') {
+                    mediaTrack.stop();
+                }
+
                 if (typeof this.localTracks.videoTrack.close === 'function') {
                     this.localTracks.videoTrack.close();
                 }
