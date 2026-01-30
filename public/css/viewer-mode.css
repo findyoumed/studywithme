@@ -124,9 +124,21 @@ body.viewer-mode * {
         grid-template-rows: 1fr 1fr !important;
     }
 
-    body.viewer-mode .remote-videos-grid[data-count="3"],
+    body.viewer-mode .remote-videos-grid[data-count="3"] {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 1fr 1fr 1fr !important;
+    }
+
     body.viewer-mode .remote-videos-grid[data-count="4"] {
         grid-template-columns: 1fr !important;
-        grid-template-rows: repeat(auto-fit, 1fr) !important;
+        grid-template-rows: 1fr 1fr 1fr 1fr !important;
+    }
+
+    /* Support up to 6 on mobile portrait */
+    body.viewer-mode .remote-videos-grid[data-count="5"],
+    body.viewer-mode .remote-videos-grid[data-count="6"] {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: repeat(auto-fill, 20vh) !important;
+        /* Fallback for many users */
     }
 }
