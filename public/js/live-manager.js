@@ -239,8 +239,8 @@ async function startBroadcasting() {
         const browserLang = navLang.startsWith('ko') ? 'ko' : 'en';
         const currentLang = savedLang || browserLang;
         const msg = currentLang === 'ko'
-            ? "방송을 시작할 수 없습니다. 잠시 후 다시 시도해주세요."
-            : "Cannot start broadcast. Please try again in a moment.";
+            ? "방송 준비 중입니다. 잠시 후 다시 시도해주세요."
+            : "Broadcast is preparing. Please try again in a moment.";
         alert(msg);
     }
 }
