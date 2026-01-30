@@ -157,7 +157,16 @@ async function setupSDKs(isViewer) {
 
     // Join RTC (Immediately upon load)
     const { rtcToken } = await fetchTokens("publisher");
-    await rtcClient.join(channelName, rtcToken, myUID);
+
+    // [LOG: 20260130_1736] Add error handling for join failure
+    try {
+        await rtcClient.join(channelName, rtcToken, myUID);
+        console.log("[LiveManager] Successfully joined Agora channel");
+    } catch (joinError) {
+        console.error("[LiveManager] Failed to join Agora channel:", joinError);
+        alert("Failed to connect to live streaming server. Please refresh the page (Ctrl+Shift+R).");
+        return; // Stop initialization if join fails
+    }
 
     // [LOG: 20260130_1652] Initialize VideoFrameMonitor for viewers to detect background
     if (isViewer) {
@@ -171,8 +180,9 @@ async function setupSDKs(isViewer) {
     if (!isViewer) {
         try {
             await rtcClient.unpublish();
+            console.log("[LiveManager] Clean state: Unpublished any stale streams");
         } catch (e) {
-            // Ignore error if already unpublished
+            console.log("[LiveManager] No stale streams to unpublish (expected)");
         }
     }
 
@@ -308,7 +318,7 @@ async function startBroadcasting() {
         const browserLang = navLang.startsWith('ko') ? 'ko' : 'en';
         const currentLang = savedLang || browserLang;
         const msg = currentLang === 'ko'
-            ? "방송 연결 중입니다. 지금 다시 시도해주세요."
+            ? "방송 연결 중입니다. 다시 시도해주세요."
             : "Broadcast is connecting. Please try again now.";
         alert(msg);
     }
