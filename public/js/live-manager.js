@@ -247,37 +247,17 @@ async function stopBroadcasting() {
 }
 
 // --- Score Broadcasting ---
+// --- Use ScoreBroadcaster Module ---
+import { ScoreBroadcaster } from "./live/score-broadcaster.js";
+const scoreBroadcaster = new ScoreBroadcaster();
+
 function startScoreBroadcasting() {
-    if (window.scoreBroadcastInterval) return;
-    window.scoreBroadcastInterval = setInterval(async () => {
-        if (window.motionManager) {
-            const score = window.motionManager.getScore();
-
-            // [LOG: 20260130_1031] HTTP API fallback for score sharing
-            try {
-                await fetch(`/api/room/${channelName}/score`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ score })
-                });
-            } catch (e) {
-                // Silent fail - not critical
-            }
-
-            // Try RTM if available (backward compatibility)
-            if (rtmClient?.connected) {
-                const payload = JSON.stringify({ type: 'SCORE', value: score });
-                try { await rtmClient.publish(channelName, payload); } catch (e) { }
-            }
-        }
-    }, 2000); // Broadcast every 2 seconds
+    scoreBroadcaster.start(channelName, rtmClient, { isViewer: urlParamsForID.get('mode') === 'viewer', myUID: myUID });
 }
 
 function stopScoreBroadcasting() {
-    clearInterval(window.scoreBroadcastInterval);
-    window.scoreBroadcastInterval = null;
+    scoreBroadcaster.stop();
 }
-
 // --- API (Inline to Restore Stability) ---
 async function fetchTokens(role) {
     const endpoint = `/api/get-agora-token?channelName=${channelName}&uid=${myUID}&role=${role}`;
