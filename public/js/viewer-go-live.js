@@ -4,24 +4,23 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('[Viewer] Initializing Go Live button...');
-  
-  const btnGoLiveMeToo = document.getElementById('btnGoLiveMeToo');
-  
-  if (!btnGoLiveMeToo) {
-    console.warn('[Viewer] Go Live button not found');
+  console.log('[Viewer] Initializing Join & Share button...');
+
+  const btnJoinShare = document.getElementById('btnJoinShare');
+
+  if (!btnJoinShare) {
+    console.warn('[Viewer] Join & Share button not found');
     return;
   }
 
   // 폰트 로드 후 버튼 표시 (FOUC 방지)
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
-      btnGoLiveMeToo.classList.add('ready');
+      btnJoinShare.classList.add('ready');
     });
   } else {
-    // Fallback: 폰트 API 미지원 브라우저
     setTimeout(() => {
-      btnGoLiveMeToo.classList.add('ready');
+      btnJoinShare.classList.add('ready');
     }, 100);
   }
 
@@ -29,94 +28,116 @@ document.addEventListener('DOMContentLoaded', () => {
   let localVideoStream = null;
   let localVideoTrack = null;
 
-  btnGoLiveMeToo.addEventListener('click', async () => {
-    console.log('[Viewer] Go Live button clicked, current state:', isViewerLive);
+  // Language & Copy Helper
+  function getLocalizedMessages() {
+    const savedLang = localStorage.getItem("studywithme_lang");
+    const navLang = navigator.language || 'en';
+    const browserLang = navLang.startsWith('ko') ? 'ko' : 'en';
+    const currentLang = savedLang || browserLang;
+
+    if (currentLang === 'ko') {
+      return {
+        copiedAndStarting: '✅ 링크 복사 & 방송 시작 중...',
+        stopped: '⏹️ 방송이 종료되었습니다',
+        startError: '방송 시작 중 오류 발생: ',
+        btnStop: 'Stop Live',
+        btnStart: 'Join & Share',
+        titleStop: '방송 종료',
+        titleStart: '방송 참여 및 공유하기'
+      };
+    } else {
+      return {
+        copiedAndStarting: '✅ Link Copied & Starting Broadcast...',
+        stopped: '⏹️ Broadcast stopped',
+        startError: 'Error starting broadcast: ',
+        btnStop: 'Stop Live',
+        btnStart: 'Join & Share',
+        titleStop: 'Stop Live',
+        titleStart: 'Join & Share Link'
+      };
+    }
+  }
+
+  async function copyLink() {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('host'); // Ensure clean link
+      if (!url.searchParams.has('mode')) url.searchParams.set('mode', 'viewer');
+
+      await navigator.clipboard.writeText(url.toString());
+
+      // Visual Feedback
+      btnJoinShare.classList.add('copied');
+      setTimeout(() => btnJoinShare.classList.remove('copied'), 2000);
+    } catch (err) {
+      console.warn('Copy failed', err);
+    }
+  }
+
+  btnJoinShare.addEventListener('click', async () => {
+    console.log('[Viewer] Join & Share clicked, current state:', isViewerLive);
+    const msgs = getLocalizedMessages();
 
     try {
       if (!isViewerLive) {
-        await startViewerBroadcast();
+        // ACTION: Start Logic
+        // 1. Copy Link first
+        await copyLink();
+
+        // 2. Show Notification
+        showNotification(msgs.copiedAndStarting);
+
+        // 3. Start Broadcast
+        await startViewerBroadcast(msgs);
       } else {
-        await stopViewerBroadcast();
+        // ACTION: Stop Logic
+        await stopViewerBroadcast(msgs);
       }
     } catch (error) {
-      console.error('[Viewer] Go Live error:', error);
-      alert('방송 시작/종료 중 오류가 발생했습니다: ' + error.message);
+      console.error('[Viewer] Error:', error);
+      alert(msgs.startError + error.message);
     }
   });
 
-  async function startViewerBroadcast() {
+  async function startViewerBroadcast(msgs) {
     console.log('[Viewer] Starting viewer broadcast...');
 
     try {
       // Get camera directly using MediaDevices API
-      console.log('[Viewer] Requesting camera access...');
-      localVideoStream = await navigator.mediaDevices.getUserMedia({ 
-        video: true, 
-        audio: false 
+      localVideoStream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
       });
-      
-      console.log('[Viewer] Camera access granted');
 
       // Get video track from stream
       const videoTracks = localVideoStream.getVideoTracks();
-      if (videoTracks.length === 0) {
-        throw new Error('No video track found');
-      }
-
+      if (videoTracks.length === 0) throw new Error('No video track found');
       const mediaStreamTrack = videoTracks[0];
-      console.log('[Viewer] Got media stream track');
 
-      // Check multiple ways to get rtcClient
-      let rtcClient = null;
-      
-      // Method 1: window.liveManager
-      if (window.liveManager && window.liveManager.rtcClient) {
-        rtcClient = window.liveManager.rtcClient;
-        console.log('[Viewer] Found rtcClient via window.liveManager');
-      }
-      // Method 2: window.rtcClient (direct)
-      else if (window.rtcClient) {
-        rtcClient = window.rtcClient;
-        console.log('[Viewer] Found rtcClient via window.rtcClient');
-      }
-      // Method 3: Search for AgoraRTCClient
-      else if (window.AgoraRTCClient) {
-        rtcClient = window.AgoraRTCClient;
-        console.log('[Viewer] Found rtcClient via window.AgoraRTCClient');
-      }
-      
+      // Get RTC Client
+      let rtcClient = getRTCClient();
       if (!rtcClient || !rtcClient.client) {
-        console.error('[Viewer] Available window properties:', Object.keys(window).filter(k => k.includes('live') || k.includes('rtc') || k.includes('agora')));
-        throw new Error('RTC Client not found. Please make sure you are connected to the room.');
+        throw new Error('RTC Client not found. Please wait for room connection.');
       }
 
-      console.log('[Viewer] RTC Client ready:', rtcClient);
-
-      // Create Agora video track from MediaStreamTrack
-      console.log('[Viewer] Creating Agora video track...');
+      // Create Agora video track
       localVideoTrack = AgoraRTC.createCustomVideoTrack({
         mediaStreamTrack: mediaStreamTrack
       });
 
-      console.log('[Viewer] Created Agora track');
-
       // Publish to Agora
-      console.log('[Viewer] Publishing video track...');
       await rtcClient.client.publish([localVideoTrack]);
 
       // Update UI
       isViewerLive = true;
-      btnGoLiveMeToo.classList.add('active');
-      btnGoLiveMeToo.querySelector('.material-symbols-outlined').textContent = 'stop_circle';
-      btnGoLiveMeToo.querySelector('.btn-text').textContent = 'Stop Live';
-      btnGoLiveMeToo.title = '방송 종료';
+      btnJoinShare.classList.add('active');
+      btnJoinShare.querySelector('.material-symbols-outlined').textContent = 'stop_circle';
+      btnJoinShare.querySelector('.btn-text').textContent = msgs.btnStop;
+      btnJoinShare.title = msgs.titleStop;
 
       console.log('[Viewer] ✅ Broadcast started successfully');
-      showNotification('✅ 방송이 시작되었습니다!');
 
     } catch (error) {
-      console.error('[Viewer] Start broadcast error:', error);
-      
       // Clean up on error
       if (localVideoStream) {
         localVideoStream.getTracks().forEach(track => track.stop());
@@ -126,50 +147,49 @@ document.addEventListener('DOMContentLoaded', () => {
         localVideoTrack.close();
         localVideoTrack = null;
       }
-      
       throw error;
     }
   }
 
-  async function stopViewerBroadcast() {
+  async function stopViewerBroadcast(msgs) {
     console.log('[Viewer] Stopping viewer broadcast...');
 
     try {
       // Unpublish from Agora
-      if (window.liveManager && window.liveManager.rtcClient && localVideoTrack) {
-        const rtcClient = window.liveManager.rtcClient;
-        console.log('[Viewer] Unpublishing track...');
+      const rtcClient = getRTCClient();
+      if (rtcClient && localVideoTrack) {
         await rtcClient.client.unpublish([localVideoTrack]);
-        
-        // Close Agora track
         localVideoTrack.close();
         localVideoTrack = null;
       }
 
       // Stop local media stream
       if (localVideoStream) {
-        console.log('[Viewer] Stopping local stream...');
-        localVideoStream.getTracks().forEach(track => {
-          track.stop();
-          console.log('[Viewer] Stopped track:', track.kind);
-        });
+        localVideoStream.getTracks().forEach(track => track.stop());
         localVideoStream = null;
       }
 
       // Update UI
       isViewerLive = false;
-      btnGoLiveMeToo.classList.remove('active');
-      btnGoLiveMeToo.querySelector('.material-symbols-outlined').textContent = 'podcasts';
-      btnGoLiveMeToo.querySelector('.btn-text').textContent = 'Join & Go Live';
-      btnGoLiveMeToo.title = '나도 방송 참여하기';
+      btnJoinShare.classList.remove('active');
+      btnJoinShare.querySelector('.material-symbols-outlined').textContent = 'podcasts';
+      btnJoinShare.querySelector('.btn-text').textContent = msgs.btnStart;
+      btnJoinShare.title = msgs.titleStart;
 
       console.log('[Viewer] ⏹️ Broadcast stopped successfully');
-      showNotification('⏹️ 방송이 종료되었습니다');
-      
+      showNotification(msgs.stopped);
+
     } catch (error) {
       console.error('[Viewer] Stop broadcast error:', error);
       throw error;
     }
+  }
+
+  function getRTCClient() {
+    if (window.liveManager && window.liveManager.rtcClient) return window.liveManager.rtcClient;
+    if (window.rtcClient) return window.rtcClient;
+    if (window.AgoraRTCClient) return window.AgoraRTCClient;
+    return null;
   }
 
   function showNotification(message) {
@@ -184,26 +204,31 @@ document.addEventListener('DOMContentLoaded', () => {
       padding: 20px 40px;
       border-radius: 12px;
       font-size: 18px;
+      text-align: center;
       z-index: 99999;
-      animation: fadeInOut 2s forwards;
+      white-space: pre-line;
+      animation: fadeInOut 2.5s forwards;
     `;
     notification.textContent = message;
     document.body.appendChild(notification);
 
     setTimeout(() => {
       notification.remove();
-    }, 2000);
+    }, 2500);
   }
 
-  // Add animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-      20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    }
-  `;
-  document.head.appendChild(style);
+  // Animation Style
+  if (!document.getElementById('notify-anim-style')) {
+    const style = document.createElement('style');
+    style.id = 'notify-anim-style';
+    style.textContent = `
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+          15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+      `;
+    document.head.appendChild(style);
+  }
 });
