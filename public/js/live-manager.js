@@ -233,7 +233,15 @@ async function startBroadcasting() {
         console.log("Broadcasting started.");
     } catch (e) {
         console.error("Start broadcasting failed:", e);
-        alert("방송 시작 실패. 페이지를 새로고침 해주세요.");
+        // Localized Error Message
+        const savedLang = localStorage.getItem("studywithme_lang");
+        const navLang = navigator.language || 'en';
+        const browserLang = navLang.startsWith('ko') ? 'ko' : 'en';
+        const currentLang = savedLang || browserLang;
+        const msg = currentLang === 'ko'
+            ? "방송 시작 실패. 페이지를 새로고침 해주세요."
+            : "Failed to start broadcast. Please refresh the page.";
+        alert(msg);
     }
 }
 
