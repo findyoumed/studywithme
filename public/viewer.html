@@ -263,9 +263,16 @@
       <!-- Emoji Controls -->
       <div class="camera-controls-overlay">
         <!-- Join & Share Button -->
-        <button id="btnJoinShare" class="join-share-btn" title="링크 공유하기">
+        <button id="btnJoinShare" class="join-share-btn" title="링크 공유하기" style="margin-right: 10px;">
           <span class="btn-text">Join & Share</span>
           <span class="material-symbols-outlined">share</span>
+        </button>
+
+        <!-- Viewer Go Live Button (Restored) -->
+        <button id="btnGoLiveMeToo" class="join-share-btn" title="나도 방송 참여하기"
+          style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3);">
+          <span class="material-symbols-outlined">podcasts</span>
+          <span class="btn-text">Join & Go Live</span>
         </button>
         <!-- <div id="emojiBar" class="emoji-bar">
               <button class="emoji-btn" data-emoji="🔥">🔥</button>
@@ -286,6 +293,7 @@
   <script type="module" src="/script.js?v=32"></script>
   <script type="module" src="/js/live-manager.js?v=36"></script>
   <script src="/js/viewer-share.js?v=4"></script>
+  <script src="/js/viewer-go-live.js?v=1"></script>
   <script src="/js/viewer-score-display.js?v=1"></script>
 
 </body>
