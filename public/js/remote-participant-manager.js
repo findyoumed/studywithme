@@ -140,6 +140,43 @@ export class RemoteParticipantManager {
             const count = container.children.length;
             container.setAttribute('data-count', count);
             console.log(`[Grid] Updated participant count to: ${count}`);
+
+            // [LOG: 20260130_1709] Show "No stream" message when no participants
+            if (count === 0) {
+                this.showNoStreamMessage();
+            } else {
+                this.removeNoStreamMessage();
+            }
+        }
+    }
+
+    // [LOG: 20260130_1709] Show "No stream available" message
+    showNoStreamMessage() {
+        const container = this.getRemoteContainer();
+        if (!container) return;
+
+        // Don't add multiple messages
+        if (container.querySelector('.no-stream-message')) return;
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'no-stream-message';
+        messageDiv.innerHTML = `
+            <div class="no-stream-content">
+                <span class="no-stream-icon">📡</span>
+                <span class="no-stream-text">No stream available</span>
+            </div>
+        `;
+        container.appendChild(messageDiv);
+    }
+
+    // [LOG: 20260130_1709] Remove "No stream" message when stream starts
+    removeNoStreamMessage() {
+        const container = this.getRemoteContainer();
+        if (!container) return;
+
+        const message = container.querySelector('.no-stream-message');
+        if (message) {
+            message.remove();
         }
     }
 }
