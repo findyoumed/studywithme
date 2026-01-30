@@ -32,6 +32,8 @@ export class ScoreBroadcaster {
                 }
             }
 
+            // [USER REQUEST] Disable RTM Score Broadcast
+            /*
             // 3. Host: Send via RTM (Legacy/Backup for real-time overlays)
             if (!isViewer && rtmClient && channelName) {
                 try {
@@ -45,6 +47,8 @@ export class ScoreBroadcaster {
                     // RTM might fail if not connected, ignore
                 }
             }
+            */
+
 
         }, 1000);
     }

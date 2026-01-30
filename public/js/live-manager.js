@@ -6,7 +6,7 @@
 import { RemoteParticipantManager } from './remote-participant-manager.js?v=38';
 import { LiveUIManager } from './live-ui-manager.js?v=38';
 import { AgoraRTCClient } from './agora-rtc-client.js?v=38';
-import { AgoraRTMClient } from './agora-rtm-client.js?v=38';
+// import { AgoraRTMClient } from './agora-rtm-client.js?v=38';
 
 const APP_ID = "13c86a022ad94066b4b21e03735595ee";
 
@@ -62,7 +62,8 @@ async function init() {
 
     // Initialize Modules
     rtcClient = new AgoraRTCClient(APP_ID);
-    rtmClient = new AgoraRTMClient(APP_ID, myUID);
+    // rtmClient = new AgoraRTMClient(APP_ID, myUID);
+    rtmClient = { client: null }; // Dummy object to prevent crash in UI manager
     remoteParticipantManager = new RemoteParticipantManager(participantsMap);
 
     // Global Expose
