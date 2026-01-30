@@ -57,9 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const text = btnJoinShare.querySelector('.btn-text');
     const originalIcon = icon.textContent;
     const originalText = text.textContent;
-    // 우선순위: 1. 저장된 설정 2. 브라우저 언어
+    // 우선순위: 1. 저장된 설정 2. 브라우저 언어 (없으면 영어)
     const savedLang = localStorage.getItem("studywithme_lang");
-    const browserLang = navigator.language.startsWith('ko') ? 'ko' : 'en';
+    const navLang = navigator.language || 'en';
+    const browserLang = navLang.startsWith('ko') ? 'ko' : 'en';
     const currentLang = savedLang || browserLang;
     const isKo = currentLang === 'ko';
 
