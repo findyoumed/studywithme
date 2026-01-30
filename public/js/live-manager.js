@@ -123,9 +123,8 @@ async function setupSDKs(isViewer) {
         onUserLeft: (user) => remoteParticipantManager.removeParticipant(user)
     });
 
-    // [USER REQUEST] Disable RTM to silence console errors - Using HTTP Fallback only
-    /*
-    // Setup RTM (for both Host and Viewer to receive scores)
+    // [LOG: 20260130_1638] Re-enable RTM for background state messaging
+    // Setup RTM (for both Host and Viewer to receive scores and background state)
     const RTM_SDK = await waitForRTM();
     if (RTM_SDK) {
         const { rtmToken } = await fetchTokens("subscriber");
@@ -137,7 +136,6 @@ async function setupSDKs(isViewer) {
             refreshParticipants(); // Only host refreshes participants
         }
     }
-    */
 
 
     // Join RTC (Immediately upon load)
@@ -204,8 +202,17 @@ function handleRTMMessage(msg, publisher) {
                 window.updateViewerScore(data.value);
             }
         }
+        // [LOG: 20260130_1637] Handle host background/foreground messages
+        else if (data.type === 'host-background') {
+            console.log(`[RTM] Host went to background, showing overlay for ${publisher}`);
+            remoteParticipantManager.showAwayOverlay(publisher);
+        }
+        else if (data.type === 'host-foreground') {
+            console.log(`[RTM] Host returned to foreground, removing overlay for ${publisher}`);
+            remoteParticipantManager.removeAwayOverlay(publisher);
+        }
     } catch (e) {
-        // Not a JSON message or other error, ignore
+        console.warn("Error parsing RTM message:", e);
     }
 }
 
