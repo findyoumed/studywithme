@@ -227,13 +227,15 @@ async function startBroadcasting() {
     window.isLive = true;
 
     try {
-        // [LOG: 20260130_1454] Revert to direct track usage for better background stability on mobile
+        // [LOG: 20260130_1508] Re-introduce cloning for background persistence on mobile
+        // Browsers often mute the track attached to visible <video> when backgrounded.
+        // A cloned track can sometimes bypass this power-saving suspension.
         let videoTrack = null;
         if (window.cameraManager && typeof window.cameraManager.getVideoTrack === 'function') {
             const originalTrack = window.cameraManager.getVideoTrack();
             if (originalTrack) {
-                videoTrack = originalTrack;
-                console.log("[LiveManager] Using direct track for better background persistence");
+                videoTrack = originalTrack.clone();
+                console.log("[LiveManager] Cloned track for background broadcast protection");
             }
         }
 
@@ -244,6 +246,16 @@ async function startBroadcasting() {
         }
 
         await rtcClient.publish(videoTrack);
+
+        // [LOG: 20260130_1508] Set Media Session metadata to prevent mobile background sleep
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: 'Live Study Session',
+                artist: userNickname,
+                album: channelName
+            });
+            navigator.mediaSession.playbackState = 'playing';
+        }
 
         // Final insurance for video element playback
         const localVideo = document.getElementById('camera');

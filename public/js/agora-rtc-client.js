@@ -97,10 +97,27 @@ export class AgoraRTCClient {
     async unpublish() {
         try {
             if (this.localTracks.videoTrack) {
-                // [LOG: 20260130_1454] Keep the original focus camera running even after unpublish
+                // [LOG: 20260130_1508] Stop the media stream track to release camera hardware
+                const mediaTrack = this.localTracks.videoTrack.getMediaStreamTrack
+                    ? this.localTracks.videoTrack.getMediaStreamTrack()
+                    : null;
+
+                if (mediaTrack && typeof mediaTrack.stop === 'function') {
+                    mediaTrack.stop();
+                }
+
+                if (typeof this.localTracks.videoTrack.close === 'function') {
+                    this.localTracks.videoTrack.close();
+                }
                 this.localTracks.videoTrack = null;
             }
             await this.client.unpublish();
+
+            // Clear media session if supported
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'none';
+            }
+
             console.log("[RTC] Unpublished");
         } catch (e) {
             console.error("[RTC] Unpublish failed:", e);
