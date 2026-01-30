@@ -4,12 +4,17 @@
    Base Styles
    ========================================= */
 :root {
-  --bg-primary: #0f172a; /* Slate 900 */
-  --bg-secondary: #1e293b; /* Slate 800 */
-  --accent-primary: #818cf8; /* Indigo 400 */
-  --accent-hover: #6366f1; /* Indigo 500 */
+  --bg-primary: #0f172a;
+  /* Slate 900 */
+  --bg-secondary: #1e293b;
+  /* Slate 800 */
+  --accent-primary: #818cf8;
+  /* Indigo 400 */
+  --accent-hover: #6366f1;
+  /* Indigo 500 */
   --text-primary: #ffffff;
-  --text-secondary: #cbd5e1; /* Slate 300 */
+  --text-secondary: #cbd5e1;
+  /* Slate 300 */
   --glass-bg: rgba(15, 23, 42, 0.8);
   --border-color: rgba(255, 255, 255, 0.1);
 }
@@ -25,5 +30,25 @@ body {
   font-family: "Inter", sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
-  overflow: hidden;
+  /* [LOG: 20260130_1422] Allow scrolling by default, will be controlled by container on desktop */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Custom Scrollbar for better visibility on mobile */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }

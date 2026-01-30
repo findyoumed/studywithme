@@ -7,17 +7,19 @@
 .container {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    /* [LOG: 20260130_1422] Change to auto for scroll visibility */
+    height: auto;
+    min-height: 100vh;
     background: #000;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     transition: all 0.3s ease;
 }
 
 
 
 /* Mobile Adjustment */
-@media (max-width: 768px) {
-}
+@media (max-width: 768px) {}
 
 /* --- Split Mode (Default) --- */
 .container:not(.overlay-mode) {
@@ -31,7 +33,8 @@
     position: relative;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    /* [LOG: 20260130_1422] Allow panel content scroll if needed */
+    overflow-y: auto;
 }
 
 /* --- Full Live Mode (All Camera, No YouTube) --- */
@@ -65,11 +68,12 @@
     .container.overlay-mode .video-panel {
         display: none !important;
     }
+
     .container.overlay-mode .camera-panel {
         width: 100%;
         height: 100%;
         /* border-left: none;  <-- This is now handled in layout-camera if needed, but border is on camera-panel base */
-        border-left: none; 
+        border-left: none;
     }
 }
 
@@ -77,13 +81,16 @@
 .container.overlay-mode .next-video-bar {
     display: none !important;
 }
+
 .container.overlay-mode .next-video-bar .next-info,
 .container.overlay-mode .next-video-bar .ctrl-btn:not(.btn-icon-only) {
     display: none !important;
 }
+
 .container.overlay-mode .next-video-bar .settings-container {
     pointer-events: auto;
-    z-index: 1001; /* Above camera and other layers */
+    z-index: 1001;
+    /* Above camera and other layers */
 }
 
 /* Video Player Area */
@@ -109,7 +116,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: calc(100% - 40px); /* Leave room for YT progress bar at bottom */
+    height: calc(100% - 40px);
+    /* Leave room for YT progress bar at bottom */
     z-index: 5;
     cursor: pointer;
     background: transparent;
