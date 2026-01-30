@@ -68,24 +68,44 @@ export class RemoteParticipantManager {
         this.updateGridCount();
     }
 
-    // [LOG: 20260130_1518] Show "Mobile device busy" overlay when host unpublishes
+    // [LOG: 20260130_1531] Show "Mobile device busy" overlay when host unpublishes
     showAwayOverlay(uid) {
-        const remotePlayerContainer = document.getElementById(`user-${uid}`);
-        if (!remotePlayerContainer) return;
+        console.log(`[ParticipantManager] Attempting to show away overlay for user ${uid}`);
+
+        let remotePlayerContainer = document.getElementById(`user-${uid}`);
+
+        // If container doesn't exist, create it
+        if (!remotePlayerContainer) {
+            console.log(`[ParticipantManager] Container for user ${uid} doesn't exist, creating it`);
+            const container = this.getRemoteContainer();
+            if (!container) {
+                console.error(`[ParticipantManager] Remote video container not found!`);
+                return;
+            }
+
+            remotePlayerContainer = document.createElement("div");
+            remotePlayerContainer.id = `user-${uid}`;
+            remotePlayerContainer.className = "remote-video-player";
+            container.append(remotePlayerContainer);
+        }
 
         // Don't add multiple overlays
-        if (remotePlayerContainer.querySelector('.away-overlay')) return;
+        if (remotePlayerContainer.querySelector('.away-overlay')) {
+            console.log(`[ParticipantManager] Overlay already exists for user ${uid}`);
+            return;
+        }
 
         const overlay = document.createElement('div');
         overlay.className = 'away-overlay';
         overlay.innerHTML = `
             <div class="away-message">
                 <span class="away-icon">📱</span>
-                <span class="away-text">모바일 기기의 카메라는 백그라운드 방송을 지원하지 않습니다</span>
-                <span class="away-subtext">Mobile cameras do not support background streaming</span>
+                <span class="away-text">모바일 기기에서는 카메라의 백그라운드 사용을 지원하지 않습니다</span>
+                <span class="away-subtext">Mobile devices do not support background camera usage</span>
             </div>
         `;
         remotePlayerContainer.appendChild(overlay);
+        console.log(`[ParticipantManager] Away overlay added for user ${uid}`);
     }
 
     // [LOG: 20260130_1518] Remove "away" overlay when host returns
