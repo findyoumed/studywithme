@@ -135,6 +135,15 @@ async function setupSDKs(isViewer) {
     // Join RTC (Immediately upon load)
     const { rtcToken } = await fetchTokens("publisher");
     await rtcClient.join(channelName, rtcToken, myUID);
+
+    // [LOG: 20260130_1100] Ensure clean state: explicitly unpublish to clear stale server state
+    if (!isViewer) {
+        try {
+            await rtcClient.unpublish();
+        } catch (e) {
+            // Ignore error if already unpublished
+        }
+    }
 }
 
 async function waitForRTM() {
