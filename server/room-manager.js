@@ -1,6 +1,6 @@
 
 export class RoomManager {
-    constructor(maxParticipants = 6) {
+    constructor(maxParticipants = 50) {
         this.roomParticipants = new Map(); // { channelName: Set([uid]) }
         this.MAX_PARTICIPANTS_PER_ROOM = maxParticipants;
     }
@@ -30,11 +30,11 @@ export class RoomManager {
             }
         }
     }
-    
+
     isFull(channelName) {
         return this.getCount(channelName) >= this.MAX_PARTICIPANTS_PER_ROOM;
     }
-    
+
     isUserInRoom(channelName, uid) {
         const participants = this.roomParticipants.get(channelName);
         return participants && participants.has(uid);
