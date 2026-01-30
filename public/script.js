@@ -133,6 +133,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const cameraBody = document.getElementById('cameraBody');
     if (cameraBody) {
         cameraBody.addEventListener('click', (e) => {
+            // [LOG: 20260130_1357] Ignore events from buttons or interactive elements 
+            // to prevent accidental camera pause when clicking 'Go Live'
+            if (e.target.closest('button, a, .copy-btn, .live-btn-icon')) {
+                return;
+            }
+
             // Prevent bubbling to avoid any parent listeners
             e.stopPropagation();
 
