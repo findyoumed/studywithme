@@ -5,9 +5,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[Viewer] Initializing Join & Share button...');
-  
+
   const btnJoinShare = document.getElementById('btnJoinShare');
-  
+
   if (!btnJoinShare) {
     console.warn('[Viewer] Join & Share button not found');
     return;
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       // 현재 페이지 URL 복사
       const currentUrl = window.location.href;
-      
+
       // Clipboard API 사용
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(currentUrl);
@@ -51,18 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function showSuccess() {
     // 버튼 색상 변경 (초록색)
     btnJoinShare.classList.add('copied');
-    
+
     // 아이콘과 텍스트 변경
     const icon = btnJoinShare.querySelector('.material-symbols-outlined');
     const text = btnJoinShare.querySelector('.btn-text');
     const originalIcon = icon.textContent;
     const originalText = text.textContent;
-    
+
+    const isKo = navigator.language.startsWith('ko');
     icon.textContent = 'check_circle';
-    text.textContent = 'Copied!';
+    text.textContent = isKo ? '복사 완료!' : 'Copied!';
 
     // 알림 메시지
-    showNotification('✅ 링크가 복사되었습니다!\n친구들과 공유하세요 🎉');
+    const msg = isKo
+      ? '✅ 링크가 복사되었습니다!\n친구들과 공유하세요 🎉'
+      : '✅ Link copied!\nShare with your friends 🎉';
+    showNotification(msg);
 
     // 2초 후 원래대로
     setTimeout(() => {
@@ -79,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     textArea.style.left = '-9999px';
     document.body.appendChild(textArea);
     textArea.select();
-    
+
     try {
       document.execCommand('copy');
       console.log('[Viewer] ✅ Link copied (fallback)');
@@ -88,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('[Viewer] Fallback copy failed:', err);
       alert('링크 복사 실패. 수동으로 복사해주세요:\n' + text);
     }
-    
+
     document.body.removeChild(textArea);
   }
 
