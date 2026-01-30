@@ -143,3 +143,27 @@ node --check public/js/motion-manager.js public/js/player-controller.js public/j
 ```
 
 **결과:** ✅ Syntax OK
+
+---
+
+## [2026-01-30 13:05] 모바일 뷰어 레이아웃 수정
+
+**LOG_ID: 20260130_1305**
+목표: 모바일에서 화면 분할(가로) 문제 해결 및 버튼 가려짐 (Button cut-off) 해결
+변경 파일: 
+- `public/css/viewer-mode.css` (20줄 추가)
+- `public/viewer.html` (10줄 추가)
+
+**수행 작업:** 
+1. **화면 분할 수정:** 모바일 Portrait(세로) 환경에서는 비디오가 2개 이상일 때 가로가 아닌 **세로로 쌓이도록(Stacked)** grid 옵션 추가.
+2. **버튼 가려짐 수정:** 버튼을 감싸는 오버레이의 `bottom` 위치를 **80px**로 높여 모바일 하단 내비게이션 바에 가려지지 않도록 조정.
+3. **Safe Area 적용:** 아이폰 등 노치 디자인 기기를 위해 `env(safe-area-inset-bottom)` 여백 추가.
+
+**실행 방법:** 
+`git push` 후 모바일에서 `viewer.html` 페이지(모드: viewer) 접속하여 확인.
+
+**기대 결과:** 
+1. 비디오가 가로로 찌그러지지 않고 세로로 꽉 차서 보임.
+2. 하단 'Join & Share' 버튼이 모바일 브라우저 UI에 가려지지 않고 잘 보임.
+
+**결과:** ✅ 대기 중 (사용자 확인 필요)
