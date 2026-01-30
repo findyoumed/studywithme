@@ -81,8 +81,8 @@ export class RemoteParticipantManager {
         overlay.innerHTML = `
             <div class="away-message">
                 <span class="away-icon">📱</span>
-                <span class="away-text">모바일 기기가 다른 작업 중입니다</span>
-                <span class="away-subtext">Mobile device is busy with other tasks</span>
+                <span class="away-text">모바일 기기의 카메라는 백그라운드 방송을 지원하지 않습니다</span>
+                <span class="away-subtext">Mobile cameras do not support background streaming</span>
             </div>
         `;
         remotePlayerContainer.appendChild(overlay);
