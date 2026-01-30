@@ -62,17 +62,17 @@ export class AgoraRTCClient {
         try {
             console.log('[RTC] publish() called with videoTrack:', videoTrack);
             console.log('[RTC] videoTrack type:', typeof videoTrack);
-            
+
             // videoTrack이 null이거나 유효하지 않으면 새로 생성
             if (!videoTrack) {
                 console.log('[RTC] No video track provided, creating new camera track...');
                 this.localTracks.videoTrack = await this.createCameraTrack();
-            } 
+            }
             // Agora SDK track인지 확인 (trackMediaType 속성이 있으면 Agora track)
             else if (videoTrack.trackMediaType !== undefined) {
                 console.log('[RTC] Already an Agora SDK track, using directly');
                 this.localTracks.videoTrack = videoTrack;
-            } 
+            }
             // raw MediaStreamTrack인 경우
             else if (videoTrack.kind === 'video') {
                 console.log('[RTC] Creating custom video track from raw MediaStreamTrack');
@@ -97,7 +97,11 @@ export class AgoraRTCClient {
     async unpublish() {
         try {
             if (this.localTracks.videoTrack) {
-                this.localTracks.videoTrack.close();
+                // [LOG: 20260130_1406] Only close if it's an Agora-created track
+                // If it's a shared MediaStreamTrack, let CameraManager handle it.
+                if (typeof this.localTracks.videoTrack.close === 'function') {
+                    this.localTracks.videoTrack.close();
+                }
                 this.localTracks.videoTrack = null;
             }
             await this.client.unpublish();

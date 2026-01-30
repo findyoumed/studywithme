@@ -222,18 +222,27 @@ async function toggleLive() {
 async function startBroadcasting() {
     if (isLive) return;
     try {
-        // [Simple Logic] Just create and publish
-        let videoTrack = await rtcClient.createCameraTrack();
+        // [LOG: 20260130_1406] Use existing camera track to avoid hardware conflict on mobile
+        let videoTrack = null;
+        if (window.cameraManager && typeof window.cameraManager.getVideoTrack === 'function') {
+            videoTrack = window.cameraManager.getVideoTrack();
+            console.log("[LiveManager] Syncing existing focus camera for broadcast");
+        }
+
+        // If no focus camera active, then create a new one
+        if (!videoTrack) {
+            console.log("[LiveManager] No focus camera, creating new one");
+            videoTrack = await rtcClient.createCameraTrack();
+        }
+
         await rtcClient.publish(videoTrack);
 
         isLive = true;
 
-        // [LOG: 20260130_1405] Ensure local camera keeps playing after Agora publish
-        // Mobile browsers might pause the <video> element when new media tracks are requested.
+        // Final insurance for video element playback
         const localVideo = document.getElementById('camera');
         if (localVideo && localVideo.paused) {
-            console.log("[LiveManager] Local camera paused during publish, resuming...");
-            localVideo.play().catch(err => console.warn("[LiveManager] Auto-resume failed:", err));
+            localVideo.play().catch(() => { });
         }
         window.isLive = true;
         liveUIManager.updateButtonsUI(isLive);
