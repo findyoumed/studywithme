@@ -227,6 +227,14 @@ async function startBroadcasting() {
         await rtcClient.publish(videoTrack);
 
         isLive = true;
+
+        // [LOG: 20260130_1405] Ensure local camera keeps playing after Agora publish
+        // Mobile browsers might pause the <video> element when new media tracks are requested.
+        const localVideo = document.getElementById('camera');
+        if (localVideo && localVideo.paused) {
+            console.log("[LiveManager] Local camera paused during publish, resuming...");
+            localVideo.play().catch(err => console.warn("[LiveManager] Auto-resume failed:", err));
+        }
         window.isLive = true;
         liveUIManager.updateButtonsUI(isLive);
         startScoreBroadcasting();
