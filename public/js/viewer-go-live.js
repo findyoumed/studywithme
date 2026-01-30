@@ -128,6 +128,23 @@ document.addEventListener('DOMContentLoaded', () => {
       // Publish to Agora
       await rtcClient.client.publish([localVideoTrack]);
 
+      // [LOG: 20260130_1350] Fix mobile camera freeze by playing track locally
+      const container = document.getElementById("remoteVideoContainer");
+      if (container) {
+        let localPlayer = document.getElementById('local-user-viewer');
+        if (!localPlayer) {
+          localPlayer = document.createElement('div');
+          localPlayer.id = 'local-user-viewer';
+          localPlayer.className = 'remote-video-player local-preview';
+          container.appendChild(localPlayer);
+        }
+        localVideoTrack.play(localPlayer, { fit: "cover", mirror: true });
+
+        // Update grid count for CSS
+        const count = container.children.length;
+        container.setAttribute('data-count', count);
+      }
+
       // Update UI
       isViewerLive = true;
       btnJoinShare.classList.add('active');
@@ -159,8 +176,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const rtcClient = getRTCClient();
       if (rtcClient && localVideoTrack) {
         await rtcClient.client.unpublish([localVideoTrack]);
+        localVideoTrack.stop(); // [LOG: 20260130_1350] Stop playback
         localVideoTrack.close();
         localVideoTrack = null;
+
+        // Remove local preview
+        const localPlayer = document.getElementById('local-user-viewer');
+        if (localPlayer) localPlayer.remove();
+
+        const container = document.getElementById("remoteVideoContainer");
+        if (container) {
+          const count = container.children.length;
+          container.setAttribute('data-count', count);
+        }
       }
 
       // Stop local media stream
