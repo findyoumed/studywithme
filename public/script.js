@@ -128,14 +128,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 4. Expose Global Functions for UI Bindings (onClick=...)
     exposeGlobals(playerController, playlistManager, ui, storage, cameraManager, motionManager, exerciseTimer);
 
-    // Add click listener to specific camera elements for pause/resume
-    // This avoids conflicts with control overlays and other UI elements.
+    // [LOG: 20260130_1400] Unified camera click listener on cameraBody only.
+    // This avoids conflicts where individual targets (video, canvas) triggered pause
+    // even when clicking control buttons.
     const cameraBody = document.getElementById('cameraBody');
     if (cameraBody) {
         cameraBody.addEventListener('click', (e) => {
-            // [LOG: 20260130_1357] Ignore events from buttons or interactive elements 
-            // to prevent accidental camera pause when clicking 'Go Live'
-            if (e.target.closest('button, a, .copy-btn, .live-btn-icon')) {
+            // [LOG: 20260130_1400] STRICT CHECK: Ignore any interaction intended for buttons or controls
+            if (e.target.closest('button, a, .copy-btn, .live-btn-icon, .live-controls, .camera-header')) {
                 return;
             }
 
@@ -147,21 +147,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     }
-
-    const cameraTargets = ['camera', 'output_canvas', 'placeholder'];
-    cameraTargets.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('click', (e) => {
-                // Prevent bubbling to avoid any parent listeners
-                e.stopPropagation();
-
-                if (cameraManager) {
-                    cameraManager.togglePause();
-                }
-            });
-        }
-    });
 
     // 5 & 6. Camera & Motion Detection (Parallelized for immediate scoring)
     const savedCameraFlip = storage.get(STORAGE_KEYS.CAMERA_FLIP, "true") === "true";
