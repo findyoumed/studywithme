@@ -137,11 +137,27 @@ async function setupSDKs(isViewer) {
     await rtcClient.join(channelName, rtcToken, myUID);
 
     // [LOG: 20260130_1100] Ensure clean state: explicitly unpublish to clear stale server state
+    // [LOG: 20260130_1100] Ensure clean state: explicitly unpublish to clear stale server state
     if (!isViewer) {
         try {
             await rtcClient.unpublish();
         } catch (e) {
             // Ignore error if already unpublished
+        }
+    }
+
+    // [LOG: 20260130_1116] Auto-start broadcast if viewers are present
+    if (!isViewer) {
+        try {
+            const response = await fetch(`/api/room-status?channelName=${channelName}`);
+            const data = await response.json();
+            // Count includes self, so > 1 means at least one other person (viewer)
+            if (data.currentParticipants > 1) {
+                console.log(`[LiveManager] Viewers detected (${data.currentParticipants}), auto-starting broadcast...`);
+                await startBroadcasting();
+            }
+        } catch (e) {
+            console.warn("[LiveManager] Failed to check room status for auto-start:", e);
         }
     }
 }
