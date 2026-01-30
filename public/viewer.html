@@ -75,6 +75,13 @@
       z-index: 20000 !important;
     }
 
+    @media (max-width: 768px) {
+      .camera-controls-overlay {
+        bottom: 80px;
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    }
+
     .emoji-bar {
       pointer-events: auto;
       background: rgba(0, 0, 0, 0.5);
@@ -262,10 +269,17 @@
 
       <!-- Emoji Controls -->
       <div class="camera-controls-overlay">
-        <!-- Join & Share Button (Integrated) -->
-        <button id="btnJoinShare" class="join-share-btn" title="방송 참여 및 공유하기">
-          <span class="material-symbols-outlined">podcasts</span>
+        <!-- Join & Share Button -->
+        <button id="btnJoinShare" class="join-share-btn" title="링크 공유하기" style="margin-right: 10px;">
           <span class="btn-text">Join & Share</span>
+          <span class="material-symbols-outlined">share</span>
+        </button>
+
+        <!-- Viewer Go Live Button (Restored) -->
+        <button id="btnGoLiveMeToo" class="join-share-btn" title="나도 방송 참여하기"
+          style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3);">
+          <span class="material-symbols-outlined">podcasts</span>
+          <span class="btn-text">Join & Go Live</span>
         </button>
         <!-- <div id="emojiBar" class="emoji-bar">
               <button class="emoji-btn" data-emoji="🔥">🔥</button>

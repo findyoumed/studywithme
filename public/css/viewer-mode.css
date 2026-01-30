@@ -6,8 +6,10 @@ body.viewer-mode .camera-controls-overlay .live-btn-icon,
 body.viewer-mode #participantSidebar,
 body.viewer-mode #controlsContainer,
 body.viewer-mode .video-panel,
-body.viewer-mode #localVideoPreview, /* Hide local preview slot since camera is off */
-body.viewer-mode #placeholder,        /* Hide "Connecting..." text */
+body.viewer-mode #localVideoPreview,
+/* Hide local preview slot since camera is off */
+body.viewer-mode #placeholder,
+/* Hide "Connecting..." text */
 body.viewer-mode .reaction-container {
     display: none !important;
 }
@@ -16,22 +18,27 @@ body.viewer-mode .reaction-container {
 body.viewer-mode .camera-controls-overlay {
     /* We hid individual children, but need the container to align the emoji bar */
     display: flex !important;
-    justify-content: center; /* Center the emojis */
-    pointer-events: none; /* Let clicks pass through empty space */
-    top: auto; /* Move to bottom? Or keep top? User said "viewer side", usually bottom or unobtrusive */
+    justify-content: center;
+    /* Center the emojis */
+    pointer-events: none;
+    /* Let clicks pass through empty space */
+    top: auto;
+    /* Move to bottom? Or keep top? User said "viewer side", usually bottom or unobtrusive */
     bottom: 30px;
 }
 
 body.viewer-mode .camera-controls-overlay .emoji-bar {
     display: flex !important;
-    pointer-events: auto; /* Re-enable clicks for buttons */
-    background: rgba(0,0,0,0.5);
+    pointer-events: auto;
+    /* Re-enable clicks for buttons */
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 20px;
     padding: 5px 10px;
 }
 
 /* Zero out margins/paddings for full bleed */
-body.viewer-mode, body.viewer-mode html {
+body.viewer-mode,
+body.viewer-mode html {
     margin: 0;
     padding: 0;
     width: 100%;
@@ -89,7 +96,7 @@ body.viewer-mode .remote-video-label {
 body.viewer-mode .remote-video-player video {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important; 
+    object-fit: cover !important;
     position: absolute;
     top: 0;
     left: 0;
@@ -100,4 +107,26 @@ body.viewer-mode .remote-video-player video {
 /* Box sizing reset for viewer */
 body.viewer-mode * {
     box-sizing: border-box !important;
+}
+
+/* [LOG: 20260130_1305] Mobile UI Fixes */
+@media (max-width: 768px) {
+
+    /* 1. Lift button to avoid mobile browser bars */
+    body.viewer-mode .camera-controls-overlay {
+        bottom: 80px !important;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* 2. Stack videos vertically on portrait mobile instead of splitting horizontally */
+    body.viewer-mode .remote-videos-grid[data-count="2"] {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: 1fr 1fr !important;
+    }
+
+    body.viewer-mode .remote-videos-grid[data-count="3"],
+    body.viewer-mode .remote-videos-grid[data-count="4"] {
+        grid-template-columns: 1fr !important;
+        grid-template-rows: repeat(auto-fit, 1fr) !important;
+    }
 }
