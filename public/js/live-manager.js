@@ -123,6 +123,8 @@ async function setupSDKs(isViewer) {
         onUserLeft: (user) => remoteParticipantManager.removeParticipant(user)
     });
 
+    // [USER REQUEST] Disable RTM to silence console errors - Using HTTP Fallback only
+    /*
     // [LOG: 20260130_1638] Re-enable RTM for background state messaging
     // Setup RTM (for both Host and Viewer to receive scores and background state)
     const RTM_SDK = await waitForRTM();
@@ -136,6 +138,7 @@ async function setupSDKs(isViewer) {
             refreshParticipants(); // Only host refreshes participants
         }
     }
+    */
 
 
     // Join RTC (Immediately upon load)

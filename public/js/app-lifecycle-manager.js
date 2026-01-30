@@ -31,19 +31,11 @@ export class AppLifecycleManager {
 
         const isLive = window.isLive || (window.liveManager && typeof window.liveManager.isLive === 'function' && window.liveManager.isLive());
 
-        // [LOG: 20260130_1635] SAVE BATTERY & DATA: Unpublish when going to background
+        // [LOG: 20260130_1641] SAVE BATTERY & DATA: Unpublish when going to background
         if (isLive && window.rtcClient) {
             this.wasLiveBeforeBackground = true;
             window.rtcClient.unpublish().then(() => {
                 console.log("Battery Saver: Unpublished broadcast (will auto-resume on foreground)");
-
-                // [LOG: 20260130_1635] Send RTM message to viewers about background state
-                if (window.rtmClient) {
-                    window.rtmClient.sendChannelMessage(JSON.stringify({
-                        type: 'host-background',
-                        timestamp: Date.now()
-                    })).catch(e => console.warn("Could not send RTM background message:", e));
-                }
             }).catch(e => {
                 console.warn("Could not unpublish:", e);
             });
@@ -95,7 +87,7 @@ export class AppLifecycleManager {
     async handleForeground() {
         console.log("App moved to foreground. Restarting camera...");
 
-        // [LOG: 20260130_1635] AUTO-RESUME: Re-publish broadcast if was live before
+        // [LOG: 20260130_1641] AUTO-RESUME: Re-publish broadcast if was live before
         if (this.wasLiveBeforeBackground && window.rtcClient && window.cameraManager) {
             try {
                 const videoTrack = window.cameraManager.getVideoTrack();
@@ -103,14 +95,6 @@ export class AppLifecycleManager {
                     const clonedTrack = videoTrack.clone();
                     await window.rtcClient.publish(clonedTrack);
                     console.log("Auto-resumed: Broadcast re-published after foreground return");
-
-                    // [LOG: 20260130_1635] Send RTM message to viewers about foreground return
-                    if (window.rtmClient) {
-                        window.rtmClient.sendChannelMessage(JSON.stringify({
-                            type: 'host-foreground',
-                            timestamp: Date.now()
-                        })).catch(e => console.warn("Could not send RTM foreground message:", e));
-                    }
                 }
             } catch (e) {
                 console.warn("Could not auto-resume broadcast:", e);
