@@ -84,6 +84,18 @@ async function init() {
 
     if (urlParams.get('mode') === 'viewer') {
         document.body.classList.add('viewer-mode');
+    } else {
+        // [LOG: 20260130_1046] Reset score on host load
+        const roomId = channelName;
+        try {
+            await fetch(`/api/room/${roomId}/score`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ score: 0 })
+            });
+        } catch (e) {
+            // Silent fail
+        }
     }
 
     await setupSDKs(urlParams.get('mode') === 'viewer');
@@ -100,23 +112,23 @@ async function setupSDKs(isViewer) {
             console.log(`[LiveManager] User unpublished: ${user.uid}`);
             remoteParticipantManager.removeParticipant(user);
         },
-        onUserJoined: (user) => { 
+        onUserJoined: (user) => {
             console.log(`[LiveManager] User joined: ${user.uid}`);
-            if (user.hasVideo) remoteParticipantManager.addParticipant(user); 
+            if (user.hasVideo) remoteParticipantManager.addParticipant(user);
         },
         onUserLeft: (user) => remoteParticipantManager.removeParticipant(user)
     });
 
-    // Setup RTM
-    if (!isViewer) {
-        const RTM_SDK = await waitForRTM();
-        if (RTM_SDK) {
-            const { rtmToken } = await fetchTokens("subscriber");
-            await rtmClient.init(RTM_SDK.RTM, rtmToken, userNickname, channelName, {
-                onPresence: handlePresenceEvent,
-                onMessage: handleRTMMessage
-            });
-            refreshParticipants();
+    // Setup RTM (for both Host and Viewer to receive scores)
+    const RTM_SDK = await waitForRTM();
+    if (RTM_SDK) {
+        const { rtmToken } = await fetchTokens("subscriber");
+        await rtmClient.init(RTM_SDK.RTM, rtmToken, userNickname, channelName, {
+            onPresence: handlePresenceEvent,
+            onMessage: handleRTMMessage
+        });
+        if (!isViewer) {
+            refreshParticipants(); // Only host refreshes participants
         }
     }
 
@@ -145,7 +157,24 @@ function handlePresenceEvent(e) {
     }
 }
 
-function handleRTMMessage(msg, publisher) {}
+function handleRTMMessage(msg, publisher) {
+    try {
+        const text = msg.messageType === 'TEXT' ? msg.text : msg; // Handle both types
+        const data = JSON.parse(text);
+
+        if (data.type === 'SCORE') {
+            const uid = publisher; // The UID of the sender
+            remoteParticipantManager.updateScore(uid, data.value);
+
+            // [LOG: 20260130_1025] Update viewer score display
+            if (window.updateViewerScore) {
+                window.updateViewerScore(data.value);
+            }
+        }
+    } catch (e) {
+        // Not a JSON message or other error, ignore
+    }
+}
 
 async function refreshParticipants() {
     const users = await rtmClient.getOnlineUsers(channelName);
@@ -196,12 +225,27 @@ async function stopBroadcasting() {
 function startScoreBroadcasting() {
     if (window.scoreBroadcastInterval) return;
     window.scoreBroadcastInterval = setInterval(async () => {
-        if (rtmClient.connected && window.motionManager) {
+        if (window.motionManager) {
             const score = window.motionManager.getScore();
-            const payload = JSON.stringify({ type: 'SCORE', value: score });
-            try { await rtmClient.publish(channelName, payload); } catch (e) {}
+
+            // [LOG: 20260130_1031] HTTP API fallback for score sharing
+            try {
+                await fetch(`/api/room/${channelName}/score`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ score })
+                });
+            } catch (e) {
+                // Silent fail - not critical
+            }
+
+            // Try RTM if available (backward compatibility)
+            if (rtmClient?.connected) {
+                const payload = JSON.stringify({ type: 'SCORE', value: score });
+                try { await rtmClient.publish(channelName, payload); } catch (e) { }
+            }
         }
-    }, 1000);
+    }, 2000); // Broadcast every 2 seconds
 }
 
 function stopScoreBroadcasting() {
@@ -224,5 +268,5 @@ window.addEventListener('beforeunload', async () => {
             body: JSON.stringify({ channelName, uid: myUID }),
             keepalive: true
         });
-    } catch(e) {}
+    } catch (e) { }
 });

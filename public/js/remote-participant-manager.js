@@ -32,12 +32,28 @@ export class RemoteParticipantManager {
         }
 
         // Add nickname label if it doesn't exist
-        if (!remotePlayerContainer.querySelector('.remote-video-label')) {
-            const nickname = this.participantsMap.get(user.uid.toString()) || "Anonymous";
-            const label = document.createElement('div');
-            label.className = 'remote-video-label';
-            label.textContent = nickname;
-            remotePlayerContainer.appendChild(label);
+        // Combine nickname and score into a footer overlays
+        // [LOG: 20260130_1041] Hide in viewer mode
+        const isViewer = new URLSearchParams(window.location.search).get('mode') === 'viewer';
+        if (!isViewer && !remotePlayerContainer.querySelector('.remote-info-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.className = 'remote-info-overlay';
+
+            // Nickname
+            const nickname = this.participantsMap.get(user.uid.toString()) || "User " + user.uid.toString().slice(-4);
+            const nameEl = document.createElement('span');
+            nameEl.className = 'remote-name';
+            nameEl.textContent = nickname;
+
+            // Score Badge
+            const scoreEl = document.createElement('span');
+            scoreEl.className = 'remote-score';
+            scoreEl.id = `score-${user.uid}`;
+            scoreEl.innerHTML = '🔥 0';
+
+            overlay.appendChild(nameEl);
+            overlay.appendChild(scoreEl);
+            remotePlayerContainer.appendChild(overlay);
         }
 
         // Play the video track if it exists
@@ -47,6 +63,14 @@ export class RemoteParticipantManager {
         }
 
         this.updateGridCount();
+    }
+
+    updateScore(uid, score) {
+        const scoreEl = document.getElementById(`score-${uid}`);
+        if (scoreEl) {
+            scoreEl.innerHTML = `🔥 ${score}`;
+            // Simple pop animation could be added here via CSS class
+        }
     }
 
     removeParticipant(user) {

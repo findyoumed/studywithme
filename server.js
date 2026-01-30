@@ -22,10 +22,10 @@ app.use(cors());
 
 // Serve viewer.html if mode=viewer is present
 app.use((req, res, next) => {
-    if (req.query.mode === 'viewer' && req.path === '/') {
-        return res.sendFile(join(__dirname, "public", "viewer.html"));
-    }
-    next();
+  if (req.query.mode === 'viewer' && req.path === '/') {
+    return res.sendFile(join(__dirname, "public", "viewer.html"));
+  }
+  next();
 });
 
 app.use(express.json());
@@ -73,7 +73,7 @@ app.get("/api/get-api-key", (req, res) => {
 // API endpoint to log 404 errors
 app.post("/api/report-404", express.json(), (req, res) => {
   const { url, pathname, referer, userAgent, timestamp, language } = req.body;
-  
+
   const logEntry = `[${timestamp}] 404 Error\n` +
     `  URL: ${url}\n` +
     `  Path: ${pathname}\n` +
@@ -81,14 +81,14 @@ app.post("/api/report-404", express.json(), (req, res) => {
     `  Language: ${language}\n` +
     `  User-Agent: ${userAgent}\n` +
     `  ---\n`;
-  
+
   try {
     appendFileSync(join(__dirname, "404-errors.log"), logEntry);
     console.log(`📝 404 Error logged: ${pathname}`);
   } catch (e) {
     console.error('Failed to write 404 log:', e);
   }
-  
+
   res.json({ success: true });
 });
 
@@ -100,27 +100,55 @@ app.post("/api/report-404", express.json(), (req, res) => {
 // API: 참여자 퇴장 알림
 app.post("/api/participant-left", express.json(), (req, res) => {
   const { channelName, uid } = req.body;
-  
+
   if (!channelName || !uid) {
     return res.status(400).json({ error: "channelName and uid required" });
   }
-  
+
   roomManager.removeParticipant(channelName, Number(uid));
   res.json({ success: true });
+});
+
+// [LOG: 20260130_1031] Room score storage (in-memory)
+const roomScores = new Map();
+
+// [LOG: 20260130_1031] API: Host updates score
+app.post("/api/room/:roomId/score", (req, res) => {
+  const { roomId } = req.params;
+  const { score } = req.body;
+
+  if (typeof score !== 'number') {
+    return res.status(400).json({ error: 'Invalid score' });
+  }
+
+  roomScores.set(roomId, { score, timestamp: Date.now() });
+  res.json({ success: true });
+});
+
+// [LOG: 20260130_1031] API: Viewer gets score
+app.get("/api/room/:roomId/score", (req, res) => {
+  const { roomId } = req.params;
+  const data = roomScores.get(roomId);
+
+  if (!data) {
+    return res.json({ score: 0 });
+  }
+
+  res.json({ score: data.score });
 });
 
 // API: 현재 방 상태 조회
 app.get("/api/room-status", (req, res) => {
   const { channelName } = req.query;
-  
+
   if (!channelName) {
     return res.status(400).json({ error: "channelName required" });
   }
-  
-  
+
+
   const count = roomManager.getCount(channelName);
   const isFull = roomManager.isFull(channelName);
-  
+
   res.json({
     channelName,
     currentParticipants: count,
@@ -166,7 +194,7 @@ app.get("*", (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 StudyWithMe server running at http://studywithme.co:${PORT}`);
+  console.log(`🚀 StudyWithMe server running at http://localhost:${PORT}`);
   console.log(`📁 Serving files from: ${__dirname}`);
   if (process.env.YOUTUBE_API_KEY) {
     console.log("✅ YouTube API key loaded from .env");
