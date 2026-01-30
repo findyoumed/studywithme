@@ -1,243 +1,213 @@
 ﻿<!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StudyWithMe - Live Study Together</title>
 
-    <!-- Meta Tags (Optimized) -->
-    <meta name="description" content="AI 기반 학습 코치. 유튜브 스터디 영상을 보며 카메라로 실시간 집중도 피드백과 SCORE를 기록해보세요." />
-    <meta name="keywords" content="스터디, 공부, 학습, AI 학습, 집중 코칭, 비디오 스터디, Study With Me, AI study" />
-    <meta name="author" content="StudyWithMe" />
-    <meta name="theme-color" content="#0f172a" />
-    
-    <!-- Scripts & SEO -->
-    <script src="/js/seo-loader.js?v=35" defer></script>
-    <script src="/js/analytics.js?v=30"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyWithMe - Live Study Together</title>
 
-    <!-- AI & GEO -->
-    <link rel="help" href="/llms.txt" title="AI Context" />
+  <!-- Meta Tags (Optimized) -->
+  <meta name="description" content="AI 기반 학습 코치. 유튜브 스터디 영상을 보며 카메라로 실시간 집중도 피드백과 SCORE를 기록해보세요." />
+  <meta name="keywords" content="스터디, 공부, 학습, AI 학습, 집중 코칭, 비디오 스터디, Study With Me, AI study" />
+  <meta name="author" content="StudyWithMe" />
+  <meta name="theme-color" content="#0f172a" />
 
+  <!-- Scripts & SEO -->
+  <script src="/js/seo-loader.js?v=35" defer></script>
+  <script src="/js/analytics.js?v=30"></script>
 
-
-    <!-- JSON-LD Structured Data (GEO) -->
+  <!-- AI & GEO -->
+  <link rel="help" href="/llms.txt" title="AI Context" />
 
 
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="icon-192.png" />
 
-    <!-- Fonts & Icons -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet"
-    />
+  <!-- JSON-LD Structured Data (GEO) -->
 
-    <!-- Core Design System (Direct Links for Vercel) -->
-    <link rel="stylesheet" href="/css/base.css?v=35" />
-    <link rel="stylesheet" href="/css/layout.css?v=35" />
-    <link rel="stylesheet" href="/css/controls.css?v=35" />
-    <link rel="stylesheet" href="/css/components.nextbar.css?v=35" />
-    <link rel="stylesheet" href="/css/components.overlays.css?v=35" />
-    <link rel="stylesheet" href="/css/live-stream.css?v=35" />
-    <link rel="stylesheet" href="/css/live-components.css?v=35" />
-    <link rel="stylesheet" href="/css/intro-modal.css?v=35" />
-    <link rel="stylesheet" href="/css/modals_playlist_base.css?v=35" />
-    <link rel="stylesheet" href="/css/modals_about.css?v=35" />
-    <link rel="stylesheet" href="/css/playlist_items.css?v=35" />
-    <link rel="stylesheet" href="/css/branding.css?v=35" />
-    <link rel="stylesheet" href="/css/components.error.css?v=35" />
-    <link rel="stylesheet" href="/css/components.misc.css?v=35" />
-    <link rel="stylesheet" href="/css/components.notifications.css?v=35" />
-    <link rel="stylesheet" href="/css/mobile.css?v=35" />
-    <link rel="stylesheet" href="/css/mobile-layout.css?v=35" />
-    <link rel="stylesheet" href="/css/mobile-controls.css?v=35" />
-    <link rel="stylesheet" href="/css/mobile-settings.css?v=35" />
-    <link rel="stylesheet" href="/css/modals_pmf.css?v=35" />
-    <link rel="stylesheet" href="/css/viewer-mode.css?v=35" />
 
-    <link rel="stylesheet" href="/css/search_ui.css?v=35" />
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
 
-    <style>
-      /* --- PRO-GRADE LAYOUT FAILSAFE REMOVED --- */
-      /* Styles are now fully managed by public/css/layout.css */
-      :root {
-        --bg-primary: #0f172a;
-        --text-primary: #ffffff;
-        --accent-primary: #818cf8;
-      }
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block" rel="stylesheet" />
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+  <!-- Core Design System (Direct Links for Vercel) -->
+  <link rel="stylesheet" href="/css/base.css?v=35" />
+  <link rel="stylesheet" href="/css/layout.css?v=35" />
+  <link rel="stylesheet" href="/css/controls.css?v=35" />
+  <link rel="stylesheet" href="/css/components.nextbar.css?v=35" />
+  <link rel="stylesheet" href="/css/components.overlays.css?v=35" />
+  <link rel="stylesheet" href="/css/live-stream.css?v=35" />
+  <link rel="stylesheet" href="/css/live-components.css?v=35" />
+  <link rel="stylesheet" href="/css/intro-modal.css?v=35" />
+  <link rel="stylesheet" href="/css/modals_playlist_base.css?v=35" />
+  <link rel="stylesheet" href="/css/modals_about.css?v=35" />
+  <link rel="stylesheet" href="/css/playlist_items.css?v=35" />
+  <link rel="stylesheet" href="/css/branding.css?v=35" />
+  <link rel="stylesheet" href="/css/components.error.css?v=35" />
+  <link rel="stylesheet" href="/css/components.misc.css?v=35" />
+  <link rel="stylesheet" href="/css/components.notifications.css?v=35" />
+  <link rel="stylesheet" href="/css/mobile.css?v=35" />
+  <link rel="stylesheet" href="/css/mobile-layout.css?v=35" />
+  <link rel="stylesheet" href="/css/mobile-controls.css?v=35" />
+  <link rel="stylesheet" href="/css/mobile-settings.css?v=35" />
+  <link rel="stylesheet" href="/css/modals_pmf.css?v=35" />
+  <link rel="stylesheet" href="/css/viewer-mode.css?v=35" />
 
-      body {
-        font-family: "Inter", sans-serif, system-ui;
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        overflow: hidden;
-      }
+  <link rel="stylesheet" href="/css/search_ui.css?v=35" />
 
-      body:not(.viewer-mode):not(.is-live) .remote-videos-grid {
-        display: none !important;
-      }
-    </style>
+  <style>
+    /* --- PRO-GRADE LAYOUT FAILSAFE REMOVED --- */
+    /* Styles are now fully managed by public/css/layout.css */
+    :root {
+      --bg-primary: #0f172a;
+      --text-primary: #ffffff;
+      --accent-primary: #818cf8;
+    }
 
-    <!-- Agora SDK -->
-    <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
-    <script src="/js/agora-rtm-2.2.0.js"></script>
-  </head>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  <body>
-    <div class="container">
-      <!-- Top Left Controls (Score & Settings) -->
-      <div id="topControlsContainer" class="top-left-controls"></div>
+    body {
+      font-family: "Inter", sans-serif, system-ui;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow: hidden;
+    }
 
-      <!-- Participant List Sidebar -->
-      <div id="participantSidebar" class="participant-sidebar"></div>
+    body:not(.viewer-mode):not(.is-live) .remote-videos-grid {
+      display: none !important;
+    }
+  </style>
 
-      <!-- Video Panel -->
-      <div class="panel video-panel">
-        <div class="player-wrapper">
-          <div id="player"></div>
+  <!-- Agora SDK -->
+  <script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+  <script src="/js/agora-rtm-2.2.0.js"></script>
+</head>
 
-          <!-- Desktop Speed Controls (0.5x removed) -->
-          <!-- <div class="speed-overlay">
+<body>
+  <div class="container">
+    <!-- Top Left Controls (Score & Settings) -->
+    <div id="topControlsContainer" class="top-left-controls"></div>
+
+    <!-- Participant List Sidebar -->
+    <div id="participantSidebar" class="participant-sidebar"></div>
+
+    <!-- Video Panel -->
+    <div class="panel video-panel">
+      <div class="player-wrapper">
+        <div id="player"></div>
+
+        <!-- Desktop Speed Controls (0.5x removed) -->
+        <!-- <div class="speed-overlay">
             <button class="speed-btn" data-speed="0.75">0.75x</button>
             <button class="speed-btn active" data-speed="1">1x</button>
             <button class="speed-btn" data-speed="1.25">1.25x</button>
             <button class="speed-btn" data-speed="1.5">1.5x</button>
             <button class="speed-btn" data-speed="2">2x</button>
           </div> -->
-        </div>
-
-        <!-- Next Video Bar -->
-        <div class="next-video-bar">
-          <button
-            class="ctrl-btn btn-icon-only"
-            onclick="playNext()"
-            data-i18n-title="next"
-          >
-            <span class="material-symbols-outlined">skip_next</span>
-          </button>
-          <button class="next-info" onclick="playNext()" data-i18n-title="next">
-            <span class="next-label" data-i18n="next_label">Next : </span>
-            <span class="next-title" id="nextTitle">-</span>
-          </button>
-
-          <div class="settings-container">
-            <button class="ctrl-btn btn-icon-only" onclick="toggleSpeedMenu()">
-              <span class="material-symbols-outlined">settings</span>
-            </button>
-          </div>
-        </div>
       </div>
 
-      <!-- Camera Panel -->
-      <div class="panel camera-panel">
-        <div
-          class="camera-body"
-          id="cameraBody"
-          onclick="
-            const isControl = event.target.closest('.camera-header');
-            if (
-              !isControl &&
-              window.motionManager &&
-              window.motionManager.scoreControls
-            )
-              window.motionManager.scoreControls.togglePause();
-          "
-        >
-          <video id="camera" style="display: none" autoplay playsinline></video>
-          <canvas id="output_canvas" style="display: none"></canvas>
-          <div
-            class="placeholder"
-            id="placeholder"
-            data-i18n="camera_connecting"
-          >
-            Connecting Camera...
-          </div>
+      <!-- Next Video Bar -->
+      <div class="next-video-bar">
+        <button class="ctrl-btn btn-icon-only" onclick="playNext()" data-i18n-title="next">
+          <span class="material-symbols-outlined">skip_next</span>
+        </button>
+        <button class="next-info" onclick="playNext()" data-i18n-title="next">
+          <span class="next-label" data-i18n="next_label">Next : </span>
+          <span class="next-title" id="nextTitle">-</span>
+        </button>
 
-          <!-- Remote Videos Container (Now inside body or relative to it) -->
-          <div id="remoteVideoContainer" class="remote-videos-grid"></div>
+        <div class="settings-container">
+          <button class="ctrl-btn btn-icon-only" onclick="toggleSpeedMenu()">
+            <span class="material-symbols-outlined">settings</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Camera Panel -->
+    <div class="panel camera-panel">
+      <div class="camera-body" id="cameraBody">
+        <video id="camera" style="display: none" autoplay playsinline></video>
+        <canvas id="output_canvas" style="display: none"></canvas>
+        <div class="placeholder" id="placeholder" data-i18n="camera_connecting">
+          Connecting Camera...
         </div>
 
-        <div class="camera-header">
-          <div
-            id="liveStatus"
-            class="live-status-overlay"
-            style="display: none"
-          >
-            <span class="live-indicator"></span> LIVE
-          </div>
-          <div class="live-controls">
-            <!-- <div id="emojiBar" class="emoji-bar" style="display: none;">
+        <!-- Remote Videos Container (Now inside body or relative to it) -->
+        <div id="remoteVideoContainer" class="remote-videos-grid"></div>
+      </div>
+
+      <div class="camera-header">
+        <div id="liveStatus" class="live-status-overlay" style="display: none">
+          <span class="live-indicator"></span> LIVE
+        </div>
+        <div class="live-controls">
+          <!-- <div id="emojiBar" class="emoji-bar" style="display: none;">
             <button class="emoji-btn" data-emoji="🔥">🔥</button>
             <button class="emoji-btn" data-emoji="👏">👏</button>
             <button class="emoji-btn" data-emoji="💪">💪</button>
             <button class="emoji-btn" data-emoji="💯">💯</button>
             <button class="emoji-btn" data-emoji="✨">✨</button>
           </div> -->
-            <div class="room-info" id="roomUI">
-              <span id="roomNameDisplay" class="room-name"
-                >study-room-default</span
-              >
-              <button id="btnCopyRoom" class="copy-btn" title="Copy Room Link">
-                <span class="material-symbols-outlined">link</span>
-              </button>
-            </div>
-            <button id="btnGoLive" class="live-btn-icon" title="Go Live">
-              <span class="material-symbols-outlined">podcasts</span>
+          <div class="room-info" id="roomUI">
+            <span id="roomNameDisplay" class="room-name">study-room-default</span>
+            <button id="btnCopyRoom" class="copy-btn" title="Copy Room Link">
+              <span class="material-symbols-outlined">link</span>
             </button>
           </div>
+          <button id="btnGoLive" class="live-btn-icon" title="Go Live">
+            <span class="material-symbols-outlined">podcasts</span>
+          </button>
         </div>
       </div>
-
-      <!-- Floating Emoji Container -->
-      <div id="reactionContainer" class="reaction-container"></div>
     </div>
 
-    <!-- Dynamic Containers -->
-    <div id="mobileMenuContainer"></div>
-    <div id="aboutModalContainer"></div>
-    <div class="controls" id="controlsContainer"></div>
-    <div class="playlist-modal" id="playlistModal"></div>
-    <div id="pmfModalContainer"></div>
+    <!-- Floating Emoji Container -->
+    <div id="reactionContainer" class="reaction-container"></div>
+  </div>
 
-    <!-- YouTube API & App Scripts -->
-    <script type="module" src="/script.js?v=35"></script>
-    <script type="module" src="/js/live-manager.js?v=39"></script>
+  <!-- Dynamic Containers -->
+  <div id="mobileMenuContainer"></div>
+  <div id="aboutModalContainer"></div>
+  <div class="controls" id="controlsContainer"></div>
+  <div class="playlist-modal" id="playlistModal"></div>
+  <div id="pmfModalContainer"></div>
 
-    <!-- Global Key Handlers -->
-    <script>
-      document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" || e.key === "Esc") {
-          if (window.ui && typeof window.ui.toggleSpeedMenu === "function") {
-            // Basic ESC handler for speed menu if needed
-          }
+  <!-- YouTube API & App Scripts -->
+  <script type="module" src="/script.js?v=35"></script>
+  <script type="module" src="/js/live-manager.js?v=39"></script>
+
+  <!-- Global Key Handlers -->
+  <script>
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" || e.key === "Esc") {
+        if (window.ui && typeof window.ui.toggleSpeedMenu === "function") {
+          // Basic ESC handler for speed menu if needed
         }
-      });
-    </script>
-
-    <!-- Service Worker Unregistration (Dev Mode) -->
-    <script>
-      if ("serviceWorker" in navigator) {
-        console.log("Unregistering all service workers...");
-        navigator.serviceWorker
-          .getRegistrations()
-          .then(function (registrations) {
-            for (let registration of registrations) {
-              registration.unregister();
-              console.log("Service worker unregistered:", registration);
-            }
-          });
       }
-    </script>
-  </body>
+    });
+  </script>
+
+  <!-- Service Worker Unregistration (Dev Mode) -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      console.log("Unregistering all service workers...");
+      navigator.serviceWorker
+        .getRegistrations()
+        .then(function (registrations) {
+          for (let registration of registrations) {
+            registration.unregister();
+            console.log("Service worker unregistered:", registration);
+          }
+        });
+    }
+  </script>
+</body>
+
 </html>

@@ -208,12 +208,15 @@
       gap: 8px;
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-      pointer-events: auto !important;  /* 중요! 클릭 가능하게 */
-      opacity: 0;  /* 처음엔 숨김 - FOUC 방지 */
+      pointer-events: auto !important;
+      /* 중요! 클릭 가능하게 */
+      opacity: 0;
+      /* 처음엔 숨김 - FOUC 방지 */
     }
-    
+
     .join-share-btn.ready {
-      opacity: 1;  /* JavaScript로 추가되면 표시 */
+      opacity: 1;
+      /* JavaScript로 추가되면 표시 */
     }
 
     .join-share-btn:hover {
@@ -253,7 +256,7 @@
 
       <!-- Host Score Display -->
       <div id="hostScoreDisplay" class="host-score-overlay" style="display: none;">
-        <span class="score-icon">🏆</span>
+        <span id="hostScoreMedal" class="score-icon">🥉</span>
         <span id="hostScoreValue">00:00:00</span>
       </div>
 
@@ -283,6 +286,7 @@
   <script type="module" src="/script.js?v=32"></script>
   <script type="module" src="/js/live-manager.js?v=32"></script>
   <script src="/js/viewer-share.js?v=1"></script>
+  <script src="/js/viewer-score-display.js?v=1"></script>
 
 </body>
 

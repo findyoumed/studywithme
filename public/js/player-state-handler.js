@@ -46,7 +46,15 @@ export class PlayerStateHandler {
 
         } else if (event.data === YT.PlayerState.PAUSED) {
             if (playIcon) playIcon.textContent = "play_arrow";
-            if (this.exerciseTimer) this.exerciseTimer.stop();
+            
+            // Check if broadcasting - if so, keep timer running
+            const isLive = window.liveManager && typeof window.liveManager.isLive === 'function' && window.liveManager.isLive();
+            
+            if (!isLive && this.exerciseTimer) {
+                this.exerciseTimer.stop();
+            } else if (isLive) {
+                console.log("Broadcasting active, keeping timer running.");
+            }
         } else if (event.data === YT.PlayerState.ENDED) {
             playNext();
         }

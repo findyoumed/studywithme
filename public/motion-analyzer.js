@@ -59,7 +59,9 @@ export class MotionAnalyzer {
 
         // Stability threshold (Stricter: lower value pauses score on smaller movements)
         // Reduced to 0.002 to ensure score stops when moving
-        const baseThreshold = 0.002;
+        // Stability threshold (Relaxed: allow more natural movement)
+        // Increased from 0.002 to 0.020 to prevent frustration
+        const baseThreshold = 0.020;
         const threshold = baseThreshold * (this.sensitivity / 50 + 1);
 
         const diffX = Math.abs(smoothX - this.prevNoseX);
@@ -74,9 +76,14 @@ export class MotionAnalyzer {
                 console.log(`[MotionAnalyzer] Score incremented to: ${this.score}`);
             }
         } else {
-            // Only log if we lose significant progress (e.g. > 500ms) to reduce noise
-            if (this.accumulatedMs > 500) console.log(`[MotionAnalyzer] Stability broken! Diff: ${totalDiff.toFixed(4)} > Threshold: ${threshold.toFixed(4)}`);
-            this.accumulatedMs = 0;
+            // Stability broken logic:
+            // Relaxed: Don't reset accumulatedMs to 0, just don't add. 
+            // This prevents "losing" the partial second of focus.
+            if (totalDiff > threshold * 2) { 
+                 // Only reset if movement is HUGE (really distracted)
+                 if (this.accumulatedMs > 500) console.log(`[MotionAnalyzer] Stability broken! Diff: ${totalDiff.toFixed(4)}`);
+                 // this.accumulatedMs = 0; // DISABLED RESET for better UX
+            }
         }
 
         this.prevNoseX = smoothX;
