@@ -222,8 +222,22 @@ async function toggleLive() {
 async function startBroadcasting() {
     if (isLive) return;
     try {
-        // [Simple Logic] Just create and publish
-        let videoTrack = await rtcClient.createCameraTrack();
+        // [LOG: 20260130_1350] Use existing camera track to prevent mobile freeze/conflict
+        let videoTrack = null;
+        if (window.cameraManager && typeof window.cameraManager.getVideoTrack === 'function') {
+            const rawTrack = window.cameraManager.getVideoTrack();
+            if (rawTrack) {
+                console.log("[LiveManager] Reusing existing camera track from CameraManager");
+                videoTrack = rawTrack;
+            }
+        }
+
+        // If no existing track, fallback to creating a new one
+        if (!videoTrack) {
+            console.log("[LiveManager] No existing track found, creating new camera track");
+            videoTrack = await rtcClient.createCameraTrack();
+        }
+
         await rtcClient.publish(videoTrack);
 
         isLive = true;
