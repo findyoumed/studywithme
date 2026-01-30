@@ -3,9 +3,10 @@
  * Main Controller for Live Interactions
  * Coordinates AgoraRTCClient, AgoraRTMClient, and UI.
  */
-import { RemoteParticipantManager } from './remote-participant-manager.js?v=38';
-import { LiveUIManager } from './live-ui-manager.js?v=38';
-import { AgoraRTCClient } from './agora-rtc-client.js?v=38';
+import { RemoteParticipantManager } from './remote-participant-manager.js';
+import { LiveUIManager } from './live-ui-manager.js';
+import { AgoraRTCClient } from './agora-rtc-client.js';
+import { VideoFrameMonitor } from './video-frame-monitor.js';
 // import { AgoraRTMClient } from './agora-rtm-client.js?v=38';
 
 const APP_ID = "13c86a022ad94066b4b21e03735595ee";
@@ -13,6 +14,7 @@ const APP_ID = "13c86a022ad94066b4b21e03735595ee";
 // --- State ---
 let rtcClient = null;
 let rtmClient = null;
+let videoFrameMonitor = null; // [LOG: 20260130_1650] Frame monitor for background detection
 let isLive = false;
 let channelName = "study-room-default";
 
@@ -107,7 +109,13 @@ async function setupSDKs(isViewer) {
     rtcClient.init({
         onUserPublished: async (user, mediaType) => {
             console.log(`[LiveManager] User published: ${user.uid}, media: ${mediaType}`);
-            if (mediaType === 'video') remoteParticipantManager.addParticipant(user);
+            if (mediaType === 'video') {
+                remoteParticipantManager.addParticipant(user);
+                // [LOG: 20260130_1652] Add user to frame monitoring
+                if (videoFrameMonitor) {
+                    videoFrameMonitor.addUser(user.uid);
+                }
+            }
         },
         onUserUnpublished: (user, mediaType) => {
             console.log(`[LiveManager] User unpublished: ${user.uid}, media: ${mediaType}`);
@@ -120,7 +128,13 @@ async function setupSDKs(isViewer) {
             console.log(`[LiveManager] User joined: ${user.uid}`);
             if (user.hasVideo) remoteParticipantManager.addParticipant(user);
         },
-        onUserLeft: (user) => remoteParticipantManager.removeParticipant(user)
+        onUserLeft: (user) => {
+            remoteParticipantManager.removeParticipant(user);
+            // [LOG: 20260130_1652] Remove user from frame monitoring
+            if (videoFrameMonitor) {
+                videoFrameMonitor.removeUser(user.uid);
+            }
+        }
     });
 
     // [USER REQUEST] Disable RTM to silence console errors - Using HTTP Fallback only
@@ -144,6 +158,13 @@ async function setupSDKs(isViewer) {
     // Join RTC (Immediately upon load)
     const { rtcToken } = await fetchTokens("publisher");
     await rtcClient.join(channelName, rtcToken, myUID);
+
+    // [LOG: 20260130_1652] Initialize VideoFrameMonitor for viewers to detect background
+    if (isViewer) {
+        videoFrameMonitor = new VideoFrameMonitor(rtcClient, remoteParticipantManager);
+        videoFrameMonitor.startMonitoring();
+        console.log("[LiveManager] VideoFrameMonitor started for viewer mode");
+    }
 
     // [LOG: 20260130_1100] Ensure clean state: explicitly unpublish to clear stale server state
     // [LOG: 20260130_1100] Ensure clean state: explicitly unpublish to clear stale server state

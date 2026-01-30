@@ -31,14 +31,13 @@ export class AppLifecycleManager {
 
         const isLive = window.isLive || (window.liveManager && typeof window.liveManager.isLive === 'function' && window.liveManager.isLive());
 
-        // [LOG: 20260130_1641] SAVE BATTERY & DATA: Unpublish when going to background
+        // [LOG: 20260130_1648] Keep connection alive, don't unpublish for freeze frame
+        // Mobile OS will stop video frames automatically, but connection stays alive
+        // This allows viewers to see the last frame (frozen) instead of black screen
         if (isLive && window.rtcClient) {
             this.wasLiveBeforeBackground = true;
-            window.rtcClient.unpublish().then(() => {
-                console.log("Battery Saver: Unpublished broadcast (will auto-resume on foreground)");
-            }).catch(e => {
-                console.warn("Could not unpublish:", e);
-            });
+            console.log("Live mode: Connection stays active (freeze frame expected)");
+            // DON'T unpublish - let mobile OS handle frame stopping naturally
         }
 
         // 1. Keep camera active (not stopped) for quick resume
@@ -87,18 +86,9 @@ export class AppLifecycleManager {
     async handleForeground() {
         console.log("App moved to foreground. Restarting camera...");
 
-        // [LOG: 20260130_1641] AUTO-RESUME: Re-publish broadcast if was live before
-        if (this.wasLiveBeforeBackground && window.rtcClient && window.cameraManager) {
-            try {
-                const videoTrack = window.cameraManager.getVideoTrack();
-                if (videoTrack) {
-                    const clonedTrack = videoTrack.clone();
-                    await window.rtcClient.publish(clonedTrack);
-                    console.log("Auto-resumed: Broadcast re-published after foreground return");
-                }
-            } catch (e) {
-                console.warn("Could not auto-resume broadcast:", e);
-            }
+        // [LOG: 20260130_1648] No need to re-publish, connection was kept alive
+        if (this.wasLiveBeforeBackground) {
+            console.log("Foreground: Connection already active, no re-publish needed");
             this.wasLiveBeforeBackground = false;
         }
 
