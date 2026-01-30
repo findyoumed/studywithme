@@ -106,8 +106,7 @@ export class RemoteParticipantManager {
         overlay.innerHTML = `
             <div class="away-message">
                 <span class="away-icon">📱</span>
-                <span class="away-text">모바일 기기에서는 카메라의 백그라운드 사용을 지원하지 않습니다</span>
-                <span class="away-subtext">Mobile devices do not support background camera usage</span>
+                <span class="away-text">Mobile devices do not support background camera usage</span>
             </div>
         `;
         remotePlayerContainer.appendChild(overlay);
