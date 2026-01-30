@@ -109,9 +109,12 @@ async function setupSDKs(isViewer) {
             console.log(`[LiveManager] User published: ${user.uid}, media: ${mediaType}`);
             if (mediaType === 'video') remoteParticipantManager.addParticipant(user);
         },
-        onUserUnpublished: (user) => {
-            console.log(`[LiveManager] User unpublished: ${user.uid}`);
-            remoteParticipantManager.removeParticipant(user);
+        onUserUnpublished: (user, mediaType) => {
+            console.log(`[LiveManager] User unpublished: ${user.uid}, media: ${mediaType}`);
+            // [LOG: 20260130_1518] Show "away" overlay when video unpublished (background)
+            if (mediaType === 'video') {
+                remoteParticipantManager.showAwayOverlay(user.uid);
+            }
         },
         onUserJoined: (user) => {
             console.log(`[LiveManager] User joined: ${user.uid}`);

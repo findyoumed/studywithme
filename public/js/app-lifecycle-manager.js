@@ -12,6 +12,8 @@ export class AppLifecycleManager {
 
         // Track if video was playing before background switch
         this.wasPlayingBeforeBackground = false;
+        // [LOG: 20260130_1518] Track if broadcast was live before background
+        this.wasLiveBeforeBackground = false;
     }
 
     init() {
@@ -29,15 +31,25 @@ export class AppLifecycleManager {
 
         const isLive = window.isLive || (window.liveManager && typeof window.liveManager.isLive === 'function' && window.liveManager.isLive());
 
-        // 1. Stop camera ONLY if not live
+        // [LOG: 20260130_1518] SAVE BATTERY & DATA: Unpublish when going to background
+        if (isLive && window.rtcClient) {
+            this.wasLiveBeforeBackground = true;
+            window.rtcClient.unpublish().then(() => {
+                console.log("Battery Saver: Unpublished broadcast (will auto-resume on foreground)");
+            }).catch(e => {
+                console.warn("Could not unpublish:", e);
+            });
+        }
+
+        // 1. Keep camera active (not stopped) for quick resume
         if (this.cameraManager && !isLive) {
             this.cameraManager.stop();
             console.log("Battery Saver: Stopped camera (not live)");
         } else {
-            console.log("Live mode: Camera stays active in background");
+            console.log("Live mode: Camera stays active for quick resume");
         }
 
-        // 2. Stop motion detection loop ONLY if not live
+        // 2. Keep motion detection loop running for score calculation
         if (this.motionManager && !isLive) {
             this.motionManager.stopLoop();
             console.log("Battery Saver: Stopped motion loop");
@@ -63,7 +75,7 @@ export class AppLifecycleManager {
             }
         }
 
-        // 4. Stop study timer ONLY if not live
+        // 4. Keep timer running to track correct study time
         if (this.exerciseTimer && !isLive) {
             this.exerciseTimer.stop();
             console.log("Battery Saver: Stopped study timer");
@@ -74,6 +86,21 @@ export class AppLifecycleManager {
 
     async handleForeground() {
         console.log("App moved to foreground. Restarting camera...");
+
+        // [LOG: 20260130_1518] AUTO-RESUME: Re-publish broadcast if was live before
+        if (this.wasLiveBeforeBackground && window.rtcClient && window.cameraManager) {
+            try {
+                const videoTrack = window.cameraManager.getVideoTrack();
+                if (videoTrack) {
+                    const clonedTrack = videoTrack.clone();
+                    await window.rtcClient.publish(clonedTrack);
+                    console.log("Auto-resumed: Broadcast re-published after foreground return");
+                }
+            } catch (e) {
+                console.warn("Could not auto-resume broadcast:", e);
+            }
+            this.wasLiveBeforeBackground = false;
+        }
 
         // 1. Restart camera ONLY if not live (live mode keeps camera active)
         if (this.cameraManager && !window.isLive) {

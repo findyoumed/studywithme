@@ -222,3 +222,70 @@
 #btnGoLive.active .material-symbols-outlined {
     transform: translate(-50%, calc(-50% + 1px)) !important;
 }
+
+/* [LOG: 20260130_1518] Away Overlay - Mobile Device Busy */
+.away-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    animation: fadeIn 0.3s ease;
+}
+
+.away-message {
+    text-align: center;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.away-icon {
+    font-size: 48px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.away-text {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.away-subtext {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
