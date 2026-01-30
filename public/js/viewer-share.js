@@ -57,8 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const text = btnJoinShare.querySelector('.btn-text');
     const originalIcon = icon.textContent;
     const originalText = text.textContent;
+    // 우선순위: 1. 저장된 설정 2. 브라우저 언어
+    const savedLang = localStorage.getItem("studywithme_lang");
+    const browserLang = navigator.language.startsWith('ko') ? 'ko' : 'en';
+    const currentLang = savedLang || browserLang;
+    const isKo = currentLang === 'ko';
 
-    const isKo = navigator.language.startsWith('ko');
     icon.textContent = 'check_circle';
     text.textContent = isKo ? '복사 완료!' : 'Copied!';
 
