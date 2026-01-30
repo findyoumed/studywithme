@@ -221,16 +221,19 @@ async function toggleLive() {
 
 async function startBroadcasting() {
     if (isLive) return;
+
+    // [LOG: 20260130_1454] Set flags early to prevent background suspension during publish
+    isLive = true;
+    window.isLive = true;
+
     try {
-        // [LOG: 20260130_1406] Use existing camera track to avoid hardware conflict on mobile
+        // [LOG: 20260130_1454] Revert to direct track usage for better background stability on mobile
         let videoTrack = null;
         if (window.cameraManager && typeof window.cameraManager.getVideoTrack === 'function') {
             const originalTrack = window.cameraManager.getVideoTrack();
             if (originalTrack) {
-                // [LOG: 20260130_1411] Clone the track to prevent the original video from freezing.
-                // Cloning creates a separate instance that doesn't affect the source <video> element.
-                videoTrack = originalTrack.clone();
-                console.log("[LiveManager] Using cloned track for broadcast to protect original video");
+                videoTrack = originalTrack;
+                console.log("[LiveManager] Using direct track for better background persistence");
             }
         }
 
@@ -241,8 +244,6 @@ async function startBroadcasting() {
         }
 
         await rtcClient.publish(videoTrack);
-
-        isLive = true;
 
         // Final insurance for video element playback
         const localVideo = document.getElementById('camera');
