@@ -70,20 +70,15 @@ export class RemoteParticipantManager {
 
     // [LOG: 20260130_1536] Show "Mobile device busy" overlay when host unpublishes
     showAwayOverlay(uid) {
-        // TEMPORARY DEBUG
-        this._showDebugAlert(`showAwayOverlay called for user ${uid}`);
-
         console.log(`[ParticipantManager] Attempting to show away overlay for user ${uid}`);
 
         let remotePlayerContainer = document.getElementById(`user-${uid}`);
 
         // If container doesn't exist, create it
         if (!remotePlayerContainer) {
-            this._showDebugAlert(`Container for ${uid} not found, creating...`);
             console.log(`[ParticipantManager] Container for user ${uid} doesn't exist, creating it`);
             const container = this.getRemoteContainer();
             if (!container) {
-                this._showDebugAlert(`ERROR: Remote container not found!`);
                 console.error(`[ParticipantManager] Remote video container not found!`);
                 return;
             }
@@ -96,7 +91,6 @@ export class RemoteParticipantManager {
 
         // Don't add multiple overlays
         if (remotePlayerContainer.querySelector('.away-overlay')) {
-            this._showDebugAlert(`Overlay already exists for ${uid}`);
             console.log(`[ParticipantManager] Overlay already exists for user ${uid}`);
             return;
         }
@@ -110,7 +104,6 @@ export class RemoteParticipantManager {
             </div>
         `;
         remotePlayerContainer.appendChild(overlay);
-        this._showDebugAlert(`✅ Overlay added successfully for ${uid}`);
         console.log(`[ParticipantManager] Away overlay added for user ${uid}`);
     }
 
@@ -148,30 +141,5 @@ export class RemoteParticipantManager {
             container.setAttribute('data-count', count);
             console.log(`[Grid] Updated participant count to: ${count}`);
         }
-    }
-
-    // TEMPORARY DEBUG HELPER - Remove after fixing
-    _showDebugAlert(message) {
-        let debugBox = document.getElementById('debug-alert-box');
-        if (!debugBox) {
-            debugBox = document.createElement('div');
-            debugBox.id = 'debug-alert-box';
-            debugBox.style.cssText = `
-                position: fixed;
-                top: 10px;
-                right: 10px;
-                background: rgba(255, 0, 0, 0.9);
-                color: white;
-                padding: 10px;
-                border-radius: 8px;
-                z-index: 999999;
-                max-width: 300px;
-                font-size: 12px;
-                line-height: 1.4;
-            `;
-            document.body.appendChild(debugBox);
-        }
-        debugBox.innerHTML = `<strong>DEBUG:</strong><br>${message}<br><small>${new Date().toLocaleTimeString()}</small>`;
-        setTimeout(() => debugBox.style.opacity = '0.5', 3000);
     }
 }
