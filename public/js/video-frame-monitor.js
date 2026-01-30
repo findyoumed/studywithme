@@ -56,6 +56,9 @@ export class VideoFrameMonitor {
                 if (userStats) {
                     const currentFrameCount = userStats.receiveFrameRate || 0;
 
+                    // TEMPORARY DEBUG
+                    this._showDebug(`User ${uid}: ${currentFrameCount} fps`);
+
                     // Frame rate is 0 (stalled)
                     if (currentFrameCount === 0) {
                         state.consecutiveZeroFrames++;
@@ -63,6 +66,7 @@ export class VideoFrameMonitor {
                         // If stalled for 2 checks (4 seconds) and not already showing overlay
                         if (state.consecutiveZeroFrames >= 2 && !state.isStalled) {
                             console.log(`[FrameMonitor] User ${uid} video stalled, showing overlay`);
+                            this._showDebug(`🚫 STALLED! Showing overlay`);
                             this.remoteParticipantManager.showAwayOverlay(uid);
                             state.isStalled = true;
                         }
@@ -70,6 +74,7 @@ export class VideoFrameMonitor {
                     // Frame rate recovered
                     else if (currentFrameCount > 0 && state.isStalled) {
                         console.log(`[FrameMonitor] User ${uid} video resumed, removing overlay`);
+                        this._showDebug(`✅ RESUMED! Removing overlay`);
                         this.remoteParticipantManager.removeAwayOverlay(uid);
                         state.isStalled = false;
                         state.consecutiveZeroFrames = 0;
@@ -78,10 +83,37 @@ export class VideoFrameMonitor {
                     else if (currentFrameCount > 0) {
                         state.consecutiveZeroFrames = 0;
                     }
+                } else {
+                    this._showDebug(`No stats for user ${uid}`);
                 }
             } catch (e) {
                 console.warn(`[FrameMonitor] Error checking stats for user ${uid}:`, e);
+                this._showDebug(`ERROR: ${e.message}`);
             }
         }
+    }
+
+    // TEMPORARY DEBUG HELPER
+    _showDebug(message) {
+        let debugBox = document.getElementById('frame-monitor-debug');
+        if (!debugBox) {
+            debugBox = document.createElement('div');
+            debugBox.id = 'frame-monitor-debug';
+            debugBox.style.cssText = `
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                background: rgba(0, 100, 255, 0.9);
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                z-index: 999999;
+                max-width: 300px;
+                font-size: 12px;
+                line-height: 1.4;
+            `;
+            document.body.appendChild(debugBox);
+        }
+        debugBox.innerHTML = `<strong>FRAME MONITOR:</strong><br>${message}<br><small>${new Date().toLocaleTimeString()}</small>`;
     }
 }
