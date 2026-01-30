@@ -118,24 +118,26 @@ body.viewer-mode * {
         padding-bottom: env(safe-area-inset-bottom);
     }
 
-    /* [LOG: 20260130_1340] Change to vertical scroll as requested */
+    /* [LOG: 20260130_1343] Fix camera size to 16:9 and enable natural vertical scroll */
     body.viewer-mode .remote-videos-grid {
         display: flex !important;
         flex-direction: column !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        scroll-snap-type: y mandatory !important;
-        gap: 0 !important;
-        padding: 0 !important;
+        gap: 15px !important;
+        padding: 20px 0 !important;
         width: 100vw !important;
-        height: 100vh !important;
+        height: 100% !important;
         -webkit-overflow-scrolling: touch;
+        scroll-snap-type: none !important;
+        /* Normal scrolling is less "strange" */
     }
 
     body.viewer-mode .remote-video-player {
-        flex: 0 0 100vh !important;
+        flex: 0 0 auto !important;
         width: 100vw !important;
-        height: 100vh !important;
-        scroll-snap-align: start !important;
+        aspect-ratio: 16/9 !important;
+        height: auto !important;
+        scroll-snap-align: none !important;
     }
 }
