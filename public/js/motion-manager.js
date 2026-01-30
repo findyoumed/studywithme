@@ -33,7 +33,7 @@ export class MotionManager {
         this.rafId = null;
         this.bgInterval = null;
         this.lastTime = 0;
-        document.addEventListener("visibilitychange", () => this._handleVisibilityChange());
+        this.isScoringPaused = false;
     }
 
     setPlayer(playerController) {
@@ -79,9 +79,11 @@ export class MotionManager {
         this.lastTime = performance.now();
 
         if (document.hidden) {
-            console.log("Starting in Background Mode (Interval)");
+            console.log("MotionManager: Starting in Background Mode (Interval)");
+            if (this.bgInterval) clearInterval(this.bgInterval);
             this.bgInterval = setInterval(() => this._runOneStep(), 1000);
         } else {
+            console.log("MotionManager: Starting in Foreground Mode (RAF)");
             this._runRAF();
         }
     }
@@ -93,29 +95,13 @@ export class MotionManager {
     }
 
     _handleVisibilityChange() {
-        if (!this.isRunning) return;
-
-        if (document.hidden) {
-            // Switch to Background Mode
-            if (this.rafId) cancelAnimationFrame(this.rafId);
-            if (this.bgInterval) clearInterval(this.bgInterval); 
-            // Check every 3 seconds in background to save CPU for video lectures
-            this.bgInterval = setInterval(() => this._runOneStep(), 3000);
-        } else {
-            // Switch to Foreground Mode
-            if (this.bgInterval) clearInterval(this.bgInterval);
-            this.lastTime = performance.now(); 
-            this._runRAF();
-            
-            // Force UI sync immediately upon returning
-            if (this.motionAnalyzer) {
-                 this.scoreUIManager.update(this.motionAnalyzer.getScore());
-            }
-        }
+        // Redundant - Logic moved to AppLifecycleManager calling startLoop/stopLoop
+        // But for safety, we allow startLoop/stopLoop to be called from there.
     }
 
     _runRAF() {
-        if (!this.isRunning || document.hidden) return;
+        if (!this.isRunning) return; // Removed document.hidden check to prevent self-termination on wake
+
         this._runOneStep();
         this.rafId = requestAnimationFrame(() => this._runRAF());
     }
@@ -125,7 +111,7 @@ export class MotionManager {
         // Prevent huge delta jumps, but allow compensation for throttling in background
         const rawDelta = now - this.lastTime;
         const maxGap = document.hidden ? 10000 : 2000; // Allow up to 10s gap in background
-        const deltaMs = rawDelta > maxGap ? 1000 : rawDelta; 
+        const deltaMs = rawDelta > maxGap ? 1000 : rawDelta;
         this.lastTime = now;
 
         if (this.videoElement.readyState >= 2 && !this.isScoringPaused) {
@@ -170,19 +156,19 @@ export class MotionManager {
             this.renderer.clear(); // Clear canvas when paused
             return; // Don't update score UI when paused
         }
-            
-            // Check for 600-point (10-minute) milestone
-            const currentScoreInt = Math.floor(score);
-            if (currentScoreInt >= 600 && currentScoreInt >= this.lastMilestone + 600) {
-                this.lastMilestone = Math.floor(currentScoreInt / 600) * 600;
-                // window.motionManager.triggerAutoShare(currentScoreInt); // Deactivated per user request
-            }
 
-            // Update Score UI (Only if visible)
-            if (!document.hidden) {
-                this.scoreUIManager.update(score);
-            }
-        
+        // Check for 600-point (10-minute) milestone
+        const currentScoreInt = Math.floor(score);
+        if (currentScoreInt >= 600 && currentScoreInt >= this.lastMilestone + 600) {
+            this.lastMilestone = Math.floor(currentScoreInt / 600) * 600;
+            // window.motionManager.triggerAutoShare(currentScoreInt); // Deactivated per user request
+        }
+
+        // Update Score UI (Only if visible)
+        if (!document.hidden) {
+            this.scoreUIManager.update(score);
+        }
+
         // Explicitly clear reference to help GC in long-running sessions
         pose = null;
     }
@@ -203,6 +189,12 @@ export class MotionManager {
         if (this.motionAnalyzer) {
             this.motionAnalyzer.sensitivity = val * 10;
         }
+    }
+
+    // [LOG: 20260130_0959] Add setScoringPaused method for score-controls.js
+    setScoringPaused(paused) {
+        this.isScoringPaused = paused;
+        console.log(`[MotionManager] setScoringPaused: ${paused}`);
     }
 
     togglePause() {
