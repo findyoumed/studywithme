@@ -5,7 +5,7 @@
 
 export class UILayout {
     constructor() {
-        this.overlayMode = true;
+        this.overlayMode = false;
     }
 
     syncLayoutIcon() {
