@@ -13,7 +13,6 @@
 - **[ui_verification.md](./ui_verification.md)** - 코드 vs 실제 화면 검증 결과
 - **[ui_improvements.md](./ui_improvements.md)** - 상세한 UI 개선 제안서 (8가지 개선 영역)
 - **[ui_mockups.md](./ui_mockups.md)** - UI 미리보기 갤러리 (이미지 포함)
-- **[jobs_perspective.md](./jobs_perspective.md)** - 스티브 잡스 관점의 디자인 철학
 
 ### 🖼️ 스크린샷 & 목업
 
@@ -50,12 +49,6 @@ docs/ui_improvements.md      # 전체 제안
 docs/ui_mockups.md          # 시각적 미리보기
 ```
 
-### 3. 디자인 철학 이해
-
-```bash
-# 스티브 잡스 관점 분석
-docs/jobs_perspective.md
-```
 
 ---
 
